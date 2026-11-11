@@ -4,919 +4,1592 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projektinhallinnan Harjoitustentti (Moduulit 1–8)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: rgba(79, 70, 229, 0.15);
+      --accent-green: #10b981;
+      --accent-green-bg: rgba(16, 185, 129, 0.15);
+      --accent-red: #ef4444;
+      --accent-red-bg: rgba(239, 68, 68, 0.15);
+      --accent-yellow: #f59e0b;
+      --accent-yellow-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
+
+    header {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 12px 20px;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #1e293b;
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #475569;
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pm {
+      background: var(--primary-light);
+      color: #818cf8;
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-text h1 {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    main {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .chip-warn {
+      background: var(--accent-yellow-bg);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .chip-module {
+      background: var(--primary-light);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    h2.title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    p.lead {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .config-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .select-box, .btn-mode {
+      width: 100%;
+      background: rgba(31, 41, 55, 0.4);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .select-box:focus, .btn-mode:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-mode.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.99);
+    }
+
+    /* Progress bar */
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(31, 41, 55, 0.8);
       border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #64748b;
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #818cf8);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .question-counter {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .question-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #fff;
+      line-height: 1.45;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-main);
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.92rem;
+      transition: all 0.15s ease;
+    }
+
+    .option-btn:hover {
+      background: rgba(31, 41, 55, 0.6);
+      border-color: #374151;
+    }
+
+    .option-btn.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .opt-badge {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #1f293d;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .option-btn.selected .opt-badge {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(31, 41, 55, 0.6);
+    }
+
+    .btn-secondary:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .btn-finish {
+      background: var(--accent-green);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-finish:hover {
+      opacity: 0.9;
+    }
+
+    /* Tulosnäkymä */
+    .result-score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      background: rgba(9, 13, 22, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .score-item-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .score-item-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: monospace;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0 24px 0;
+    }
+
+    .filter-btn {
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .review-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .review-card.correct {
+      border-left: 4px solid var(--accent-green);
+    }
+
+    .review-card.wrong {
+      border-left: 4px solid var(--accent-red);
+    }
+
+    .review-explanation {
+      background: rgba(9, 13, 22, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 12px;
+      line-height: 1.45;
+    }
+
+    .opt-review-line {
+      font-size: 0.88rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .opt-review-line.ans-correct {
+      background: var(--accent-green-bg);
+      color: #6ee7b7;
+      font-weight: 600;
+    }
+
+    .opt-review-line.ans-wrong-user {
+      background: var(--accent-red-bg);
+      color: #fca5a5;
+    }
+
+    .opt-review-line.ans-neutral {
+      color: var(--text-muted);
+      opacity: 0.65;
+    }
+
+    .hidden { display: none !important; }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 16px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: auto;
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body>
 
-  <!-- Yläpalkki -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <span class="p-2 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 font-mono text-sm font-bold">PM-EXAM</span>
-        <div>
-          <h1 class="text-sm font-semibold tracking-wide text-slate-100">Projektinhallinnan Tenttivalmentaja</h1>
-          <p class="text-xs text-slate-400">AMK-koealueen harjoitustentti (Moduulit 1–8)</p>
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        <span class="badge-pm">PROJEKTI 1–8</span>
+        <div class="brand-text">
+          <h1>Projektinhallinnan Tenttivalmentaja</h1>
+          <p>48 kysymyksen täydellinen kysymyspankki</p>
         </div>
       </div>
-      <div id="header-stats" class="hidden text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
-        <span id="header-progress-text">Kysymys 1/24</span>
+      <div id="header-progress" class="hidden" style="font-family: monospace; font-size: 0.8rem; color: #a5b4fc;">
+        1 / 48
       </div>
     </div>
   </header>
 
-  <!-- Pääsisältö -->
-  <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
-
-    <!-- 1. ALOITUSNÄYTTÖ -->
-    <div id="start-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl transition-all">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4">
-        <span>⚠️ Vaativa koealue</span>
-        <span>•</span>
-        <span>Paljon nippelitietoa</span>
-      </div>
-      <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-4">Valmistaudu ryhmäsi kanssa projektinhallinnan tenttiin</h2>
-      <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-        Tämä harjoitustentti testaa kurssimateriaalin (Moduulit 1–8) keskeisimmät ja vaikeimmat käsitteet, vuosiluvut, standardit (IPMA ICB4, WBS, PERT/CPM), roolit sekä poikkeusten hallinnan. Kysymyksiä ja vastausvaihtoehtoja sekoitetaan satunnaisesti jokaisella suorituskerralla.
+  <main>
+    <!-- 1. ALOITUSRUUTU -->
+    <div id="screen-start" class="card">
+      <span class="chip chip-warn">⚠️ Vaativa nippelitieto- ja soveltamistentti</span>
+      <h2 class="title">Testaa ja hio ryhmäsi projektinhallinnan osaaminen</h2>
+      <p class="lead">
+        Tämä tentti kattaa kurssin kaikki 8 moduulia syvällisesti. Mukana on tarkkoja vuosilukuja, rooleja, kaavoja, IPMA-pätevyyksiä, WBS- ja PERT-määritelmiä sekä ketteriä malleja.
       </p>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 flex items-start gap-3">
-          <div class="text-indigo-400 text-xl">🎯</div>
-          <div>
-            <h3 class="text-sm font-semibold text-slate-200">Ei ilmiselviä vastauksia</h3>
-            <p class="text-xs text-slate-400 mt-1">Vaihtoehdoissa on aitoja kurssimateriaalin käsitteitä, jotka testaavat käsitteiden täsmällistä ymmärtämistä.</p>
+      <div class="grid-2">
+        <div>
+          <label class="config-label">1. Valitse tentin laajuus:</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" class="btn-mode active" onclick="setQuestionCount(48)" id="mode-48">
+              <strong>Kaikki 48 kysymystä</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Täydellinen läpikäynti: tasan 6 kysymystä jokaisesta moduulista.</div>
+            </button>
+            <button type="button" class="btn-mode" onclick="setQuestionCount(24)" id="mode-24">
+              <strong>Pikatentti (24 kysymystä)</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Satunnaistettu 3 kysymyksen otos jokaisesta moduulista.</div>
+            </button>
+            <button type="button" class="btn-mode" onclick="setQuestionCount(12)" id="mode-12">
+              <strong>Täsmätentti (12 kysymystä)</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Nopea 10 minuutin pikakertaus.</div>
+            </button>
           </div>
         </div>
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 flex items-start gap-3">
-          <div class="text-emerald-400 text-xl">💡</div>
-          <div>
-            <h3 class="text-sm font-semibold text-slate-200">Perusteelliset selitykset</h3>
-            <p class="text-xs text-slate-400 mt-1">Lopussa näet yhteenvedon ja tarkat perustelut lähdeviitteineen (Pelin, Artto ym., Ruuska).</p>
+
+        <div>
+          <label class="config-label">2. Valitse harjoitusalue:</label>
+          <select id="module-selector" class="select-box" style="margin-bottom: 16px;">
+            <option value="all">Kaikki moduulit (1–8)</option>
+            <option value="1">Moduuli 1: Taustaa ja käsitteet</option>
+            <option value="2">Moduuli 2: Vaiheet ja ositus (WBS)</option>
+            <option value="3">Moduuli 3: Organisaatio ja sidosryhmät</option>
+            <option value="4">Moduuli 4: Suunnitelma, aikataulut, resurssit & kustannukset</option>
+            <option value="5">Moduuli 5: Muutokset, riskit ja ongelmat</option>
+            <option value="6">Moduuli 6: Viestintä ja raportointi</option>
+            <option value="7">Moduuli 7: Projektin päättäminen</option>
+            <option value="8">Moduuli 8: Kehityssuunnat (Ketterä, Lean & Allianssi)</option>
+          </select>
+
+          <div style="background: rgba(17, 24, 39, 0.5); border: 1px solid var(--card-border); padding: 12px; border-radius: 8px; font-size: 0.8rem; color: var(--text-muted);">
+            💡 <strong>Vinkki GitHub-jakoa varten:</strong><br>
+            Tämä sivu on valmis tiedosto <code>index.html</code>. Kun siirrät sen repoon <code>eijoni.github.io</code>, se aukeaa suoraan verkko-osoitteessasi ilman asennuksia.
           </div>
         </div>
       </div>
 
-      <!-- Tentin laajuuden valinta -->
-      <div class="mb-8">
-        <label class="block text-xs uppercase tracking-wider font-semibold text-slate-400 mb-3">Valitse tentin laajuus:</label>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <button type="button" onclick="selectExamMode(24)" id="mode-btn-24" class="mode-select-btn p-4 rounded-xl border text-left transition-all bg-indigo-600/10 border-indigo-500 text-white">
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-semibold text-sm">Täysi harjoitustentti</span>
-              <span class="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">24 kysymystä</span>
-            </div>
-            <p class="text-xs text-slate-400">Tasan 3 kysymystä jokaisesta moduulista (1–8). Kattavin läpikäynti.</p>
-          </button>
-          <button type="button" onclick="selectExamMode(16)" id="mode-btn-16" class="mode-select-btn p-4 rounded-xl border text-left transition-all bg-slate-800/40 border-slate-700 text-slate-300 hover:border-slate-600">
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-semibold text-sm">Nopea testi</span>
-              <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300 font-mono">16 kysymystä</span>
-            </div>
-            <p class="text-xs text-slate-400">2 satunnaista kysymystä jokaisesta moduulista nopeaan kertaukseen.</p>
-          </button>
-        </div>
-      </div>
-
-      <button onclick="startExam()" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-medium shadow-lg shadow-indigo-600/25 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2">
-        <span>Aloita harjoitustentti</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      <button class="btn-primary" onclick="initiateQuiz()">
+        <span>Aloita harjoitustentti</span> →
       </button>
     </div>
 
     <!-- 2. KYSYMYSNÄYTTÖ -->
-    <div id="quiz-screen" class="hidden transition-all">
-      <!-- Edistymispalkki -->
-      <div class="w-full bg-slate-800 rounded-full h-2 mb-6 overflow-hidden">
-        <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-violet-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+    <div id="screen-quiz" class="card hidden">
+      <div class="progress-bar-container">
+        <div id="quiz-progress-bar" class="progress-bar-fill"></div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl relative">
-        <!-- Moduulietiketti -->
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <span id="question-module-badge" class="px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-            Moduuli 1
-          </span>
-          <span id="question-counter" class="text-xs font-mono text-slate-400">
-            Kysymys 1 / 24
-          </span>
-        </div>
+      <div class="question-header">
+        <span id="quiz-module-badge" class="chip chip-module">Moduuli 1</span>
+        <span id="quiz-counter" class="question-counter">Kysymys 1 / 48</span>
+      </div>
 
-        <!-- Kysymysteksti -->
-        <h2 id="question-text" class="text-base sm:text-lg font-semibold text-slate-100 leading-snug mb-6">
-          Kysymysteksti latautuu...
-        </h2>
+      <h3 id="quiz-question-title" class="question-title">Kysymys tulee tähän...</h3>
 
-        <!-- Vastausvaihtoehdot -->
-        <div id="options-container" class="space-y-3 mb-8">
-          <!-- Vaihtoehtonapit generoidaan JS:llä -->
-        </div>
+      <div id="quiz-options-container" class="options-grid"></div>
 
-        <!-- Navigaatiopalkki -->
-        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
-          <button id="prev-btn" onclick="previousQuestion()" class="px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-slate-300 text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-            ← Edellinen
-          </button>
-          
-          <div class="flex gap-2">
-            <button id="next-btn" onclick="nextQuestion()" class="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-all shadow-md shadow-indigo-600/20">
-              Seuraava →
-            </button>
-            <button id="finish-btn" onclick="finishExam()" class="hidden px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium transition-all shadow-md shadow-emerald-600/20">
-              Päätä tentti ja katso tulokset ✓
-            </button>
-          </div>
-        </div>
+      <div class="btn-nav-row">
+        <button id="btn-prev" class="btn-secondary" onclick="navigateQuestion(-1)">← Edellinen</button>
+        <button id="btn-next" class="btn-secondary" onclick="navigateQuestion(1)">Seuraava →</button>
+        <button id="btn-submit" class="btn-finish hidden" onclick="confirmFinishExam()">Päätä tentti ja tarkista ✓</button>
       </div>
     </div>
 
     <!-- 3. TULOSNÄYTTÖ -->
-    <div id="result-screen" class="hidden transition-all pb-12">
-      <!-- Tuloskortti -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl mb-8">
-        <div class="text-center max-w-md mx-auto">
-          <div id="result-icon" class="w-16 h-16 mx-auto rounded-full flex items-center justify-center text-3xl mb-4 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            🎉
-          </div>
-          <h2 id="result-title" class="text-2xl font-bold text-white mb-1">Tentti suoritettu!</h2>
-          <p id="result-subtitle" class="text-slate-400 text-sm mb-6">Tässä on suorituksesi analyysi ja pisteytys.</p>
+    <div id="screen-result" class="card hidden">
+      <div style="text-align: center;">
+        <span id="res-badge-icon" style="font-size: 2.5rem; display: block; margin-bottom: 8px;">🎯</span>
+        <h2 id="res-title" class="title" style="margin-bottom: 4px;">Tenttitulos</h2>
+        <p id="res-feedback-text" style="color: var(--text-muted); font-size: 0.95rem;">Suorituksen yhteenveto ja arviointi.</p>
 
-          <div class="grid grid-cols-3 gap-3 p-4 rounded-xl bg-slate-950/60 border border-slate-800 mb-6">
-            <div>
-              <div class="text-xs text-slate-400">Pisteet</div>
-              <div id="score-text" class="text-xl font-bold font-mono text-white mt-0.5">0 / 24</div>
-            </div>
-            <div>
-              <div class="text-xs text-slate-400">Prosentit</div>
-              <div id="percentage-text" class="text-xl font-bold font-mono text-indigo-400 mt-0.5">0%</div>
-            </div>
-            <div>
-              <div class="text-xs text-slate-400">Arvosana (0-5)</div>
-              <div id="grade-text" class="text-xl font-bold font-mono text-emerald-400 mt-0.5">5</div>
-            </div>
+        <div class="result-score-grid">
+          <div>
+            <div class="score-item-title">PISTEET</div>
+            <div id="score-points" class="score-item-val">0 / 48</div>
           </div>
+          <div>
+            <div class="score-item-title">PROSENTIT</div>
+            <div id="score-percent" class="score-item-val" style="color: #818cf8;">0%</div>
+          </div>
+          <div>
+            <div class="score-item-title">ARVOSANA</div>
+            <div id="score-grade" class="score-item-val" style="color: #34d399;">5</div>
+          </div>
+        </div>
 
-          <div id="result-feedback-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-            Läpäisty erinomaisin arvosanoin!
-          </div>
-
-          <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <button onclick="restartExam()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Uusi satunnainen tentti</span>
-            </button>
-            <button onclick="filterReview('all')" id="filter-all-btn" class="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-medium hover:bg-slate-700 transition-all">
-              Näytä kaikki
-            </button>
-            <button onclick="filterReview('wrong')" id="filter-wrong-btn" class="px-4 py-2.5 rounded-xl border border-rose-900/40 bg-rose-950/20 text-rose-300 text-sm font-medium hover:bg-rose-900/30 transition-all">
-              Vain väärät vastaukset
-            </button>
-          </div>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 24px;">
+          <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="resetExam()">
+            🔄 Tee uusi satunnainen tentti
+          </button>
         </div>
       </div>
 
-      <!-- Kysymyskohtainen läpikäynti -->
-      <div>
-        <h3 class="text-lg font-bold text-white mb-4 flex items-center justify-between">
-          <span>Kysymyskohtainen läpikäynti ja perustelut</span>
-          <span id="review-count-badge" class="text-xs font-normal text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md">24 kysymystä</span>
-        </h3>
-        
-        <div id="review-list" class="space-y-4">
-          <!-- Generoidaan JS:llä -->
+      <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 24px 0;">
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <h3 style="font-size: 1.1rem; color: #fff;">Vastausten yksityiskohtaiset perustelut:</h3>
+        <div class="filter-tabs">
+          <button id="filter-all" class="filter-btn active" onclick="applyReviewFilter('all')">Kaikki</button>
+          <button id="filter-wrong" class="filter-btn" onclick="applyReviewFilter('wrong')">Vain väärät</button>
+          <button id="filter-correct" class="filter-btn" onclick="applyReviewFilter('correct')">Vain oikeat</button>
         </div>
       </div>
+
+      <div id="review-cards-list"></div>
     </div>
-
   </main>
 
-  <!-- ALATUNNISTE -->
-  <footer class="border-t border-slate-900 bg-slate-950 text-slate-500 text-xs py-4 text-center">
-    <p>Laadittu AMK-projektinhallinnan opintojakson aineiston (Moduulit 1–8) pohjalta opiskelijoiden tenttiharjoitteluun.</p>
+  <footer>
+    <p>Projektinhallinnan tenttivalmentaja | 48 kysymyksen kysymyspankki kurssimateriaalin (Artto ym., Pelin, Ruuska) mukaan.</p>
   </footer>
 
   <script>
     /* =========================================================================
-       TENTIN KYSYMYSPANKKI (24 kysymystä, tasan 3 kpl jokaisesta moduulista 1–8)
-       Tarkat nippelitiedot, ei ilmiselviä kompia, täsmälliset perustelut
+       48 KYSYMYKSEN TÄYDELLINEN KYSYMYSPANKKI (6 KYSYMYSTÄ PER MODUULI 1–8)
        ========================================================================= */
-    const rawQuestionBank = [
-      // MODUULI 1
+    const fullQuestionBank = [
+      // ----------------- MODUULI 1 -----------------
       {
         id: 1,
-        moduleNumber: 1,
-        moduleTitle: "Moduuli 1: Taustaa ja käsitteitä",
-        question: "Mille vuosikymmenelle projektinhallinnan historiallisessa kehityksessä sijoittuu laatuajattelun nousu tärkeäksi osaksi projektityötä yhdessä tietoteknisten suunnittelu- ja seurantatyökalujen yleistymisen kanssa?",
-        options: [
+        mod: 1,
+        modName: "Moduuli 1: Taustaa ja käsitteet",
+        q: "Mille vuosikymmenelle projektinhallinnan historiallisessa kehityksessä sijoittuu laatuajattelun nousu ja tietoteknisten suunnittelutyökalujen yleistyminen?",
+        opts: [
           "1960-luvulle",
           "1970-luvulle",
           "1980-luvulle",
           "1990-luvulle"
         ],
-        correctIndex: 2,
-        explanation: "Kurssimateriaalin (Artto ym., 2011; Pelin, 2020) mukaan: 1950–1960-luvuilla kehitettiin PERT ja CPM; 1970-luvulla huomio kohdistui projektipäällikön rooliin ja tiimityöhön; 1980-luvulla tietotekniikan yleistyminen toi uudet työkalut ja laatuajattelu nousi tärkeäksi osaksi; 1990-luvulla projektit alettiin nähdä strategisena toimintana."
+        ans: 2,
+        exp: "Artto ym. (2011) ja Pelin (2020) kronologian mukaan: 1950–60 kehitettiin PERT ja CPM; 1970-luvulla keskiöön nousi PM-rooli ja tiimityö; 1980-luvulla tietotekniikan yleistyminen ja laatuajattelu; 1990-luvulla strategisuus ja verkostot."
       },
       {
         id: 2,
-        moduleNumber: 1,
-        moduleTitle: "Moduuli 1: Taustaa ja käsitteitä",
-        question: "Mihin kansainvälisen IPMA:n osaamisviitekehyksen (ICB4) kolmesta pääalueesta kuuluvat sidosryhmien huomioiminen, organisaation strategian ymmärtäminen ja kestävän kehityksen näkökulmat?",
-        options: [
+        mod: 1,
+        modName: "Moduuli 1: Taustaa ja käsitteet",
+        q: "Mihin IPMA:n ICB4-osaamisviitekehyksen kolmesta pääalueesta kuuluvat sidosryhmien huomioiminen, strateginen ajattelu ja kestävän kehityksen näkökulmat?",
+        opts: [
           "Käytäntöpätevyyksiin (Practice)",
           "Ihmispätevyyksiin (People)",
           "Näkökulmapätevyyksiin (Perspective)",
-          "Johtamispätevyyksiin (Governance)"
+          "Kontekstipätevyyksiin (Contextual)"
         ],
-        correctIndex: 2,
-        explanation: "IPMA ICB4 jakaa osaamisen kolmeen pääalueeseen: 1) Käytäntöpätevyydet (aikataulut, resurssit, kustannukset, riskit), 2) Ihmispätevyydet (viestintä, johtaminen, motivointi, konfliktit) ja 3) Näkökulmapätevyydet (strateginen ajattelu, organisaation tavoitteet, sidosryhmien huomioiminen ja kestävä kehitys)."
+        ans: 2,
+        exp: "IPMA ICB 4.0 jakaa pätevyydet kolmeen alueeseen: 1) Käytäntöpätevyydet (menetelmät, aikataulut, budjetit), 2) Ihmispätevyydet (johtaminen, vuorovaikutus, motivointi) ja 3) Näkökulmapätevyydet (strategia, sidosryhmät, organisaatio, kestävä kehitys)."
       },
       {
         id: 3,
-        moduleNumber: 1,
-        moduleTitle: "Moduuli 1: Taustaa ja käsitteitä",
-        question: "Kun projektia tarkastellaan kirjallisuudessa nimenomaan 'tuote- tai työrakenteena', mikä seuraavista tekijöistä on tarkastelun keskiössä?",
-        options: [
-          "Ihmiset, osaaminen ja tiimin välinen vuorovaikutus",
-          "Työn osittaminen hallittaviin kokonaisuuksiin",
-          "Aikataulujen, resurssien ja tehtävien vaiheittainen prosessinhallinta",
-          "Liiketoimintahyötyjen ja strategisen arvon realisoituminen"
+        mod: 1,
+        modName: "Moduuli 1: Taustaa ja käsitteet",
+        q: "Mitä painotetaan, kun projektia tarkastellaan nimenomaan 'tuote- tai työrakenteena'?",
+        opts: [
+          "Ihmisiä, tiimityötä ja vuorovaikutussuhteita",
+          "Työn osittamista hallittaviin kokonaisuuksiin",
+          "Aikataulujen, resurssien ja vaiheiden peräkkäisyyttä",
+          "Portfolion strategista tuottavuutta"
         ],
-        correctIndex: 1,
-        explanation: "Materiaalin mukaan projektia voidaan tarkastella kolmesta eri näkökulmasta: 1) väliaikaisena organisaationa (ihmiset, osaaminen, yhteistyö), 2) tuote- tai työrakenteena (työn osittaminen hallittaviin kokonaisuuksiin) ja 3) vaiheittaisena prosessina (aikataulujen, resurssien ja tehtävien hallinta)."
+        ans: 1,
+        exp: "Kurssimateriaalin mukaan projektia voidaan tarkastella kolmesta näkökulmasta: 1) väliaikaisena organisaationa (ihmiset, yhteistyö), 2) tuote- tai työrakenteena (työn osittaminen hallittaviin kokonaisuuksiin) ja 3) vaiheittaisena prosessina (aikataulut, resurssit, ohjaus)."
       },
-
-      // MODUULI 2
       {
         id: 4,
-        moduleNumber: 2,
-        moduleTitle: "Moduuli 2: Projektin vaiheet ja ositus",
-        question: "Mikä on kurssimateriaalissa esitetyn projektin yleisen elinkaarimallin vaiheiden täsmällinen ja oikea looginen etenemisjärjestys alusta loppuun?",
-        options: [
-          "Tarpeen tunnistaminen → ideointi → määrittely → suunnittelu → toteutus → päättäminen",
-          "Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen",
-          "Esiselvitys → määrittely → ideointi → toteutus → ohjaus → päättäminen",
-          "Ideointi → määrittely → tarpeen tunnistaminen → suunnittelu → toteutus → arviointi"
+        mod: 1,
+        modName: "Moduuli 1: Taustaa ja käsitteet",
+        q: "Miten kurssilla käytetty Artto ym. (2011) määritelmä tiivistää projektin luonteen?",
+        opts: [
+          "Jatkuva toimintamalli organisaation ydinprosessien toistuvaan ylläpitoon",
+          "Ennalta määritettyyn päämäärään tähtäävä, monimutkaisten ja toisiinsa liittyvien tehtävien muodostama, ajallisesti, kustannuksiltaan ja laajuudeltaan rajattu ainutkertainen kokonaisuus",
+          "Vapaamuotoinen ideointityöpaja ilman sitovia budjetti- tai aikarajoitteita",
+          "Linjaorganisaation pysyvä alaosasto kehitystehtäville"
         ],
-        correctIndex: 1,
-        explanation: "Kurssimateriaalissa esitetty projektin yleinen elinkaarimalli etenee täsmällisesti järjestyksessä: Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen (Kettunen, 2009; Severa, 2019)."
+        ans: 1,
+        exp: "Kurssin virallinen määritelmä korostaa tavoitteellisuutta, monimutkaisten toisiinsa kytkeytyvien tehtävien kokonaisuutta, ainutkertaisuutta sekä kolmiorajoitteita (aika, kustannukset, laajuus)."
       },
       {
         id: 5,
-        moduleNumber: 2,
-        moduleTitle: "Moduuli 2: Projektin vaiheet ja ositus",
-        question: "Mikä asiakirja laaditaan usein projektin virallista käynnistämistä varten luomaan yhteinen näkemys tavoitteista ja nimeämään projektipäällikkö sekä ohjausryhmä ennen tarkempaa suunnittelua?",
-        options: [
-          "Projektisuunnitelma (Project Plan)",
-          "Projektin asettamiskirje (Project Charter / Mandate)",
-          "Toteutettavuustutkimus (Feasibility Study)",
-          "Työpakettierittely (WBS Dictionary)"
+        mod: 1,
+        modName: "Moduuli 1: Taustaa ja käsitteet",
+        q: "Mitä 'projektinhallinnan rautainen kolmio' (tai kultainen kolmio) kuvastaa tavoitteiden välisestä tasapainosta?",
+        opts: [
+          "Laatu ja kustannukset voidaan aina saavuttaa ilman aikarajoitteita.",
+          "Tavoitteet (tulos/laatu, aika, raha/resurssit) ovat sidoksissa toisiinsa: yhden muuttaminen vaikuttaa välittömästi muihin.",
+          "Projektipäällikkö voi vapaasti kasvattaa laajuutta ilman kustannus- tai aikavaikutuksia.",
+          "Se on vain rakennusalalla käytettävä sopimusmalli."
         ],
-        correctIndex: 1,
-        explanation: "Projektin virallista käynnistämistä varten johdon toimesta laaditaan projektin asettamiskirje (Ruuska, 2007). Siinä määritellään tausta, tavoitteet, alustava aikataulu sekä nimetään projektipäällikkö ja ohjausryhmä. Projektisuunnitelma laaditaan vasta tämän jälkeen suunnitteluvaiheessa."
+        ans: 1,
+        exp: "Rautaisen kolmion osatekijät ovat tulos (laajuus ja laatu), aika ja raha (kustannukset/resurssit). Jos esimerkiksi aikataulua kiristetään, se nostaa yleensä kustannuksia tai karsii laajuutta."
       },
       {
         id: 6,
-        moduleNumber: 2,
-        moduleTitle: "Moduuli 2: Projektin vaiheet ja ositus",
-        question: "Mikä seuraavista väitteistä kuvaa täsmällisimmin WBS-rakenteen (Work Breakdown Structure) pienintä yksikköä eli työpakettia (work package)?",
-        options: [
-          "Työpaketti on projektin koko elinkaaren kattava hallinnollinen päävaihe.",
-          "Työpaketti kuvaa projektin kriittistä polkua ja sitä ei voi aikatauluttaa itsenäisesti.",
-          "Työpaketti on itsenäisesti hallittava tehtäväkokonaisuus ja pienin seurattava kustannus- ja ohjausyksikkö, jolle voidaan osoittaa vastuuhenkilö.",
-          "Työpaketti on aina korkeintaan yhden työpäivän mittainen rutiinitehtävä ilman omaa budjettia."
+        mod: 1,
+        modName: "Moduuli 1: Taustaa ja käsitteet",
+        q: "Miten käsitteet 'projekti', 'hanke' ja 'ohjelma' eroavat toisistaan materiaalin mukaan?",
+        opts: [
+          "Termit ovat täysin identtisiä ilman toimialakohtaisia sävyeroja.",
+          "Julkishallinnossa projektista puhutaan usein hankkeena ja rakennusalalla urakkana; ohjelma koostuu useista yhteiseen strategiseen tavoitteeseen tähtäävistä projekteista (kuten Apollo-ohjelma).",
+          "Ohjelma on aina pienempi kuin yksittäinen projekti ja kestää enintään kuukauden.",
+          "Hankkeella tarkoitetaan ainoastaan epäonnistunutta projektia."
         ],
-        correctIndex: 2,
-        explanation: "Pelinin (2009, 2020) ja Ruuskan (2007) mukaan WBS-rakenteen pienin yksikkö on työpaketti (work package). Se sisältää selkeästi määritellyn tehtäväkokonaisuuden, jolle voidaan osoittaa vastuuhenkilö, aikataulu, resurssit ja kustannukset, ja se toimii projektin pienimpänä seurattavana kustannus- ja ohjausyksikkönä."
+        ans: 1,
+        exp: "Julkisella sektorilla käytetään usein termiä hanke ja rakennusalalla urakka. Ohjelma (program) on puolestaan useiden toisiinsa liittyvien projektien strateginen kokonaisuus (esim. Apollo-avaruusohjelma)."
       },
 
-      // MODUULI 3
+      // ----------------- MODUULI 2 -----------------
       {
         id: 7,
-        moduleNumber: 3,
-        moduleTitle: "Moduuli 3: Projektiorganisaatio ja sidosryhmät",
-        question: "Mikä on projektin ohjausryhmän (johtoryhmän) ensisijainen rooli ja mikä on tavallisesti projektipäällikön asema kyseisessä ryhmässä?",
-        options: [
-          "Ohjausryhmä vastaa projektin päivittäisestä operatiivisesta työstä ja projektipäällikkö toimii sen itsenäisenä puheenjohtajana.",
-          "Ohjausryhmä toimii ylimpänä päätöksentekoelimenä perusorganisaation strategisesta näkökulmasta, ja projektipäällikkö osallistuu työskentelyyn toimien usein sen sihteerinä.",
-          "Ohjausryhmä tekee ainoastaan viranomaisilmoitukset ja projektipäällikkö on sen ulkopuolinen tarkkailija ilman puheoikeutta.",
-          "Ohjausryhmä koostuu yksinomaan projektiryhmän jäsenistä ja projektipäällikkö vastaa sen budjettivallasta."
+        mod: 2,
+        modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
+        q: "Mikä on kurssimateriaalissa (Kettunen, 2009; Severa, 2019) esitetyn elinkaarimallin täsmällinen etenemisjärjestys?",
+        opts: [
+          "Tarpeen tunnistaminen → ideointi → suunnittelu → määrittely → toteutus → päättäminen",
+          "Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen",
+          "Esiselvitys → määrittely → suunnittelu → ideointi → päättäminen → toteutus",
+          "Määrittely → ideointi → toteutus → suunnittelu → päättäminen"
         ],
-        correctIndex: 1,
-        explanation: "Ohjausryhmä toimii projektin ylimpänä päätöksentekoelimenä ja tarkastelee sitä perusorganisaation strategisten tavoitteiden näkökulmasta (Silfverberg, 2007). Projektipäällikkö osallistuu sen työskentelyyn ja toimii usein sen sihteerinä ja esittelijänä (Kettunen, 2009)."
+        ans: 1,
+        exp: "Materiaalin mukainen virallinen elinkaarimalli: Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen."
       },
       {
         id: 8,
-        moduleNumber: 3,
-        moduleTitle: "Moduuli 3: Projektiorganisaatio ja sidosryhmät",
-        question: "Mitä tehtävien delegoinnilla tarkoitetaan kurssimateriaalin mukaan projektipäällikön johtamistyössä?",
-        options: [
-          "Kaiken henkilökohtaisen vastuun vapauttamista siirtämällä se ulkopuoliselle alihankkijalle ilman valvontaa",
-          "Vastuun ja päätösvallan siirtämistä tehtävän suorittamisesta henkilölle, joka hyväksyy annetun tehtävän",
-          "Työtehtävien automaattista arpomista projektiryhmän asiantuntijoiden kesken tasaosuuksin",
-          "Päätösvallan keskittämistä ainoastaan projektin omistajalle ja ohjausryhmän puheenjohtajalle"
+        mod: 2,
+        modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
+        q: "Mikä on ennen projektin virallista käynnistämistä tehtävän esiselvityksen eli toteutettavuustutkimuksen (feasibility study) päätarkoitus?",
+        opts: [
+          "Loppuraportin laatiminen ja kaluston myyminen",
+          "Arvioida hankkeen tarpeellisuutta, toteuttamiskelpoisuutta ja hyötyjä johdon päätöksenteon tueksi",
+          "Kaikkien yksityiskohtaisten työtuntien kirjaaminen takautuvasti",
+          "Projektiorganisaation välitön purkaminen"
         ],
-        correctIndex: 1,
-        explanation: "Ruuskan (2012) mukaan delegoinnissa siirretään vastuuta ja päätösvaltaa tehtävän suorittamisesta henkilölle, joka hyväksyy annetun tehtävän. Projektipäällikkö toimii samalla integraattorina, joka yhdistää työvaiheet ja resurssit."
+        ans: 1,
+        exp: "Esiselvityksellä / toteutettavuustutkimuksella (Ruuska, 2007) selvitetään, kannattaako projektia ylipäätään käynnistää ja onko sille olemassa riittävät tekniset, taloudelliset ja toiminnalliset edellytykset."
       },
       {
         id: 9,
-        moduleNumber: 3,
-        moduleTitle: "Moduuli 3: Projektiorganisaatio ja sidosryhmät",
-        question: "Mihin laajempaan projektinhallinnan prosessiin sidosryhmien huolellinen ja varhainen tunnistaminen suoraan kytkeytyy, ja mikä seuraavista tahoista luetaan materiaalissa nimenomaisesti projektin sidosryhmäksi?",
-        options: [
-          "Pelkkään jälkilaskentaan; ainoastaan rahoittajapankki katsotaan sidosryhmäksi",
-          "Projektin riskienhallintaan; sidosryhmiin luetaan jopa projektiin osallistuvien henkilöiden lähipiiri ja kilpailijat",
-          "Ainoastaan toimintaverkon kriittisen polun laskentaan; vain toimittajat luetaan sidosryhmiksi",
-          "WBS:n työpakettien koodaamiseen; ainoastaan viranomaiset ovat todellisia sidosryhmiä"
+        mod: 2,
+        modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
+        q: "Mikä virallinen asiakirja laaditaan usein käynnistämisvaiheessa nimeämään projektipäällikkö ja ohjausryhmä sekä antamaan valtuutus suunnittelulle?",
+        opts: [
+          "Projektin asettamiskirje",
+          "Gantt-kaavio",
+          "Loppukatselmuspöytäkirja",
+          "Työmaapäiväkirja"
         ],
-        correctIndex: 1,
-        explanation: "Artto ym. (2006) korostavat, että sidosryhmien tunnistaminen on keskeinen osa riskienhallintaa (huomiotta jäänyt ryhmä voi aiheuttaa suuria esteitä). Materiaali luettelee sidosryhmiksi mm. asiakkaat, viranomaiset, median, kilpailijat sekä 'projektiin osallistuvien henkilöiden lähipiirin'."
+        ans: 0,
+        exp: "Projektin asettamiskirje (Ruuska, 2007) luo yhteisen pohjan, vahvistaa taustan ja tavoitteet sekä nimeää muodollisesti projektipäällikön ja mahdollisen ohjausryhmän."
       },
-
-      // MODUULI 4
       {
         id: 10,
-        moduleNumber: 4,
-        moduleTitle: "Moduuli 4: Suunnitelma, aikataulut, resurssit, kustannukset",
-        question: "Projektin aikataulussa tunnistetaan erilaisia riippuvuustyyppejä. Mistä riippuvuudesta on kyse, kun tehtävän toteutus on sidottu tiettyyn ulkoiseen ajankohtaan, kuten viranomaispäätökseen tai toimituspäivään?",
-        options: [
-          "Loogisesta riippuvuudesta",
-          "Limitysriippuvuudesta",
-          "Viiveriippuvuudesta",
-          "Kalenteririippuvuudesta"
+        mod: 2,
+        modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
+        q: "Mihin viiteen keskeiseen kysymykseen hyvin laaditun projektisuunnitelman tulee vastata (Lewis, 1997)?",
+        opts: [
+          "Miksi, kenen syy, millä oikeudella, minne, milloinkaan",
+          "Mitä tehdään, miksi tehdään, kuka tekee, milloin tehdään ja miten tavoitteet saavutetaan",
+          "Kuka maksaa eniten, kuka pääsee vähimmällä, milloin lomaillaan, minne mennään, miten peitellään virheet",
+          "Mitä ostetaan, mistä saadaan alennusta, kuka irtisanotaan, milloin konkurssi uhkaa, miten valitetaan"
         ],
-        correctIndex: 3,
-        explanation: "Pelinin (2020) mukaan: Kalenteririippuvuudessa tehtävän toteutus on sidottu tiettyyn ulkoiseen kalenteriajankohtaan (esim. viranomaispäätös tai toimituspäivä). Loogisessa riippuvuudessa tehtävä vaatii edellisen valmistumista ja resurssiriippuvuudessa samojen tekijöiden käyttö estää samanaikaisuuden."
+        ans: 1,
+        exp: "Lewis (1997) ja Ruuska (2007) listaavat 5 peruskysymystä: Mitä tehdään? Miksi tehdään? Kuka tekee? Milloin tehdään? Miten tavoitteet saavutetaan?"
       },
       {
         id: 11,
-        moduleNumber: 4,
-        moduleTitle: "Moduuli 4: Suunnitelma, aikataulut, resurssit, kustannukset",
-        question: "Avainhenkilön henkilökohtaisessa kuormitussuunnitelmassa esiintyy merkintä '6, EE, 0,5'. Mitä tämä merkintä tarkoittaa kurssikirjallisuuden standardin mukaan?",
-        options: [
-          "Tehtävä kestää 6 päivää, tekijöitä on EE-luokassa enintään 0,5 henkilötyövuotta.",
-          "Tehtävän kesto on 6 viikkoa, vastuuhenkilön tunnus on EE ja hänen käyttöasteensa tehtävässä on 50 % (0,5) työajasta.",
-          "Tehtävän prioriteetti on 6, kustannuspaikka EE ja riskikerroin 0,5.",
-          "Projektin kuudennen vaiheen työpaketti EE edellyttää puolen tunnin viikoittaista raportointia."
+        mod: 2,
+        modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
+        q: "Miksi Pelin (2020) kutsuu projektin ositusta (Work Breakdown Structure, WBS)?",
+        opts: [
+          "Projektinhallinnan selkärangaksi, joka muodostaa projektiohjauksen perustan",
+          "Turhaksi byrokraattiseksi hidasteeksi, jota ei suositella käytettäväksi",
+          "Vain ohjelmistokoodareille tarkoitetuksi luokkahierarkiaksi",
+          "Tilintarkastajien salaiseksi pistokokeeksi"
         ],
-        correctIndex: 1,
-        explanation: "Materiaalin (Artto ym., 2011; Pelin, 2020) esimerkin mukaisesti merkintä '6, EE, 0,5' tarkoittaa: 6 = tehtävän kesto viikkoina, EE = henkilön tunnus ja 0,5 = käyttöaste eli 50 % henkilön työajasta."
+        ans: 0,
+        exp: "Pelin (2020) määrittelee osituksen projektiohjauksen perustaksi ja nimittää sitä projektinhallinnan selkärangaksi, koska koko aikataulutus, budjetointi ja seuranta nojaavat siihen."
       },
       {
         id: 12,
-        moduleNumber: 4,
-        moduleTitle: "Moduuli 4: Suunnitelma, aikataulut, resurssit, kustannukset",
-        question: "Miten 'sidottujen kustannusten periaate' toimii projektin kustannusseurannassa ja miten budjetti eroaa kustannusarviosta?",
-        options: [
-          "Kustannus kirjataan vasta kun lasku on maksettu pankkitililtä; budjetti on aina täysin sama asia kuin kustannusarvio.",
-          "Kustannus kirjataan heti kun sitova sopimus tai tilaus tehdään; kustannusarvio kertoo kuinka paljon rahaa tarvitaan, budjetti kertoo milloin rahaa tarvitaan.",
-          "Sidotut kustannukset tarkoittavat pelkästään kiinteitä palkkakuluja; budjettia ei koskaan sidota projektin aikatauluun.",
-          "Kustannus kirjataan ennusteena jo ideoinnissa; budjetti ilmoittaa pelkät projektin tuotot ja jälkilaskennan lopputuloksen."
+        mod: 2,
+        modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
+        q: "Mikä seuraavista luonnehtii oikein WBS:n pienintä yksikköä eli työpakettia (work package)?",
+        opts: [
+          "Se on projektin ylin strateginen päämäärä ilman omaa vastuuhenkilöä.",
+          "Se on itsenäisesti hallittava tehtäväkokonaisuus ja pienin seurattava kustannus- ja ohjausyksikkö, jolle voidaan määrittää vastuuhenkilö, aikataulu ja budjetti.",
+          "Työpaketti voi sisältää korkeintaan 15 minuuttia työtä eikä sitä saa koskaan delegoida.",
+          "Työpaketti tarkoittaa projektin fyysistä postilähetystä tilaajalle."
         ],
-        correctIndex: 1,
-        explanation: "Pelin (2020) ja Ruuska (2012): Sidottujen kustannusten periaatteessa kulu kirjataan heti sitovan sopimuksen/tilauksen syntyessä (jolloin taloustilanne ei näytä keinotekoisen hyvältä laskujen viipyessä). Kustannusarvio kertoo mitä projekti maksaa kokonaisuudessaan; budjetti kertoo milloin rahaa tarvitaan kytkemällä kulut aikatauluun."
+        ans: 1,
+        exp: "WBS:n alin elementti on työpaketti. Se on ohjauksen ja kustannusseurannan perusyksikkö, jolla on nimetty omistaja, selkeä tavoite, aikataulu ja resurssit."
       },
 
-      // MODUULI 5
+      // ----------------- MODUULI 3 -----------------
       {
         id: 13,
-        moduleNumber: 5,
-        moduleTitle: "Moduuli 5: Projektin muutokset, riskit ja ongelmat",
-        question: "Mitkä seuraavista projektin aikana syntyvistä muutostarpeista luokitellaan kurssimateriaalissa nimenomaan projektin sisäisiksi muutoksiksi?",
-        options: [
-          "Asiakkaan uudet vaatimukset ja markkinatilanteen äkilliset heilahdukset",
-          "Lainsäädännön ja viranomaismääräysten muuttuminen hankkeen aikana",
-          "Työmenetelmien muuttaminen, teknisten ratkaisujen vaihtaminen ja resurssien uudelleenjärjestely",
-          "Globaalien toimitusketjujen häiriöt ja komponenttipula"
+        mod: 3,
+        modName: "Moduuli 3: Organisaatio ja sidosryhmät",
+        q: "Miten projektiorganisaation koko ja resurssitarve tyypillisesti kehittyvät projektin elinkaaren aikana (Ruuska, 2012)?",
+        opts: [
+          "Koko pysyy täysin muuttumattomana ensimmäisestä päivästä viimeiseen.",
+          "Alussa organisaatio on usein kevyt, kasvaa suunnittelu- ja toteutusvaiheissa huipulleen ja supistuu asteittain kohti päättämistä.",
+          "Organisaatio on suurimmillaan ideointivaiheessa ja kutistuu yhteen henkeen toteutuksessa.",
+          "Resurssitarve kasvaa räjähdysmäisesti vasta projektin päättämisen jälkeen."
         ],
-        correctIndex: 2,
-        explanation: "Kurssimateriaalin (Pelin, 2020) mukaan sisäiset muutokset liittyvät projektin omiin toteutustapoihin ja tiimin ratkaisuihin (työmenetelmät, tekniset ratkaisut, resurssien uudelleenjärjestely). Asiakkaan toiveet, lait, markkinat ja toimitusketjut ovat tyypillisiä ulkoisia muutoksia."
+        ans: 1,
+        exp: "Projektiorganisaatio on tilapäinen. Alussa se on kevyt (ydintiimi/valmistelijat), laajenee toteutuksen huipussa ja supistuu vaiheittain ennen purkamista."
       },
       {
         id: 14,
-        moduleNumber: 5,
-        moduleTitle: "Moduuli 5: Projektin muutokset, riskit ja ongelmat",
-        question: "Mitä tarkoitetaan vaatimusten hallintaan liittyvällä 'jäljitettävyydellä' (traceability) projektin muutostenhallinnassa?",
-        options: [
-          "Sitä, että projektipäällikkö voi jäljittää työntekijöiden tarkan työajan minuuttitasolla",
-          "Kykyä osoittaa, miten yksittäinen vaatimus on huomioitu suunnittelussa, toteutuksessa ja lopputuotteen hyväksymisessä",
-          "Projektin kaikkien ostolaskujen kirjanpidollista arkistointitapaa verotarkastusta varten",
-          "Tilaajan IP-osoitteiden seuraamista tietojärjestelmähankkeen käyttöönottovaiheessa"
+        mod: 3,
+        modName: "Moduuli 3: Organisaatio ja sidosryhmät",
+        q: "Mitä tehtävien delegoinnilla tarkoitetaan täsmällisesti projektipäällikön johtamistyössä (Ruuska, 2012)?",
+        opts: [
+          "Kaiken henkilökohtaisen vastuun siirtämistä alihankkijoille ilman raportointivelvoitetta",
+          "Vastuun ja päätösvallan siirtämistä tehtävän suorittamisesta henkilölle, joka hyväksyy annetun tehtävän",
+          "Päätösvallan keskittämistä vain ja ainoastaan tilaajalle",
+          "Vaikeiden töiden jättämistä tekemättä ryhmäpaineen välttämiseksi"
         ],
-        correctIndex: 1,
-        explanation: "Ruuskan (2012) mukaan jäljitettävyydellä (traceability) tarkoitetaan sitä, että voidaan aukottomasti osoittaa, miten yksittäinen vaatimus on viety suunnitteluun, miten se on toteutettu ja miten se todennetaan ja hyväksytään lopputuotteessa."
+        ans: 1,
+        exp: "Delegoinnissa siirretään vastuuta ja tarvittavaa päätösvaltaa tehtävän suorittamiseksi henkilölle, joka hyväksyy tehtävän vastaanottamisen. Projektipäällikkö toimii kokonaisuuden integraattorina."
       },
       {
         id: 15,
-        moduleNumber: 5,
-        moduleTitle: "Moduuli 5: Projektin muutokset, riskit ja ongelmat",
-        question: "Mitä riskien käsittelystrategiaa edustaa kiinteähintaisen alihankintasopimuksen tai vakuutuksen ottaminen, ja mihin Pareto-analyysiä käytetään riskienhallinnassa?",
-        options: [
-          "Riskin välttämistä; Pareto-analyysillä lasketaan riskin matemaattinen todennäköisyys asteikolla 1–5.",
-          "Riskin hyväksymistä; Pareto-analyysillä poistetaan kaikki ulkoiset riskit projektisuunnitelmasta.",
-          "Riskin siirtämistä; Pareto-analyysillä kohdennetaan toimenpiteet pieneen joukkoon merkittävimpiä riskejä (80/20-sääntö).",
-          "Riskin pienentämistä; Pareto-analyysillä arvioidaan projektipäällikön henkilökohtaista osaamista."
+        mod: 3,
+        modName: "Moduuli 3: Organisaatio ja sidosryhmät",
+        q: "Mikä on ohjausryhmän (johtoryhmän/valvontaryhmän) ensisijainen rooli ja miten usein se yleensä kokoontuu?",
+        opts: [
+          "Tehdä koodaus- ja asennustyöt; kokoontuu kaksi kertaa päivässä",
+          "Toimia projektin ylimpänä päätöksentekoelimenä perusorganisaation strategisesta näkökulmasta; kokoontuu yleensä säännöllisesti (esim. kerran kuukaudessa)",
+          "Ainoastaan maksaa kahvilaskut ilman päätösvaltaa; kokoontuu vain projektin päätyttyä",
+          "Toimia projektipäällikön alaisena ja ottaa vastaan hänen käskynsä"
         ],
-        correctIndex: 2,
-        explanation: "Riskin siirtämisessä taloudellinen vastuu siirretään osin tai kokonaan toiselle (vakuutukset, kiinteähintaiset alihankinnat). Pareto-analyysi puolestaan perustuu 80/20-periaatteeseen: tunnistetaan se pieni määrä keskeisiä riskejä, jotka aiheuttavat valtaosan kokonaisuhkista, jotta toimet kohdennetaan tehokkaasti."
+        ans: 1,
+        exp: "Ohjausryhmä edustaa omistajaa/tilaajaa ja toimii ylimpänä päätöksentekoelimenä (Silfverberg, 2007; Kettunen, 2009). Se kokoontuu tyypillisesti esim. kerran kuukaudessa seuraamaan tavoitteiden toteutumista."
       },
-
-      // MODUULI 6
       {
         id: 16,
-        moduleNumber: 6,
-        moduleTitle: "Moduuli 6: Projektiviestintä ja raportointi",
-        question: "Miten kirjallinen viestintä ja henkilökohtainen vuorovaikutus eroavat toisistaan vaikuttavuudeltaan projektijohtamisessa (Ruuska, 2012)?",
-        options: [
-          "Kirjallinen viestintä muuttaa syvällisesti asenteita ja käyttäytymistä, kun taas henkilökohtainen vuorovaikutus lisää vain passiivista tietoisuutta.",
-          "Kirjallinen viestintä lisää tietoisuutta asiasta, mutta asenteisiin ja käyttäytymiseen vaikuttaminen edellyttää henkilökohtaista vuorovaikutusta.",
-          "Molemmat ovat täysin identtisiä, eikä henkilökohtaista kontaktia suositella projektityössä virallisuuden säilyttämiseksi.",
-          "Sähköposti on paras ja suositelluin väline käsitellä projektin vaikeita, kriittisiä ja negatiivisia ristiriitoja."
+        mod: 3,
+        modName: "Moduuli 3: Organisaatio ja sidosryhmät",
+        q: "Mikä on projektipäällikön tavanomainen rooli projektin ohjausryhmän työskentelyssä?",
+        opts: [
+          "Hän on ulkopuolinen henkilö, jolle ei koskaan kerrota kokouksista.",
+          "Hän osallistuu työskentelyyn, esittelee asiat ja toimii usein sen sihteerinä.",
+          "Hän toimii aina automaattisesti ohjausryhmän puheenjohtajana ja omistajana.",
+          "Hänellä on veto-oikeus kumota kaikki organisaation strategiset päätökset."
         ],
-        correctIndex: 1,
-        explanation: "Ruuska (2012) toteaa nimenomaisesti: Kirjallinen viestintä lisää tietoisuutta käsiteltävästä asiasta, mutta asenteisiin ja käyttäytymiseen vaikuttaminen vaatii henkilökohtaista kanssakäymistä. Lisäksi sähköposti ei sovi vaikeiden tai negatiivisten asioiden hoitoon tulkinnanvaraisuuden ja kasvottomuuden vuoksi."
+        ans: 1,
+        exp: "Projektipäällikkö osallistuu ohjausryhmän kokouksiin asioiden esittelijänä ja usein toimii ryhmän sihteerinä, vaikka ei itse ole ryhmän puheenjohtaja (Kettunen, 2009; Silfverberg, 2007)."
       },
       {
         id: 17,
-        moduleNumber: 6,
-        moduleTitle: "Moduuli 6: Projektiviestintä ja raportointi",
-        question: "Mitä suositellaan tehtäväksi projektin viestinnän suunnittelun pohjaksi, ja mikä on kurssikirjallisuuden mukaan hyvän viestinnän keskeinen tunnusmerkki?",
-        options: [
-          "Kustannusarvion jälkilaskenta; tunnusmerkkinä on viestien mahdollisimman suuri viikoittainen lukumäärä.",
-          "Sidosryhmäanalyysi; tunnusmerkkinä on se, että vastaanottaja ymmärtää viestin tarkoitetulla tavalla ja lähettäjä voi varmistua tästä.",
-          "WBS-osituksen poistaminen; tunnusmerkkinä on pelkän suullisen viestinnän käyttö kaikissa tilanteissa.",
-          "Toimintaverkon solmuanalyysi; tunnusmerkkinä on se, ettei projektipäällikön tarvitse tavata ohjausryhmää."
+        mod: 3,
+        modName: "Moduuli 3: Organisaatio ja sidosryhmät",
+        q: "Mikä seuraavista tahoista luetaan materiaalissa (Artto ym., 2006) nimenomaisesti projektin mahdolliseksi sidosryhmäksi?",
+        opts: [
+          "Vain ja ainoastaan projektipäällikkö itse",
+          "Asiakas, loppukäyttäjät, kilpailijat, media sekä projektiin osallistuvien henkilöiden lähipiiri",
+          "Ainoastaan veroviranomainen",
+          "Ei kukaan organisaation ulkopuolinen"
         ],
-        correctIndex: 1,
-        explanation: "Artto ym. (2006) mukaan viestinnän suunnittelun pohjaksi tehdään sidosryhmäanalyysi tiedontarpeiden selvittämiseksi. Hyvän viestinnän tunnusmerkki on se, että vastaanottaja ymmärtää viestin tarkoitetulla tavalla ja lähettäjä voi varmistua tästä."
+        ans: 1,
+        exp: "Sidosryhmiä ovat kaikki tahot, joihin projekti vaikuttaa tai jotka voivat vaikuttaa siihen. Materiaali mainitsee laajan kirjon tilaajasta, käyttäjistä ja viranomaisista aina mediaan, kilpailijoihin ja lähipiiriin asti."
       },
       {
         id: 18,
-        moduleNumber: 6,
-        moduleTitle: "Moduuli 6: Projektiviestintä ja raportointi",
-        question: "Mikä seuraavista kokonaisuuksista kuuluu nimenomaan projektin päättyessä laadittavaan loppuraporttiin (Ruuska, 2012) eikä projektin aikaisiin rutiinitilanneraportteihin?",
-        options: [
-          "Yksittäisen työviikon työtuntilistat ja tulevan viikon kalenterivaraus",
-          "Opitut kokemukset (lessons learned), suositukset jatkotoimenpiteiksi sekä lopputuotteen ylläpito- ja jatkokehityssuunnitelmat",
-          "Ainoastaan seuraavan kuukauden kokouskutsu ja sen esityslista",
-          "Kriittisen polun viivästymisilmoitus ja välitön muutospyyntölomake"
+        mod: 3,
+        modName: "Moduuli 3: Organisaatio ja sidosryhmät",
+        q: "Miksi sidosryhmien varhainen ja huolellinen tunnistaminen on materiaalin mukaan kriittinen osa projektin riskienhallintaa?",
+        opts: [
+          "Koska huomiotta jäänyt merkittävä sidosryhmä voi myöhemmin vastustuksellaan estää projektin etenemisen tai lopputuloksen hyväksymisen.",
+          "Jotta kaikille sidosryhmille voidaan maksaa sama kiinteä kuukausipalkka.",
+          "Koska sidosryhmät korvaavat koko projektisuunnitelman laadinnan.",
+          "Sidosryhmillä ei ole mitään yhteyttä riskienhallintaan."
         ],
-        correctIndex: 1,
-        explanation: "Loppuraportin (Ruuska, 2012; Silfverberg, 2007) keskeisintä ja uniikkia sisältöä ovat koko projektin kokonaisonnistumisen arviointi, opitut kokemukset ja kehittämiskohteet, suositukset jatkotoimenpiteiksi sekä ylläpito- ja jatkokehityssuunnitelmat."
+        ans: 0,
+        exp: "Artto ym. (2006) korostavat, että sidosryhmien tunnistaminen on keskeinen osa riskienhallintaa: jos jokin avaintaho jätetään huomiotta, se voi viivästyttää projektia tai torjua lopputuloksen käyttöönoton."
       },
 
-      // MODUULI 7
+      // ----------------- MODUULI 4 -----------------
       {
         id: 19,
-        moduleNumber: 7,
-        moduleTitle: "Moduuli 7: Projektin päättäminen",
-        question: "Kuka kutsuu koolle projektin virallisen päätöskokouksen ja kuka tekee lopullisen muodollisen päätöksen projektin päättämisestä sekä vastuista vapauttamisesta?",
-        options: [
-          "Projektiryhmän nuorin jäsen kutsuu; projektipäällikkö päättää yksin päättämisestä.",
-          "Projektipäällikkö kutsuu kokouksen koolle ja valmistelee loppuraportin; projektin ohjausryhmä tai muu valvova johtoelin tekee lopullisen päätöksen päättämisestä.",
-          "Ulkopuolinen tilintarkastaja kutsuu kokouksen; kukin sidosryhmä päättää omalta osaltaan erikseen.",
-          "Tilaajan pääkäyttäjä kutsuu kokouksen; projektipäällikkö vapauttaa ohjausryhmän vastuistaan."
+        mod: 4,
+        modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
+        q: "Mitä tarkoitetaan aikataulusuunnittelussa käytettävällä rullaavan suunnittelun periaatteella (vyöryvä aalto / rolling wave)?",
+        opts: [
+          "Suunnitelmia ei tehdä lainkaan ennen kuin projekti on jo valmistunut.",
+          "Lähimpänä toteutettavat vaiheet suunnitellaan tarkasti, kun taas myöhemmät vaiheet kuvataan aluksi yleisemmällä tasolla ja tarkennetaan työn edetessä.",
+          "Projektin deadlinea siirretään joka viikko yhdellä kuukaudella eteenpäin.",
+          "Budjettia kasvatetaan automaattisesti ilman ohjausryhmän lupaa."
         ],
-        correctIndex: 1,
-        explanation: "Pelinin (2004) ja Huotarin (2015) mukaan päätöskokouksen valmistelee ja kutsuu koolle projektipäällikkö, mutta virallisen ja lopullisen päätöksen projektin päättämisestä, tulosten hyväksymisestä ja organisaation purkamisesta tekee projektin ohjausryhmä tai vastaava johtoelin."
+        ans: 1,
+        exp: "Rullaava suunnittelu (Artto ym., 2011; Ruuska, 2012) tarkoittaa, että lähitulevaisuus suunnitellaan tarkasti työpaketeiksi ja kaukaisemmat vaiheet tarkennetaan tiedon kertyessä."
       },
       {
         id: 20,
-        moduleNumber: 7,
-        moduleTitle: "Moduuli 7: Projektin päättäminen",
-        question: "Miten projektin tulosten virallinen luovutus- ja hyväksymismenettely kurssimateriaalin mukaan eroaa toisistaan tutkimusprojektissa, rakennusprojektissa ja tietojärjestelmäprojektissa?",
-        options: [
-          "Kaikissa käytetään täysin samaa RT-kortiston mukaista katselmusta.",
-          "Tutkimusprojektissa järjestetään usein päätösseminaari, rakennusprojektissa vastaanottotarkastus ja tietojärjestelmähankkeessa hyväksymistestaus (ja koekäyttö).",
-          "Tietojärjestelmä luovutetaan päätösseminaarissa, rakennus hyväksymistestauksella ilman katselmusta ja tutkimus pelkällä suullisella ilmoituksella.",
-          "Tutkimushankkeissa pidetään virallinen työmaakatselmus ja rakennushankkeissa ainoastaan koekäyttöjakso."
+        mod: 4,
+        modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
+        q: "Mistä aikataulun riippuvuustyypistä on kyse, kun tehtävän aloitus on sidottu tiettyyn ulkoiseen ajankohtaan, kuten viranomaispäätökseen tai toimituspäivään?",
+        opts: [
+          "Loogisesta riippuvuudesta",
+          "Kalenteririippuvuudesta",
+          "Viiveriippuvuudesta",
+          "Limitysriippuvuudesta"
         ],
-        correctIndex: 1,
-        explanation: "Kettunen (2003) ja Ruuska (2012): Tutkimus-/selvityshankkeissa tulokset luovutetaan ja esitellään usein päätösseminaarissa. Fyysisessä rakennushankkeessa suoritetaan virallinen vastaanottotarkastus. Tietojärjestelmähankkeissa suoritetaan hyväksymistestaus ja usein erillinen koekäyttöjakso."
+        ans: 1,
+        exp: "Pelin (2020) määrittelee: Kalenteririippuvuudessa tehtävä on sidottu tiettyyn kalenteripäivämäärään tai ulkoiseen tapahtumaan (kuten lupa, messut tai toimitusajankohta)."
       },
       {
         id: 21,
-        moduleNumber: 7,
-        moduleTitle: "Moduuli 7: Projektin päättäminen",
-        question: "Mitkä ovat Pelinin (2004) mukaan projektin päättyessä arkistoitavan 'projektikansion' kolme keskeistä päätarkoitusta?",
-        options: [
-          "Verojen kiertäminen, työntekijöiden valvonta ja kaluston romuttaminen",
-          "Tiedon säilyminen, tulosten jäljitettävyys sekä organisaation oppiminen tulevia projekteja varten",
-          "Ohjausryhmän salaisten muistiinpanojen hävittäminen ja budjetin salaaminen",
-          "Projektipäällikön henkilökohtaisen ansioluettelon täydentäminen ja markkinointi kilpailijoille"
+        mod: 4,
+        modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
+        q: "Mitä tarkoittaa resurssikuormitussuunnitelmassa esiintyvä standardimerkintä '6, EE, 0,5'?",
+        opts: [
+          "Tehtävän kesto on 6 viikkoa, vastuuhenkilön tunnus on EE ja hänen käyttöasteensa kyseisessä tehtävässä on 50 % (0,5) työajasta.",
+          "Tehtävä vaatii 6 henkilöä, EE-palkkaluokan ja 5 kuukautta aikaa.",
+          "Projektin riskiarvo on 6, kustannuskeskus EE ja arvonlisävero 0,5 %.",
+          "Kuudentena päivänä suoritettava työpaketti EE vaatii puoli tuntia perehdytystä."
         ],
-        correctIndex: 1,
-        explanation: "Materiaalin mukaan projektikansion dokumentoinnin ja säilyttämisen tarkoituksena on varmistaa: 1) tiedon säilyminen, 2) tulosten jäljitettävyys sekä 3) organisaation oppiminen tulevia projekteja varten (Pelin, 2004)."
+        ans: 0,
+        exp: "Materiaalin (Artto ym., 2011; Pelin, 2020) mukaan merkinnässä '6, EE, 0,5' luku 6 on kesto viikkoina, EE on henkilön koodi/tunnus ja 0,5 on työajan käyttöaste (50 %)."
       },
-
-      // MODUULI 8
       {
         id: 22,
-        moduleNumber: 8,
-        moduleTitle: "Moduuli 8: Projektinhallinnan kehityssuuntia",
-        question: "Miten ketteristä toimintamalleista Scrum ja Kanban eroavat toisistaan keskeisimmältä toimintaperiaatteeltaan?",
-        options: [
-          "Scrumia sovelletaan vain talonrakennuksessa, kun taas Kanban on pelkkä EU-hankkeiden raportointityökalu.",
-          "Scrum perustuu määrämittaisiin kehitysjaksoihin eli sprintteihin (1–4 vk), kun taas Kanban keskittyy työn visualisointiin ja keskeneräisen työn (WIP) määrän rajoittamiseen.",
-          "Kanban vaatii aina vesiputousmallin mukaisen ennakkosuunnittelun, kun taas Scrumissa ei tehdä lainkaan suunnittelua eikä katselmuksia.",
-          "Scrum kieltää tiimityöskentelyn ja palaverit, kun taas Kanbanissa pidetään päivittäin useita tunteja kestäviä päätöskokouksia."
+        mod: 4,
+        modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
+        q: "Miten PERT-menetelmässä otetaan huomioon tehtävien keston epävarmuus ja mitkä 3 aika-arviota sille annetaan?",
+        opts: [
+          "Aamu-, ilta- ja yöaika",
+          "Optimistinen aika, todennäköisin aika ja pessimistinen aika",
+          "Halpa aika, kallis aika ja ilmainen aika",
+          "Mennyt aika, nykyinen aika ja tuleva aika"
         ],
-        correctIndex: 1,
-        explanation: "Lehtonen (2014) ja Leppänen (2022): Scrum etenee tyypillisesti 1–4 viikon mittaisissa iteroinneissa eli sprinteissä, joiden päättyessä arvioidaan tuotos. Kanban puolestaan visualisoi työnkulun taululla, vähentää keskeneräisen työn (WIP) määrää ja parantaa työn virtausta ilman sidottuja sprinttisyklejä."
+        ans: 1,
+        exp: "PERT-menetelmässä (Program Evaluation and Review Technique) epävarmuutta mallinnetaan kolmella kestoarviolla: optimistinen (optimistic), todennäköisin (most likely) ja pessimistinen (pessimistic)."
       },
       {
         id: 23,
-        moduleNumber: 8,
-        moduleTitle: "Moduuli 8: Projektinhallinnan kehityssuuntia",
-        question: "Mihin huomio kohdistuu rakennusalalla yleistyneessä, Lean-ajatteluun perustuvassa 'tahtituotannossa'?",
-        options: [
-          "Yksittäisten työntekijöiden maksimaaliseen ylityötuntien kerryttämiseen ja materiaalivarastojen kasvattamiseen",
-          "Työpakettien etenemiseen suunnitellussa vakiorytmissä työalueelta toiselle, tasaiseen työn virtaukseen ja arvontuotantoon asiakkaalle",
-          "Projektisuunnitelman korvaamiseen pelkillä suullisilla sopimuksilla ilman aikatauluja",
-          "Kaikkien alihankkijoiden korvaamiseen yhdellä valtion viranomaisella"
+        mod: 4,
+        modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
+        q: "Mikä on projektin 'kriittisen polun' täsmällinen määritelmä ja ominaisuus?",
+        opts: [
+          "Lyhin reitti projektin alusta loppuun, jolla on eniten pelivaraa",
+          "Projektin alusta loppuun ulottuva pisin toisistaan riippuvaisten tehtävien ketju, jonka tehtävillä ei ole lainkaan pelivaraa (viivästys siirtää valmistumispäivää)",
+          "Tehtävät, joissa työskentelee organisaation toimitusjohtaja",
+          "Kaikki ne tehtävät, jotka ylittävät budjetin yli 50 prosentilla"
         ],
-        correctIndex: 1,
-        explanation: "Koskelan (2000) ja Pelinin (2020) mukaan tahtituotannossa hanke jaetaan työpaketteihin, jotka etenevät suunnitellussa vakiorytmissä tilasta toiseen. Huomio ei ole pelkästään yksittäisen resurssin optimoinnissa, vaan koko projektin tasaisessa virtauksessa, häiriöiden karsinnassa ja läpimenoaikojen lyhentämisessä."
+        ans: 1,
+        exp: "Kriittinen polku (Critical Path) määrittää projektin vähimmäiskeston. Se on pisin ketju riippuvuuksia, ja sen tehtävien liikkumavara/pelivara on tasan nolla."
       },
       {
         id: 24,
-        moduleNumber: 8,
-        moduleTitle: "Moduuli 8: Projektinhallinnan kehityssuuntia",
-        question: "Mikä seuraavista luonnehtii parhaiten suurissa rakennus- ja infrahankkeissa käytettävää allianssimallia (Lahdenperä, 2019)?",
-        options: [
-          "Tilaaja ja pääurakoitsija riitelevät vastuista käräjäoikeudessa jo ennen suunnitteluvaiheen aloitusta.",
-          "Tilaaja siirtää kaikki riskit kiinteällä hinnalla yhdelle ainoalle alihankkijalle ilman yhteistyövelvoitetta.",
-          "Tilaaja, suunnittelijat ja urakoitsijat muodostavat yhteisen jaetun organisaation, jossa vastataan yhdessä suunnittelusta ja toteutuksesta sekä jaetaan sekä riskit että hyödyt.",
-          "Hanke toteutetaan anonyymisti ilman projektipäällikköä tai ohjausryhmää verkkokyselynä."
+        mod: 4,
+        modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
+        q: "Miten budjetti eroaa kustannusarviosta ja miten 'sidottujen kustannusten periaate' toimii seurannassa?",
+        opts: [
+          "Ne ovat täysin sama asia; kustannus kirjataan vasta kun raha siirtyy pankissa.",
+          "Kustannusarvio kertoo kuinka paljon rahaa tarvitaan, budjetti kertoo milloin rahaa tarvitaan kytkemällä se aikatauluun; sidottu kulu kirjataan heti sitovan sopimuksen/tilauksen syntyessä.",
+          "Budjetti tehdään vain jälkilaskennassa ja kustannusarvio jätetään aina salaiseksi.",
+          "Sidotut kustannukset tarkoittavat vakuudeksi annettua käteistä."
         ],
-        correctIndex: 2,
-        explanation: "Lahdenperän (2019) mukaan allianssi on yhteistoiminnallinen malli, jossa tilaaja, suunnittelijat ja urakoitsijat muodostavat yhteisen organisaation, vastaavat hankkeesta yhdessä ja jakavat sekä toteutuksen riskit että saavutetut hyödyt avoimen kulttuurin hengessä (esim. Tampereen Rantatunneli)."
+        ans: 1,
+        exp: "Kustannusarvio summaa kokonaisrahantarpeen, kun taas budjetti jaksottaa sen aikajanalle. Sidottu kustannus kirjataan heti kun sitova sopimus syntyy, jotta taloustilanne ei vääristy laskujen viiveiden takia."
+      },
+
+      // ----------------- MODUULI 5 -----------------
+      {
+        id: 25,
+        mod: 5,
+        modName: "Moduuli 5: Muutokset, riskit & ongelmat",
+        q: "Mitkä seuraavista luokitellaan kurssimateriaalissa nimenomaisesti projektin sisäisiksi muutoksiksi?",
+        opts: [
+          "Asiakkaan uudet vaatimukset ja markkinoiden suhdannevaihtelut",
+          "Lainsäädännön ja viranomaismääräysten kiristyminen",
+          "Työmenetelmien muuttaminen, teknisten ratkaisujen vaihtaminen ja resurssien uudelleenjärjestely",
+          "Globaalit komponenttipulat ja rahtiviiveet"
+        ],
+        ans: 2,
+        exp: "Pelin (2020) mukaan sisäiset muutokset ovat projektitiimin omassa hallinnassa olevia toteutustapojen (menetelmät, tekniset valinnat, resurssien jako) viilauksia. Asiakkaan toiveet ja lait ovat ulkoisia."
+      },
+      {
+        id: 26,
+        mod: 5,
+        modName: "Moduuli 5: Muutokset, riskit & ongelmat",
+        q: "Mitä tarkoitetaan vaatimusten hallintaan liittyvällä 'jäljitettävyydellä' (traceability)?",
+        opts: [
+          "Projektipäällikön oikeutta seurata työntekijöiden sijaintia GPS-laitteella",
+          "Kykyä osoittaa aukottomasti, miten yksittäinen vaatimus on huomioitu suunnittelussa, toteutettu ja todennettu lopputuotteen hyväksymisessä",
+          "Pelkkää kirjanpidon kuittien numerointia verotusta varten",
+          "Projektin lähdekoodin poistamista versionhallinnasta"
+        ],
+        ans: 1,
+        exp: "Jäljitettävyys (traceability, Ruuska 2012) varmistaa, että jokaiseen hyväksyttyyn vaatimukseen löytyy vastaava suunnitelma, toteutus ja testitulos, jotta mikään ei unohdu."
+      },
+      {
+        id: 27,
+        mod: 5,
+        modName: "Moduuli 5: Muutokset, riskit & ongelmat",
+        q: "Mikä tunnettu periaate vallitsee muutoksen kustannusten ja projektin etenemisen välillä?",
+        opts: [
+          "Muutoksen tekeminen on sitä kalliimpaa, mitä varhaisemmassa vaiheessa se tehdään.",
+          "Muutoksen kustannus kasvaa jyrkästi projektin edetessä: suunnitteluvaiheessa muutos on halpa, toteutus- ja käyttöönottovaiheessa erittäin kallis.",
+          "Muutoksen kustannus pysyy täysin vakiona elinkaaren läpi.",
+          "Muutokset toteutusvaiheessa ovat aina ilmaisia."
+        ],
+        ans: 1,
+        exp: "Artto ym. (2011) ja Pelin (2020): Alussa muutos vaatii vain paperityön/suunnitelman päivitystä (halpaa), mutta toteutus- tai käyttöönottovaiheessa se vaatii jo tehdyn työn purkamista ja uudelleenrakentamista (kallista)."
+      },
+      {
+        id: 28,
+        mod: 5,
+        modName: "Moduuli 5: Muutokset, riskit & ongelmat",
+        q: "Mitä tarkoitetaan käsitteellä 'scope creep' (laajuuden hallitsematon kasvu)?",
+        opts: [
+          "Projektin aikataulun nopeutumista ilman syytä",
+          "Projektin laajuuden ja vaatimusten vähittäistä, hallitsematonta laajenemista ilman virallisia päätöksiä, lisäbudjettia tai aikataulumuutoksia",
+          "Projektiryhmän jäsenten vapaaehtoista irtisanoutumista",
+          "Koneiden kulumista työmaalla"
+        ],
+        ans: 1,
+        exp: "Scope creep tarkoittaa projektin sisällön vaivihkaista paisumista asiakkaan pienten lisätoiveiden myötä ilman virallista muutosprosessia ja lisärahoitusta, mikä on yleinen syy epäonnistumisiin."
+      },
+      {
+        id: 29,
+        mod: 5,
+        modName: "Moduuli 5: Muutokset, riskit & ongelmat",
+        q: "Miten riskin suuruus lasketaan kurssimateriaalin riskimatriisissa (asteikolla 1–5)?",
+        opts: [
+          "Riskin suuruus = Todennäköisyys + Vaikutus (maksimi 10)",
+          "Riskin suuruus = Todennäköisyys × Vaikutus (arvo välillä 1–25)",
+          "Riskin suuruus = Budjetti jaettuna aikataululla",
+          "Riskin suuruus = Työpakettien kokonaismäärä"
+        ],
+        ans: 1,
+        exp: "Riskin suuruus lasketaan kaavalla: Todennäköisyys (1–5) × Vaikutus (1–5) = 1–25. Esimerkiksi arvo 4 × 5 = 20 on korkean riskiluokan tapahtuma, joka vaatii välittömiä toimenpiteitä."
+      },
+      {
+        id: 30,
+        mod: 5,
+        modName: "Moduuli 5: Muutokset, riskit & ongelmat",
+        q: "Mitä riskien käsittelystrategiaa edustaa kiinteähintaisen alihankintasopimuksen tekeminen tai vakuutuksen ottaminen?",
+        opts: [
+          "Riskin välttämistä",
+          "Riskin pienentämistä",
+          "Riskin siirtämistä",
+          "Riskin hyväksymistä"
+        ],
+        ans: 2,
+        exp: "Riskin siirtämisessä (Artto ym., 2011; Pelin, 2020) taloudellinen tai toiminnallinen riski siirretään sopimuksella toiselle osapuolelle (kuten vakuutusyhtiölle tai alihankkijalle takuu- ja kiinteähintasopimuksin)."
+      },
+
+      // ----------------- MODUULI 6 -----------------
+      {
+        id: 31,
+        mod: 6,
+        modName: "Moduuli 6: Viestintä ja raportointi",
+        q: "Miten kirjallinen viestintä ja henkilökohtainen vuorovaikutus eroavat vaikuttavuudeltaan (Ruuska, 2012)?",
+        opts: [
+          "Kirjallinen viestintä muuttaa syvästi asenteita, kun taas henkilökohtainen vuorovaikutus luo vain passiivista tietoisuutta.",
+          "Kirjallinen viestintä lisää tietoisuutta asiasta, mutta asenteisiin ja käyttäytymiseen vaikuttaminen edellyttää usein henkilökohtaista vuorovaikutusta.",
+          "Henkilökohtainen kanssakäyminen on täysin tehotonta projektityössä.",
+          "Pelkkä intranet-tiedote riittää aina saamaan ihmiset sitoutumaan muutokseen."
+        ],
+        ans: 1,
+        exp: "Ruuska (2012) osoittaa: Kirjallinen viesti välittää tehokkaasti faktoja ja herättää tietoisuutta, mutta todellinen asenteiden ja käyttäytymisen muutos vaatii dialogia ja henkilökohtaista kohtaamista."
+      },
+      {
+        id: 32,
+        mod: 6,
+        modName: "Moduuli 6: Viestintä ja raportointi",
+        q: "Miksi sähköpostin käyttöä ei kurssikirjallisuudessa suositella vaikeiden tai negatiivisten asioiden hoitoon?",
+        opts: [
+          "Koska sähköpostiviestit ovat laissa kiellettyjä liike-elämässä",
+          "Koska se on kasvotonta, luo väärinkäsitysten ja tulkintojen riskin eikä mahdollista välitöntä tunnetilan aistimista",
+          "Koska sähköposti saapuu perille vasta viikon viiveellä",
+          "Koska sähköposti vaatii aina viranomaisen leiman"
+        ],
+        ans: 1,
+        exp: "Ruuskan (2012) mukaan sähköposti on herkkä väärinymmärryksille kasvottomuutensa vuoksi, eikä se sovellu konfliktien tai vaikeiden kielteisten viestien ratkaisuun."
+      },
+      {
+        id: 33,
+        mod: 6,
+        modName: "Moduuli 6: Viestintä ja raportointi",
+        q: "Mikä on kurssimateriaalin (Artto ym., 2006) mukaan hyvän viestinnän keskeinen tunnusmerkki?",
+        opts: [
+          "Viesti on mahdollisimman pitkä ja sisältää vieraskielisiä sivistyssanoja.",
+          "Vastaanottaja ymmärtää viestin tarkoitetulla tavalla ja lähettäjä voi varmistua tästä.",
+          "Lähettäjä ei koskaan vastaa saamiinsa palautteisiin.",
+          "Viesti lähetetään aina vähintään tuhannelle vastaanottajalle."
+        ],
+        ans: 1,
+        exp: "Onnistuneen viestinnän peruskriteeri on se, että viestin sisältö ymmärretään vastaanottajan päässä täsmälleen tarkoitetulla tavalla ja viestijä saa tästä vahvistuksen (palautesilmukka)."
+      },
+      {
+        id: 34,
+        mod: 6,
+        modName: "Moduuli 6: Viestintä ja raportointi",
+        q: "Mitä sääntöjä kurssikirjallisuus asettaa toimiville projektikokouksille (Ruuska, 2012)?",
+        opts: [
+          "Kokouksilla ei saa olla agendaa ja osallistujamäärän tulee olla mahdollisimman suuri.",
+          "Kokousten tulee olla suunniteltuja, tavoitteellisia ja ajallisesti rajattuja, ryhmäkoko pidetään pienenä ja niille nimetään aina puheenjohtaja ja sihteeri.",
+          "Kokoukset pidetään vain silloin kun projektipäällikkö haluaa pitää monologin.",
+          "Kokouksista ei saa koskaan laatia pöytäkirjaa."
+        ],
+        ans: 1,
+        exp: "Ruuska (2012) korostaa: Hyvä kokous on suunniteltu, tiukasti rajattu ajaltaan, osallistujina vain asianosaiset (pieni tehokas ryhmä) ja rooleina selkeä puheenjohtaja ja sihteeri."
+      },
+      {
+        id: 35,
+        mod: 6,
+        modName: "Moduuli 6: Viestintä ja raportointi",
+        q: "Mitä tilanneraportointi luonteeltaan ensisijaisesti on projektiohjauksen näkökulmasta?",
+        opts: [
+          "Menojen salaamista tilintarkastajilta",
+          "Ennen kaikkea poikkeamien tunnistamista ja analysointia suhteessa suunnitelmiin, jotta korjaavat päätökset voidaan tehdä ajoissa",
+          "Pelkkää virallista juhlapuhetta tilaajan miellyttämiseksi",
+          "Koko projektisuunnitelman kirjoittamista uudelleen joka viikko"
+        ],
+        ans: 1,
+        exp: "Tilanneraportointi (Artto ym., 2011; Kettunen, 2009) keskittyy toteuman ja suunnitelman vertailuun: poikkeamien havaitsemiseen, niiden syiden analyysiin ja korjaaviin toimenpiteisiin."
+      },
+      {
+        id: 36,
+        mod: 6,
+        modName: "Moduuli 6: Viestintä ja raportointi",
+        q: "Mikä seuraavista kokonaisuuksista kuuluu nimenomaan projektin loppuraporttiin (Ruuska, 2012) eikä viikoittaiseen tilanneraporttiin?",
+        opts: [
+          "Tulevan tiistain lounaslista",
+          "Opitut kokemukset (lessons learned), projektin kokonaisarviointi sekä tuotoksen ylläpito- ja jatkokehityssuunnitelmat",
+          "Kriittisen polun päivittäinen tuntilista",
+          "Yksittäisen koodaustyöpaketin ohjelmointivirheet"
+        ],
+        ans: 1,
+        exp: "Loppuraportti kokoaa yhteen koko hankkeen tulokset: miten onnistuttiin, mitä opittiin (organisaation oppiminen), miten tuotetta jatkossa ylläpidetään ja mitä suositellaan jatkotoimiksi."
+      },
+
+      // ----------------- MODUULI 7 -----------------
+      {
+        id: 37,
+        mod: 7,
+        modName: "Moduuli 7: Projektin päättäminen",
+        q: "Kuka kutsuu koolle projektin päätöskokouksen ja kuka tekee virallisen päätöksen projektin päättämisestä ja vastuista vapauttamisesta?",
+        opts: [
+          "Projektipäällikkö kutsuu koolle ja valmistelee asiat; ohjausryhmä (tai valvova johtoelin) tekee virallisen päätöksen.",
+          "Projektiryhmän harjoittelija päättää projektin ilman ohjausryhmää.",
+          "Ohjausryhmä kutsuu kokouksen ja projektipäällikkö tekee yksin juridiset päätökset.",
+          "Ulkopuolinen konsultti päättää projektin salaisessa äänestyksessä."
+        ],
+        ans: 0,
+        exp: "Pelinin (2004) ja Huotarin (2015) mukaan päätöskokouksen kutsuu koolle ja valmistelee projektipäällikkö, mutta virallisen lopettamispäätöksen ja vastuuvapauden antaa ohjausryhmä."
+      },
+      {
+        id: 38,
+        mod: 7,
+        modName: "Moduuli 7: Projektin päättäminen",
+        q: "Milloin projekti voidaan päättää ennenaikaisesti (Pelin, 2004)?",
+        opts: [
+          "Ainoastaan silloin kun tilaaja unohtaa projektin nimen",
+          "Kun suunnitelmasta poiketaan merkittävästi, toimintaympäristön olosuhteet muuttuvat olennaisesti tai tilaajan tilanne estää jatkamisen",
+          "Projektia ei ole koskaan sallittua keskeyttää missään olosuhteissa",
+          "Aina heti kun ensimmäinen työpaketti valmistuu etuajassa"
+        ],
+        ans: 1,
+        exp: "Pelin (2004) toteaa, että projekti voidaan keskeyttää ennenaikaisesti perustelluista syistä: edellytykset ovat rauenneet, markkina muuttunut, tilaajan maksukyky pettänyt tai tavoitteita ei voida saavuttaa."
+      },
+      {
+        id: 39,
+        mod: 7,
+        modName: "Moduuli 7: Projektin päättäminen",
+        q: "Miten virallinen tulosten luovutusmenettely eroaa tutkimushankkeessa ja tietojärjestelmähankkeessa (Kettunen, 2003; Ruuska, 2012)?",
+        opts: [
+          "Molemmat luovutetaan täysin samalla rakennustyömaan vastaanottotarkastuksella.",
+          "Tutkimushankkeessa tulokset luovutetaan usein päätösseminaarissa; tietojärjestelmähankkeessa suoritetaan hyväksymistestaus ja usein erillinen koekäyttöjakso.",
+          "Tietojärjestelmähankkeessa ei koskaan tehdä testausta ennen luovutusta.",
+          "Tutkimushankkeessa tuloksia ei luovuteta kenellekään."
+        ],
+        ans: 1,
+        exp: "Tutkimuksissa tyypillinen luovutustapa on päätösseminaari ja julkaisu. IT- ja järjestelmähankkeissa vaaditaan kriteeripohjainen hyväksymistestaus ja yleensä tuotannollinen koekäyttö."
+      },
+      {
+        id: 40,
+        mod: 7,
+        modName: "Moduuli 7: Projektin päättäminen",
+        q: "Mitä tapahtuu projektituotoksen hallinnolliselle ja operatiiviselle vastuulle virallisen hyväksynnän jälkeen?",
+        opts: [
+          "Vastuu jää pysyvästi puretun projektiryhmän henkilökohtaiseksi velvollisuudeksi ilman palkkaa.",
+          "Vastuu tuotoksesta siirtyy projektiorganisaatiolta vastaanottavalle linja- tai tilaajaorganisaatiolle (ylläpitoon).",
+          "Kukaan ei vastaa tuotoksesta enää koskaan.",
+          "Vastuu siirtyy automaattisesti ohjelmistotoimittajan toimitusjohtajalle henkilökohtaisesti."
+        ],
+        ans: 1,
+        exp: "Päättämisvaiheen ydin on tuotoksen siirtäminen vastaanottajalle (Ruuska, 2012). Projektiorganisaatio puretaan ja ylläpitovastuu siirtyy jatkuvaan linjaorganisaatioon."
+      },
+      {
+        id: 41,
+        mod: 7,
+        modName: "Moduuli 7: Projektin päättäminen",
+        q: "Mitkä ovat Pelinin (2004) mukaan projektikansion kokoamisen ja arkistoinnin 3 keskeistä tarkoitusta?",
+        opts: [
+          "Verojen kiertäminen, työntekijöiden valvonta ja tilojen tyhjentäminen",
+          "Tiedon säilyminen, tulosten jäljitettävyys sekä organisaation oppiminen tulevia projekteja varten",
+          "Ohjausryhmän salaisten muistiinpanojen kätkeminen",
+          "Asiakkaan laskutustietojen hävittäminen"
+        ],
+        ans: 1,
+        exp: "Pelin (2004) nimeää 3 pääfunktiota: 1) tiedon säilyminen tulevaisuutta varten, 2) tulosten ja päätösten jäljitettävyys ja 3) kokemusten hyödyntäminen eli organisaation oppiminen."
+      },
+      {
+        id: 42,
+        mod: 7,
+        modName: "Moduuli 7: Projektin päättäminen",
+        q: "Mitä projektin päätöskokouksessa käsitellään Pelinin (2004) esittämän asialistan mukaan?",
+        opts: [
+          "Vain seuraavan vuoden lomarahat",
+          "Loppuraportti, tulosten ja toteutuksen arviointi, jatkotoimenpiteet, vastuiden siirto, henkilöstön uudelleensijoitus ja arkistointi",
+          "Uuden projektin WBS-ositus ja kriittisen polun laskenta alusta alkaen",
+          "Pelkät asiakasvalitukset ilman dokumentointia"
+        ],
+        ans: 1,
+        exp: "Päätöskokouksen standardilista sisältää loppuraportin hyväksymisen, onnistumisen arvioinnin, vastuiden siirron vastaanottajalle, henkilöstön vapauttamisen ja materiaalien arkistoinnin."
+      },
+
+      // ----------------- MODUULI 8 -----------------
+      {
+        id: 43,
+        mod: 8,
+        modName: "Moduuli 8: Kehityssuunnat",
+        q: "Mihin tilanteisiin perinteinen vesiputousmalli (waterfall) edelleen soveltuu parhaiten kurssimateriaalin mukaan?",
+        opts: [
+          "Nopeasti muuttuviin mobiilipelisovelluksiin, joiden ominaisuudet keksitään viikoittain",
+          "Hankkeisiin, joissa tavoitteet, vaatimukset ja ympäristö ovat vakaita ja muutokset myöhemmin kalliita (kuten rakennus- ja infrahankkeet)",
+          "Hankkeisiin, joissa ei ole lainkaan aikataulua tai budjettia",
+          "Vain alle 100 euron arvoisiin mikrotehtäviin"
+        ],
+        ans: 1,
+        exp: "Vesiputousmalli sopii erinomaisesti vakaisiin ja ennustettaviin hankkeisiin (Artto ym., 2011), kuten siltojen, teiden tai rakennusten toteutukseen, joissa myöhäiset muutokset ovat kohtuuttoman kalliita."
+      },
+      {
+        id: 44,
+        mod: 8,
+        modName: "Moduuli 8: Kehityssuunnat",
+        q: "Miten ketterä Scrum-malli jaksottaa kehitystyön ja miten pitkiä kehitysjaksot (sprintit) tyypillisesti ovat?",
+        opts: [
+          "Yhden päivän mittaisiin pikahetkiin ilman suunnittelua",
+          "Tyypillisesti 1–4 viikon mittaisiin kehitysjaksoihin (sprintteihin), joiden päätteeksi arvioidaan tulokset ja suunnitellaan seuraava jakso",
+          "Tasan 6 kuukauden mittaisiin vaiheisiin",
+          "Sprinttejä käytetään vain projektin päättämisen jälkeen"
+        ],
+        ans: 1,
+        exp: "Scrum perustuu toistuviin kiinteänmittaisiin jaksoihin eli sprintteihin (yleensä 1–4 viikkoa), joiden aikana tiimi toteuttaa toimivan osakokonaisuuden ja katselmoi sen asiakkaan kanssa."
+      },
+      {
+        id: 45,
+        mod: 8,
+        modName: "Moduuli 8: Kehityssuunnat",
+        q: "Mihin Kanban-menetelmän toimintalogiikka ensisijaisesti perustuu (Leppänen, 2022)?",
+        opts: [
+          "Määrämittaisiin sprintteihin ja pakollisiin aamujumppiin",
+          "Työn visualisointiin taululla, työn virtauksen ohjaamiseen ja keskeneräisen työn (WIP) määrän rajoittamiseen",
+          "Kaikkien kirjallisten ohjeiden ja dokumenttien kieltämiseen",
+          "Projektipäällikön yksinvaltaan ilman tiimin osallistumista"
+        ],
+        ans: 1,
+        exp: "Kanban visualisoi työvaiheet (To Do, Doing, Done), rajoittaa yhtäaikaisen keskeneräisen työn määrää (Work In Progress / WIP) ja maksimoi työn läpivirtausta ilman sidottuja sprinttisyklejä."
+      },
+      {
+        id: 46,
+        mod: 8,
+        modName: "Moduuli 8: Kehityssuunnat",
+        q: "Mitä tarkoitetaan 'hybridiprojektinhallinnalla' (Pelin, 2020)?",
+        opts: [
+          "Projektia, jossa käytetään ainoastaan hybridiautoja työmaaliikenteessä",
+          "Toimintamallia, jossa yhdistetään perinteisen vesiputousmallin ennakkosuunnitelmallisuus ja ketterien menetelmien joustava kokeilu",
+          "Hanketta, jolla on kaksi eri toimitusjohtajaa eri maissa",
+          "Projektia, jossa työskennellään vain öisin"
+        ],
+        ans: 1,
+        exp: "Hybridimalli yhdistää perinteisen mallin raamit (kokonaisaikataulu, kiinteät rajapinnat, budjettiraami) ja ketterät toteutusmenetelmät (sprintit ja Kanban toteutusvaiheessa)."
+      },
+      {
+        id: 47,
+        mod: 8,
+        modName: "Moduuli 8: Kehityssuunnat",
+        q: "Mihin rakennusalalla yleistyneessä, Lean-ajatteluun pohjautuvassa 'tahtituotannossa' pyritään (Koskela, 2000)?",
+        opts: [
+          "Työmaan keskeyttämiseen joka toinen viikko",
+          "Työpakettien etenemiseen tasaisessa vakiorytmissä (tahdissa) tilasta toiseen, tasaisen työn virtauksen luomiseen ja läpimenoaikojen lyhentämiseen",
+          "Työntekijöiden kuormittamiseen ilman minkäänlaista tauotusta",
+          "Kaikkien koneiden korvaamiseen pelkällä käsityöllä"
+        ],
+        ans: 1,
+        exp: "Tahtituotannossa hanke ositetaan ja työ etenee vakioidussa tahdissa lohkosta toiseen. Tavoitteena on työn tasainen virtaus, odotusaikojen ja häiriöiden karsinta sekä nopea läpimeno."
+      },
+      {
+        id: 48,
+        mod: 8,
+        modName: "Moduuli 8: Kehityssuunnat",
+        q: "Mikä on allianssimallin (Lahdenperä, 2019) keskeisin periaate ja mitkä ovat tunnettuja suomalaisia esimerkkejä siitä?",
+        opts: [
+          "Tilaaja siirtää kaikki riskit yhdelle alihankkijalle sakon uhalla; esimerkkinä mikä tahansa normaali kauppakeskus",
+          "Tilaaja, suunnittelijat ja urakoitsijat muodostavat yhteisen organisaation, jossa jaetaan yhdessä sekä riskit että saavutetut hyödyt; esimerkkeinä Tampereen Rantatunneli ja Tampereen raitiotie",
+          "Allianssimalli kieltää sopimusten allekirjoittamisen; esimerkkinä Apollo-ohjelma",
+          "Allianssi tarkoittaa ulkomaisen yrityksen vihamielistä yritysvaltausta"
+        ],
+        ans: 1,
+        exp: "Allianssi perustuu 'yhdessä tekemiseen': jaetut tavoitteet, yhteinen organisaatio ja jaettu 'risk & reward' -kannustinjärjestelmä. Tunnettuja onnistumisia ovat mm. Tampereen Rantatunneli ja Raitiotie."
       }
     ];
 
     /* =========================================================================
-       TENTTISOVELLUKSEN TILA JA LOGIIKKA
+       TENTTISOVELLUKSEN LOGIIKKA JA TILANHALLINTA
        ========================================================================= */
-    let examMode = 24; // 24 tai 16
-    let currentQuestions = [];
-    let currentQuestionIndex = 0;
-    let userAnswers = {}; // { questionId: selectedOriginalIndex }
+    let chosenQuestionCount = 48;
+    let activeQuestions = [];
+    let currentQuizIndex = 0;
+    let selectedAnswers = {}; // { questionId: chosenOriginalIndex }
 
-    // Fisher-Yates satunnaistus
-    function shuffleArray(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
+    // Fisher-Yates -sekoitus
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+        [copy[i], copy[j]] = [copy[j], copy[i]];
       }
-      return arr;
+      return copy;
     }
 
-    // Tentin moodin valinta
-    function selectExamMode(num) {
-      examMode = num;
-      const btn24 = document.getElementById('mode-btn-24');
-      const btn16 = document.getElementById('mode-btn-16');
-
-      if (num === 24) {
-        btn24.className = "mode-select-btn p-4 rounded-xl border text-left transition-all bg-indigo-600/10 border-indigo-500 text-white";
-        btn16.className = "mode-select-btn p-4 rounded-xl border text-left transition-all bg-slate-800/40 border-slate-700 text-slate-300 hover:border-slate-600";
-      } else {
-        btn16.className = "mode-select-btn p-4 rounded-xl border text-left transition-all bg-indigo-600/10 border-indigo-500 text-white";
-        btn24.className = "mode-select-btn p-4 rounded-xl border text-left transition-all bg-slate-800/40 border-slate-700 text-slate-300 hover:border-slate-600";
-      }
-    }
-
-    // Tentin aloitus
-    function startExam() {
-      userAnswers = {};
-      currentQuestionIndex = 0;
-
-      let selectedQuestions = [];
-
-      if (examMode === 24) {
-        // Kaikki 24 kysymystä, mutta moduulien järjestys ja kysymysten sisäinen järjestys sekoitetaan
-        selectedQuestions = shuffleArray(rawQuestionBank);
-      } else {
-        // 16 kysymystä: tasan 2 satunnaista jokaisesta 8 moduulista
-        for (let m = 1; m <= 8; m++) {
-          const moduleQs = rawQuestionBank.filter(q => q.moduleNumber === m);
-          const shuffledModuleQs = shuffleArray(moduleQs);
-          selectedQuestions.push(shuffledModuleQs[0], shuffledModuleQs[1]);
+    function setQuestionCount(count) {
+      chosenQuestionCount = count;
+      [48, 24, 12].forEach(n => {
+        const el = document.getElementById(`mode-${n}`);
+        if (el) {
+          if (n === count) el.classList.add('active');
+          else el.classList.remove('active');
         }
-        selectedQuestions = shuffleArray(selectedQuestions);
+      });
+    }
+
+    function initiateQuiz() {
+      const moduleFilter = document.getElementById('module-selector').value;
+      selectedAnswers = {};
+      currentQuizIndex = 0;
+
+      let candidateBank = [...fullQuestionBank];
+
+      // Jos rajattu tiettyyn moduuliin
+      if (moduleFilter !== 'all') {
+        const modNum = parseInt(moduleFilter, 10);
+        candidateBank = candidateBank.filter(q => q.mod === modNum);
       }
 
-      // Sekoitetaan myös kunkin kysymyksen vastausvaihtoehdot
-      currentQuestions = selectedQuestions.map(q => {
+      // Kysymysten valinta
+      if (moduleFilter === 'all') {
+        if (chosenQuestionCount === 48) {
+          activeQuestions = shuffle(candidateBank);
+        } else if (chosenQuestionCount === 24) {
+          // 3 satunnaista kysymystä per moduuli (8 x 3 = 24)
+          let picked = [];
+          for (let m = 1; m <= 8; m++) {
+            const mQuestions = shuffle(candidateBank.filter(q => q.mod === m));
+            picked.push(...mQuestions.slice(0, 3));
+          }
+          activeQuestions = shuffle(picked);
+        } else {
+          // 12 kysymystä
+          activeQuestions = shuffle(candidateBank).slice(0, 12);
+        }
+      } else {
+        // Yhden moduulin kysymykset
+        const count = Math.min(candidateBank.length, chosenQuestionCount);
+        activeQuestions = shuffle(candidateBank).slice(0, count);
+      }
+
+      // Sekoitetaan vaihtoehdot ja pidetään linkki alkuperäiseen oikeaan vastaukseen
+      activeQuestions = activeQuestions.map(q => {
         const indices = [0, 1, 2, 3];
-        const shuffledIndices = shuffleArray(indices);
-        const shuffledOptions = shuffledIndices.map(idx => ({
-          text: q.options[idx],
-          originalIndex: idx
+        const shuffledIndices = shuffle(indices);
+        const displayOpts = shuffledIndices.map(origIdx => ({
+          text: q.opts[origIdx],
+          origIdx: origIdx
         }));
         return {
           ...q,
-          displayOptions: shuffledOptions
+          displayOpts: displayOpts
         };
       });
 
-      // UI-vaihto
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('result-screen').classList.add('hidden');
-      document.getElementById('quiz-screen').classList.remove('hidden');
-      document.getElementById('header-stats').classList.remove('hidden');
+      // Näyttöjen vaihto
+      document.getElementById('screen-start').classList.add('hidden');
+      document.getElementById('screen-result').classList.add('hidden');
+      document.getElementById('screen-quiz').classList.remove('hidden');
+      document.getElementById('header-progress').classList.remove('hidden');
 
-      renderCurrentQuestion();
+      renderQuizQuestion();
     }
 
-    // Nykyisen kysymyksen renderöinti
-    function renderCurrentQuestion() {
-      const q = currentQuestions[currentQuestionIndex];
-      const total = currentQuestions.length;
+    function renderQuizQuestion() {
+      const q = activeQuestions[currentQuizIndex];
+      const total = activeQuestions.length;
 
-      // Päivitä otsikot ja edistymispalkki
-      document.getElementById('question-module-badge').innerText = q.moduleTitle;
-      document.getElementById('question-counter').innerText = `Kysymys ${currentQuestionIndex + 1} / ${total}`;
-      document.getElementById('header-progress-text').innerText = `Kysymys ${currentQuestionIndex + 1}/${total}`;
-      
-      const pct = ((currentQuestionIndex + 1) / total) * 100;
-      document.getElementById('progress-bar').style.width = `${pct}%`;
+      document.getElementById('quiz-module-badge').innerText = q.modName;
+      document.getElementById('quiz-counter').innerText = `Kysymys ${currentQuizIndex + 1} / ${total}`;
+      document.getElementById('header-progress').innerText = `${currentQuizIndex + 1} / ${total}`;
 
-      // Kysymysteksti
-      document.getElementById('question-text').innerText = q.question;
+      const pct = ((currentQuizIndex + 1) / total) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
 
-      // Vaihtoehdot
-      const container = document.getElementById('options-container');
-      container.innerHTML = '';
+      document.getElementById('quiz-question-title').innerText = q.q;
+
+      const optsBox = document.getElementById('quiz-options-container');
+      optsBox.innerHTML = '';
 
       const letters = ['A', 'B', 'C', 'D'];
-      const userSelectedOriginal = userAnswers[q.id];
+      const userSelected = selectedAnswers[q.id];
 
-      q.displayOptions.forEach((opt, idx) => {
-        const isSelected = (userSelectedOriginal !== undefined && userSelectedOriginal === opt.originalIndex);
-        
+      q.displayOpts.forEach((opt, idx) => {
+        const isSelected = (userSelected !== undefined && userSelected === opt.origIdx);
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.onclick = () => selectOption(q.id, opt.originalIndex);
-
-        let baseStyle = "w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3.5 group ";
-        if (isSelected) {
-          baseStyle += "bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-600/10 ring-1 ring-indigo-500";
-        } else {
-          baseStyle += "bg-slate-800/40 border-slate-700/80 text-slate-300 hover:bg-slate-800 hover:border-slate-600";
-        }
-        btn.className = baseStyle;
-
-        let badgeStyle = "flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs font-semibold ";
-        if (isSelected) {
-          badgeStyle += "bg-indigo-600 text-white";
-        } else {
-          badgeStyle += "bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-slate-200 border border-slate-700";
-        }
+        btn.className = `option-btn ${isSelected ? 'selected' : ''}`;
+        btn.onclick = () => chooseAnswer(q.id, opt.origIdx);
 
         btn.innerHTML = `
-          <span class="${badgeStyle}">${letters[idx]}</span>
-          <span class="text-sm pt-0.5 leading-relaxed">${opt.text}</span>
+          <span class="opt-badge">${letters[idx]}</span>
+          <span style="flex:1;">${opt.text}</span>
         `;
-
-        container.appendChild(btn);
+        optsBox.appendChild(btn);
       });
 
-      // Painikkeiden tilat
-      document.getElementById('prev-btn').disabled = (currentQuestionIndex === 0);
-      
-      const nextBtn = document.getElementById('next-btn');
-      const finishBtn = document.getElementById('finish-btn');
+      // Painikkeiden tila
+      document.getElementById('btn-prev').disabled = (currentQuizIndex === 0);
 
-      if (currentQuestionIndex === total - 1) {
+      const nextBtn = document.getElementById('btn-next');
+      const submitBtn = document.getElementById('btn-submit');
+
+      if (currentQuizIndex === total - 1) {
         nextBtn.classList.add('hidden');
-        finishBtn.classList.remove('hidden');
+        submitBtn.classList.remove('hidden');
       } else {
         nextBtn.classList.remove('hidden');
-        finishBtn.classList.add('hidden');
+        submitBtn.classList.add('hidden');
       }
     }
 
-    // Vaihtoehdon valinta
-    function selectOption(questionId, originalIndex) {
-      userAnswers[questionId] = originalIndex;
-      renderCurrentQuestion();
+    function chooseAnswer(questionId, originalIndex) {
+      selectedAnswers[questionId] = originalIndex;
+      renderQuizQuestion();
     }
 
-    // Navigointi
-    function nextQuestion() {
-      if (currentQuestionIndex < currentQuestions.length - 1) {
-        currentQuestionIndex++;
-        renderCurrentQuestion();
+    function navigateQuestion(step) {
+      const nextIndex = currentQuizIndex + step;
+      if (nextIndex >= 0 && nextIndex < activeQuestions.length) {
+        currentQuizIndex = nextIndex;
+        renderQuizQuestion();
       }
     }
 
-    function previousQuestion() {
-      if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        renderCurrentQuestion();
-      }
-    }
-
-    // Tentin päättäminen ja tulosten laskenta
-    function finishExam() {
-      // Tarkistetaan vastaamattomat
-      const unanswered = currentQuestions.filter(q => userAnswers[q.id] === undefined).length;
+    function confirmFinishExam() {
+      const unanswered = activeQuestions.filter(q => selectedAnswers[q.id] === undefined).length;
       if (unanswered > 0) {
-        const confirmFinish = window.confirm(`Sinulla on vielä ${unanswered} kysymystä vastaamatta. Haluatko silti päättää tentin ja tarkistaa tulokset?`);
-        if (!confirmFinish) return;
+        const ok = confirm(`Sinulla on vielä ${unanswered} vastaamatonta kysymystä. Haluatko silti lopettaa ja tarkistaa tulokset?`);
+        if (!ok) return;
       }
+      displayResults();
+    }
 
+    function displayResults() {
       let score = 0;
-      currentQuestions.forEach(q => {
-        if (userAnswers[q.id] === q.correctIndex) {
+      activeQuestions.forEach(q => {
+        if (selectedAnswers[q.id] === q.ans) {
           score++;
         }
       });
 
-      const total = currentQuestions.length;
-      const percentage = Math.round((score / total) * 100);
+      const total = activeQuestions.length;
+      const pct = Math.round((score / total) * 100);
 
-      // AMK-asteikko
       let grade = 0;
       let feedback = "";
-      let badgeClass = "";
       let icon = "📝";
 
-      if (percentage >= 90) {
+      if (pct >= 90) {
         grade = 5;
-        feedback = "Erinomaista osaamista! Olet täysin valmis tenttiin.";
-        badgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+        feedback = "Erinomaista työtä! Hallitset nippelitiedot ja kurssikäsitteet täydellisesti.";
         icon = "🏆";
-      } else if (percentage >= 80) {
+      } else if (pct >= 80) {
         grade = 4;
-        feedback = "Kiitettävä tulos! Hallitset yksityiskohdat ja käsitteet erittäin hyvin.";
-        badgeClass = "bg-indigo-500/20 text-indigo-300 border-indigo-500/30";
+        feedback = "Kiitettävä suoritus! Todella vahva osaaminen, läpäiset tentin helposti.";
         icon = "🌟";
-      } else if (percentage >= 70) {
+      } else if (pct >= 70) {
         grade = 3;
-        feedback = "Hyvä suoritus! Perusteet ja useimmat soveltavat käsitteet hallussa.";
-        badgeClass = "bg-blue-500/20 text-blue-300 border-blue-500/30";
+        feedback = "Hyvä tulos! Perusteet ja useimmat käsitteet ovat hallussa.";
         icon = "👍";
-      } else if (percentage >= 60) {
+      } else if (pct >= 60) {
         grade = 2;
         feedback = "Tyydyttävä tulos. Kertaa erityisesti väärin menneiden kysymysten perustelut.";
-        badgeClass = "bg-amber-500/20 text-amber-300 border-amber-500/30";
         icon = "📚";
-      } else if (percentage >= 50) {
+      } else if (pct >= 50) {
         grade = 1;
-        feedback = "Välttävä tulos. Tentti läpäisty rimaa hipoen, suositellaan lisäkertausta.";
-        badgeClass = "bg-orange-500/20 text-orange-300 border-orange-500/30";
+        feedback = "Välttävä tulos. Pääsit läpi, mutta suositellaan lisäkertausta.";
         icon = "⚠️";
       } else {
         grade = 0;
-        feedback = "Hylätty (alle 50 %). Käy huolellisesti läpi alla olevat vastaukset ja yritä uudelleen.";
-        badgeClass = "bg-rose-500/20 text-rose-300 border-rose-500/30";
+        feedback = "Hylätty (alle 50 %). Käy läpi alla olevat vastaukset ja yritä uudelleen.";
         icon = "❌";
       }
 
-      // Päivitä tulosnäkymä
-      document.getElementById('result-icon').innerText = icon;
-      document.getElementById('score-text').innerText = `${score} / ${total}`;
-      document.getElementById('percentage-text').innerText = `${percentage}%`;
-      document.getElementById('grade-text').innerText = grade === 0 ? "Hylätty" : `${grade} / 5`;
-      
-      const badgeElem = document.getElementById('result-feedback-badge');
-      badgeElem.innerText = feedback;
-      badgeElem.className = `inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 border ${badgeClass}`;
+      document.getElementById('res-badge-icon').innerText = icon;
+      document.getElementById('score-points').innerText = `${score} / ${total}`;
+      document.getElementById('score-percent').innerText = `${pct}%`;
+      document.getElementById('score-grade').innerText = grade === 0 ? "0 (Hyl)" : `${grade} / 5`;
+      document.getElementById('res-feedback-text').innerText = feedback;
 
-      renderReviewCards('all');
+      renderReviewItems('all');
 
-      // Vaihda ruutu
-      document.getElementById('quiz-screen').classList.add('hidden');
-      document.getElementById('header-stats').classList.add('hidden');
-      document.getElementById('result-screen').classList.remove('hidden');
+      document.getElementById('screen-quiz').classList.add('hidden');
+      document.getElementById('header-progress').classList.add('hidden');
+      document.getElementById('screen-result').classList.remove('hidden');
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Yhteenvedon ja tarkastelukorttien generointi
-    function renderReviewCards(filter) {
-      const container = document.getElementById('review-list');
+    function renderReviewItems(filter) {
+      const container = document.getElementById('review-cards-list');
       container.innerHTML = '';
 
-      let list = currentQuestions;
+      let list = activeQuestions;
       if (filter === 'wrong') {
-        list = currentQuestions.filter(q => userAnswers[q.id] !== q.correctIndex);
+        list = activeQuestions.filter(q => selectedAnswers[q.id] !== q.ans);
+      } else if (filter === 'correct') {
+        list = activeQuestions.filter(q => selectedAnswers[q.id] === q.ans);
       }
-
-      document.getElementById('review-count-badge').innerText = `${list.length} kysymystä näytetään`;
 
       if (list.length === 0) {
         container.innerHTML = `
-          <div class="p-8 text-center text-slate-400 bg-slate-900 border border-slate-800 rounded-xl">
-            Ei näytettäviä kysymyksiä tässä suodatuksessa.
+          <div style="text-align: center; color: var(--text-muted); padding: 20px;">
+            Ei kysymyksiä valitussa suodatuksessa.
           </div>
         `;
         return;
       }
 
       list.forEach((q, idx) => {
-        const userChoice = userAnswers[q.id];
-        const isCorrect = (userChoice === q.correctIndex);
-        const answered = (userChoice !== undefined);
+        const userAns = selectedAnswers[q.id];
+        const isCorrect = (userAns === q.ans);
+        const answered = (userAns !== undefined);
 
         const card = document.createElement('div');
-        card.className = `p-5 sm:p-6 rounded-xl border transition-all ${isCorrect ? 'bg-slate-900/90 border-emerald-500/30' : 'bg-slate-900/90 border-rose-500/30'}`;
+        card.className = `review-card ${isCorrect ? 'correct' : 'wrong'}`;
 
-        let statusBadge = "";
-        if (!answered) {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">Ei vastattu</span>`;
-        } else if (isCorrect) {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Oikein (+1p)</span>`;
-        } else {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">Väärin (0p)</span>`;
-        }
+        let statusText = "";
+        if (!answered) statusText = `<span style="color: var(--accent-yellow); font-weight: 600;">(Ei vastattu)</span>`;
+        else if (isCorrect) statusText = `<span style="color: var(--accent-green); font-weight: 600;">✓ Oikein (+1p)</span>`;
+        else statusText = `<span style="color: var(--accent-red); font-weight: 600;">✗ Väärin (0p)</span>`;
 
-        let answersHTML = "";
-        q.options.forEach((optText, oIdx) => {
-          const isUser = (userChoice === oIdx);
-          const isAns = (q.correctIndex === oIdx);
+        let optRows = "";
+        q.opts.forEach((optText, oIdx) => {
+          let lineClass = "opt-review-line ans-neutral";
+          let label = "";
 
-          let rowStyle = "p-3 rounded-lg text-xs sm:text-sm flex items-start gap-2.5 border ";
-          let mark = "";
-
-          if (isAns) {
-            rowStyle += "bg-emerald-950/40 border-emerald-500/40 text-emerald-200 font-medium";
-            mark = `<span class="text-emerald-400 font-bold">✓ Oikea vastaus:</span>`;
-          } else if (isUser && !isCorrect) {
-            rowStyle += "bg-rose-950/40 border-rose-500/40 text-rose-200";
-            mark = `<span class="text-rose-400 font-bold">✗ Sinun vastauksesi:</span>`;
-          } else {
-            rowStyle += "bg-slate-800/30 border-slate-800 text-slate-400 opacity-70";
+          if (oIdx === q.ans) {
+            lineClass = "opt-review-line ans-correct";
+            label = "✓ Oikea vastaus: ";
+          } else if (oIdx === userAns && !isCorrect) {
+            lineClass = "opt-review-line ans-wrong-user";
+            label = "✗ Sinun valintasi: ";
           }
 
-          answersHTML += `
-            <div class="${rowStyle}">
-              <div>${mark} ${optText}</div>
+          optRows += `
+            <div class="${lineClass}">
+              <strong>${label}</strong>${optText}
             </div>
           `;
         });
 
         card.innerHTML = `
-          <div class="flex items-center justify-between gap-2 mb-3">
-            <span class="text-xs text-indigo-400 font-medium">${q.moduleTitle}</span>
-            ${statusBadge}
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem;">
+            <span style="color: #a5b4fc; font-weight: 600;">${q.modName}</span>
+            ${statusText}
           </div>
-          <h4 class="text-sm sm:text-base font-semibold text-slate-100 mb-4 leading-snug">
-            ${q.question}
-          </h4>
-          <div class="space-y-2 mb-4">
-            ${answersHTML}
+          <div style="font-weight: 600; font-size: 0.98rem; margin-bottom: 12px; color: #fff;">
+            ${q.q}
           </div>
-          <div class="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs sm:text-sm text-slate-300 leading-relaxed">
-            <span class="font-semibold text-indigo-300 block mb-1">Materiaalin perustelu & lähde:</span>
-            ${q.explanation}
+          <div style="margin-bottom: 8px;">
+            ${optRows}
+          </div>
+          <div class="review-explanation">
+            <strong style="color: #818cf8; display: block; margin-bottom: 4px;">Perustelu & kurssilähde:</strong>
+            ${q.exp}
           </div>
         `;
-
         container.appendChild(card);
       });
     }
 
-    // Suodatustoiminto tulossivulla
-    function filterReview(type) {
-      const allBtn = document.getElementById('filter-all-btn');
-      const wrongBtn = document.getElementById('filter-wrong-btn');
-
-      if (type === 'all') {
-        allBtn.className = "px-4 py-2.5 rounded-xl border border-indigo-500 bg-indigo-600/20 text-white text-sm font-medium transition-all";
-        wrongBtn.className = "px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-medium hover:bg-slate-700 transition-all";
-      } else {
-        wrongBtn.className = "px-4 py-2.5 rounded-xl border border-rose-500 bg-rose-600/20 text-white text-sm font-medium transition-all";
-        allBtn.className = "px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-medium hover:bg-slate-700 transition-all";
-      }
-
-      renderReviewCards(type);
+    function applyReviewFilter(filterType) {
+      ['all', 'wrong', 'correct'].forEach(t => {
+        const btn = document.getElementById(`filter-${t}`);
+        if (btn) {
+          if (t === filterType) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+      renderReviewItems(filterType);
     }
 
-    // Uudelleenkäynnistys
-    function restartExam() {
-      startExam();
+    function resetExam() {
+      initiateQuiz();
     }
   </script>
 </body>
