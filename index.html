@@ -444,6 +444,42 @@
       opacity: 0.65;
     }
 
+    .mod-breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      gap: 10px;
+      margin: 18px 0 24px 0;
+      text-align: left;
+    }
+
+    .mod-stat-card {
+      background: rgba(9, 13, 22, 0.65);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .mod-stat-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+
+    .mod-stat-bar {
+      height: 6px;
+      background: #1f293d;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .mod-stat-fill {
+      height: 100%;
+      background: var(--primary);
+    }
+
     .hidden { display: none !important; }
 
     footer {
@@ -571,9 +607,14 @@
           </div>
         </div>
 
+        <div id="module-breakdown-box" class="mod-breakdown-grid"></div>
+
         <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 24px;">
           <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="resetExam()">
             🔄 Tee uusi satunnainen tentti
+          </button>
+          <button class="btn-secondary" style="width: auto; padding: 10px 20px;" onclick="backToStartScreen()">
+            ⚙️ Vaihda asetuksia
           </button>
         </div>
       </div>
@@ -600,6 +641,8 @@
   <script>
     /* =========================================================================
        48 KYSYMYKSEN TÄYDELLINEN KYSYMYSPANKKI (6 KYSYMYSTÄ PER MODUULI 1–8)
+       Ei pituusvinoumaa: kaikki 4 vaihtoehtoa ovat keskenään yhtä pitkiä ja
+       käyttävät kurssimateriaalin täsmällistä ammattisanastoa.
        ========================================================================= */
     const fullQuestionBank = [
       // ----------------- MODUULI 1 -----------------
@@ -607,85 +650,85 @@
         id: 1,
         mod: 1,
         modName: "Moduuli 1: Taustaa ja käsitteet",
-        q: "Mille vuosikymmenelle projektinhallinnan historiallisessa kehityksessä sijoittuu laatuajattelun nousu ja tietoteknisten suunnittelutyökalujen yleistyminen?",
+        q: "Miten projektinhallinnan painopisteet kehittyivät eri vuosikymmeninä kurssimateriaalin (Artto ym., 2011; Pelin, 2020) esittämän kronologian mukaan?",
         opts: [
-          "1960-luvulle",
-          "1970-luvulle",
-          "1980-luvulle",
-          "1990-luvulle"
+          "1970-luvulla tietotekniikan yleistyminen toi uusia seurantatyökaluja ja laatuajattelun, kun taas 1980-luvulla huomio kohdistui projektipäällikön rooliin ja tiimityöskentelyyn.",
+          "1980-luvulla tietotekniikan yleistyminen toi uusia seurantatyökaluja ja laatuajattelun, kun taas 1970-luvulla huomio kohdistui projektipäällikön rooliin ja tiimityöskentelyyn.",
+          "1960-luvulla projektit kytkettiin osaksi organisaatioiden strategista toimintaa ja verkostoja, kun taas 1970-luvulla kehitettiin PERT- ja CPM-aikataulutusmenetelmät.",
+          "1980-luvulla kehitettiin ensimmäiset PERT- ja CPM-menetelmät aikataulujen ohjaukseen, kun taas 1990-luvulla laatuajattelu nousi ensimmäistä kertaa osaksi projektityötä."
         ],
-        ans: 2,
-        exp: "Artto ym. (2011) ja Pelin (2020) kronologian mukaan: 1950–60 kehitettiin PERT ja CPM; 1970-luvulla keskiöön nousi PM-rooli ja tiimityö; 1980-luvulla tietotekniikan yleistyminen ja laatuajattelu; 1990-luvulla strategisuus ja verkostot."
+        ans: 1,
+        exp: "Materiaalin kronologia: 1950–60-luvuilla kehitettiin PERT ja CPM aikataulujen ohjaukseen. 1970-luvulla painottuivat projektipäällikön rooli, johtaminen ja tiimityö. 1980-luvulla tietotekniikan yleistyminen toi suunnittelu- ja seurantatyökalut sekä laatuajattelun. 1990-luvulla korostuivat strategia, verkostot ja kumppanuudet."
       },
       {
         id: 2,
         mod: 1,
         modName: "Moduuli 1: Taustaa ja käsitteet",
-        q: "Mihin IPMA:n ICB4-osaamisviitekehyksen kolmesta pääalueesta kuuluvat sidosryhmien huomioiminen, strateginen ajattelu ja kestävän kehityksen näkökulmat?",
+        q: "Miten kansainvälisen projektinhallintajärjestö IPMA:n osaamisviitekehys (ICB4) jakaa projektiosaajan keskeiset pätevyydet kolmeen pääalueeseen?",
         opts: [
-          "Käytäntöpätevyyksiin (Practice)",
-          "Ihmispätevyyksiin (People)",
-          "Näkökulmapätevyyksiin (Perspective)",
-          "Kontekstipätevyyksiin (Contextual)"
+          "Käytäntöpätevyydet kattavat sidosryhmien huomioimisen ja strategisen ajattelun, kun taas näkökulmapätevyydet kattavat aikataulujen, resurssien ja riskien hallinnan.",
+          "Ihmispätevyydet kattavat organisaation tavoitteiden ymmärtämisen ja kestävän kehityksen, kun taas käytäntöpätevyydet kattavat konfliktien ratkaisun ja motivoinnin.",
+          "Näkökulmapätevyydet kattavat strategisen ajattelun, sidosryhmät ja kestävän kehityksen, kun taas käytäntöpätevyydet kattavat aikataulut, resurssit, kustannukset ja riskit.",
+          "Näkökulmapätevyydet kattavat vuorovaikutuksen, tiimin motivoinnin ja konfliktien ratkaisemisen, kun taas ihmispätevyydet kattavat sidosryhmien ja ympäristön vaatimukset."
         ],
         ans: 2,
-        exp: "IPMA ICB 4.0 jakaa pätevyydet kolmeen alueeseen: 1) Käytäntöpätevyydet (menetelmät, aikataulut, budjetit), 2) Ihmispätevyydet (johtaminen, vuorovaikutus, motivointi) ja 3) Näkökulmapätevyydet (strategia, sidosryhmät, organisaatio, kestävä kehitys)."
+        exp: "IPMA ICB4 -viitekehyksessä: 1) Käytäntöpätevyydet liittyvät suunnitteluun ja hallintaan (aikataulut, resurssit, kustannukset, riskit), 2) Ihmispätevyydet vuorovaikutukseen ja johtamiseen (viestintä, yhteistyö, konfliktien ratkaisu, motivointi) ja 3) Näkökulmapätevyydet toimintaympäristöön (strateginen ajattelu, organisaation tavoitteet, sidosryhmät, kestävä kehitys)."
       },
       {
         id: 3,
         mod: 1,
         modName: "Moduuli 1: Taustaa ja käsitteet",
-        q: "Mitä painotetaan, kun projektia tarkastellaan nimenomaan 'tuote- tai työrakenteena'?",
+        q: "Kun projektia tarkastellaan kirjallisuudessa kolmesta eri perusnäkökulmasta, miten näiden tarkastelutapojen painotukset eroavat toisistaan?",
         opts: [
-          "Ihmisiä, tiimityötä ja vuorovaikutussuhteita",
-          "Työn osittamista hallittaviin kokonaisuuksiin",
-          "Aikataulujen, resurssien ja vaiheiden peräkkäisyyttä",
-          "Portfolion strategista tuottavuutta"
+          "Tuote- tai työrakenteena painottuu aikataulujen ja resurssien vaiheittainen hallinta, kun taas vaiheittaisena prosessina painottuu työn osittaminen hallittaviin kokonaisuuksiin.",
+          "Väliaikaisena organisaationa painottuu työn osittaminen hallittaviin kokonaisuuksiin, kun taas tuote- tai työrakenteena painottuvat ihmiset, osaaminen ja yhteistyö.",
+          "Tuote- tai työrakenteena painottuu työn osittaminen hallittaviin kokonaisuuksiin, kun taas vaiheittaisena prosessina painottuu aikataulujen, resurssien ja tehtävien hallinta.",
+          "Vaiheittaisena prosessina painottuvat ihmiset, tiimityö ja vuorovaikutusosaaminen, kun taas väliaikaisena organisaationa painottuu aikataulujen ja resurssien hallinta."
         ],
-        ans: 1,
-        exp: "Kurssimateriaalin mukaan projektia voidaan tarkastella kolmesta näkökulmasta: 1) väliaikaisena organisaationa (ihmiset, yhteistyö), 2) tuote- tai työrakenteena (työn osittaminen hallittaviin kokonaisuuksiin) ja 3) vaiheittaisena prosessina (aikataulut, resurssit, ohjaus)."
+        ans: 2,
+        exp: "Kurssimateriaalin mukaan projektia voidaan tarkastella: 1) väliaikaisena organisaationa (ihmiset, osaaminen ja yhteistyö), 2) tuote- tai työrakenteena (työn osittaminen hallittaviin kokonaisuuksiin) sekä 3) vaiheittaisena prosessina (aikataulujen, resurssien ja tehtävien hallinta)."
       },
       {
         id: 4,
         mod: 1,
         modName: "Moduuli 1: Taustaa ja käsitteet",
-        q: "Miten kurssilla käytetty Artto ym. (2011) määritelmä tiivistää projektin luonteen?",
+        q: "Miten projektinhallinnan kolme tarkastelunäkökulmaa (prosesseina ja tietoalueina, osaamisena sekä työkaluina ja käytäntöinä) rajataan kurssimateriaalissa?",
         opts: [
-          "Jatkuva toimintamalli organisaation ydinprosessien toistuvaan ylläpitoon",
-          "Ennalta määritettyyn päämäärään tähtäävä, monimutkaisten ja toisiinsa liittyvien tehtävien muodostama, ajallisesti, kustannuksiltaan ja laajuudeltaan rajattu ainutkertainen kokonaisuus",
-          "Vapaamuotoinen ideointityöpaja ilman sitovia budjetti- tai aikarajoitteita",
-          "Linjaorganisaation pysyvä alaosasto kehitystehtäville"
+          "Tämän kurssin keskeisenä näkökulmana on projektinhallinta työkaluina ja käytäntöinä, johon luetaan tavoitteiden määrittely, laadunhallinta, riskienhallinta ja viestintä.",
+          "Tämän kurssin keskeisenä näkökulmana on projektinhallinta prosesseina ja tietoalueina, johon luetaan muun muassa aikataulutus, resurssien, kustannusten, laadun ja riskien hallinta.",
+          "Tämän kurssin keskeisenä näkökulmana on projektinhallinta osaamisena, johon luetaan projektisuunnitelmat, budjetit, riskikartoitukset, tarkistuslistat ja seurantaraportit.",
+          "Tämän kurssin keskeisenä näkökulmana on projektinhallinta prosesseina ja tietoalueina, johon luetaan erityisesti projektipäällikön vuorovaikutus, päätöksenteko ja johtaminen."
         ],
         ans: 1,
-        exp: "Kurssin virallinen määritelmä korostaa tavoitteellisuutta, monimutkaisten toisiinsa kytkeytyvien tehtävien kokonaisuutta, ainutkertaisuutta sekä kolmiorajoitteita (aika, kustannukset, laajuus)."
+        exp: "Materiaalissa todetaan suoraan, että tämän kurssin keskeinen näkökulma on 1. Projektinhallinta prosesseina ja tietoalueina (tavoitteiden määrittely, aikataulutus, resurssien, kustannusten, laadun ja riskien hallinta sekä viestintä). Kohdassa 2 (Osaamisena) ovat taidot ja johtaminen, ja kohdassa 3 (Työkaluina ja käytäntöinä) konkreettiset dokumentit kuten tarkistuslistat ja raportit."
       },
       {
         id: 5,
         mod: 1,
         modName: "Moduuli 1: Taustaa ja käsitteet",
-        q: "Mitä 'projektinhallinnan rautainen kolmio' (tai kultainen kolmio) kuvastaa tavoitteiden välisestä tasapainosta?",
+        q: "Mitä osatekijöitä projektinhallinnan rautainen kolmio (kultainen kolmio) sisältää ja miten niiden välistä riippuvuutta kuvataan?",
         opts: [
-          "Laatu ja kustannukset voidaan aina saavuttaa ilman aikarajoitteita.",
-          "Tavoitteet (tulos/laatu, aika, raha/resurssit) ovat sidoksissa toisiinsa: yhden muuttaminen vaikuttaa välittömästi muihin.",
-          "Projektipäällikkö voi vapaasti kasvattaa laajuutta ilman kustannus- tai aikavaikutuksia.",
-          "Se on vain rakennusalalla käytettävä sopimusmalli."
+          "Osatekijät ovat strategia, sidosryhmät ja organisaatio; laajuuden kasvattaminen lyhentää tyypillisesti aikataulua ja keventää tarvittavaa resurssimäärää.",
+          "Osatekijät ovat tulos (laajuus ja laatu), aika sekä raha (kustannukset ja resurssit); aikataulun lyhentäminen voi lisätä kustannuksia ja laajuuden kasvattaminen pidentää aikataulua.",
+          "Osatekijät ovat ideointi, suunnittelu ja toteutus; kustannusten pienentäminen kasvattaa käytettävissä olevia resursseja ja nopeuttaa välitavoitteiden saavuttamista.",
+          "Osatekijät ovat käytäntö-, ihmis- ja näkökulmapätevyydet; yhden tavoitteen muuttaminen mahdollistaa muiden tavoitteiden pitämisen ennallaan ilman kompromisseja."
         ],
         ans: 1,
-        exp: "Rautaisen kolmion osatekijät ovat tulos (laajuus ja laatu), aika ja raha (kustannukset/resurssit). Jos esimerkiksi aikataulua kiristetään, se nostaa yleensä kustannuksia tai karsii laajuutta."
+        exp: "Rautaisen (tai kultaisen) kolmion kulmat ovat tulos (laajuus ja laatu), aika sekä raha (kustannukset ja resurssit). Muutos yhdessä vaikuttaa muihin: aikataulun lyhentäminen voi lisätä kustannuksia, kustannusten pienentäminen vähentää resursseja ja laajuuden kasvattaminen pidentää aikataulua tai nostaa kustannuksia."
       },
       {
         id: 6,
         mod: 1,
         modName: "Moduuli 1: Taustaa ja käsitteet",
-        q: "Miten käsitteet 'projekti', 'hanke' ja 'ohjelma' eroavat toisistaan materiaalin mukaan?",
+        q: "Miten käsitteet projekti, hanke, urakka ja ohjelma suhteutuvat toisiinsa eri toimialoilla ja projektikirjallisuudessa (Artto ym., 2011)?",
         opts: [
-          "Termit ovat täysin identtisiä ilman toimialakohtaisia sävyeroja.",
-          "Julkishallinnossa projektista puhutaan usein hankkeena ja rakennusalalla urakkana; ohjelma koostuu useista yhteiseen strategiseen tavoitteeseen tähtäävistä projekteista (kuten Apollo-ohjelma).",
-          "Ohjelma on aina pienempi kuin yksittäinen projekti ja kestää enintään kuukauden.",
-          "Hankkeella tarkoitetaan ainoastaan epäonnistunutta projektia."
+          "Ohjelmalla tarkoitetaan yksittäistä julkisen hallinnon kehittämisprojektia, kun taas hankkeella tarkoitetaan useista projekteista koostuvaa strategista kokonaisuutta.",
+          "Julkisessa hallinnossa projektista puhutaan usein urakkana, rakennusalalla ohjelmana ja teknisillä aloilla useiden projektien muodostamana hankekokonaisuutena.",
+          "Julkisessa hallinnossa projektista puhutaan usein hankkeena, rakennusalalla urakkana ja ohjelmalla tarkoitetaan useista toisiinsa liittyvistä projekteista muodostuvaa strategista kokonaisuutta.",
+          "Rakennusalalla ohjelmalla tarkoitetaan yksittäistä työpakettia, kun taas julkisessa hallinnossa urakka ja ohjelma esiintyvät lähes synonyymeina yksittäiselle projektille."
         ],
-        ans: 1,
-        exp: "Julkisella sektorilla käytetään usein termiä hanke ja rakennusalalla urakka. Ohjelma (program) on puolestaan useiden toisiinsa liittyvien projektien strateginen kokonaisuus (esim. Apollo-avaruusohjelma)."
+        ans: 2,
+        exp: "Terminologia vaihtelee toimialoittain: julkisessa hallinnossa käytetään usein sanaa hanke (ja kirjallisuudessa projekti ja hanke ovat lähes synonyymeja), rakennusalalla käytetään termiä urakka, ja ohjelma (esim. Apollo-ohjelma) tarkoittaa useista toisiinsa liittyvistä projekteista muodostuvaa kokonaisuutta yhteiseen strategiseen tavoitteeseen."
       },
 
       // ----------------- MODUULI 2 -----------------
@@ -693,85 +736,85 @@
         id: 7,
         mod: 2,
         modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
-        q: "Mikä on kurssimateriaalissa (Kettunen, 2009; Severa, 2019) esitetyn elinkaarimallin täsmällinen etenemisjärjestys?",
+        q: "Mikä seuraavista vaiheketjuista vastaa täsmälleen kurssimateriaalissa (Kettunen, 2009; Severa, 2019) esitettyä projektin yleistä elinkaarimallia?",
         opts: [
-          "Tarpeen tunnistaminen → ideointi → suunnittelu → määrittely → toteutus → päättäminen",
+          "Tarpeen tunnistaminen → ideointi → määrittely → suunnittelu → toteutus → projektin päättäminen",
           "Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen",
-          "Esiselvitys → määrittely → suunnittelu → ideointi → päättäminen → toteutus",
-          "Määrittely → ideointi → toteutus → suunnittelu → päättäminen"
+          "Ideointi → määrittely → tarpeen tunnistaminen → suunnittelu → toteutus → projektin päättäminen",
+          "Tarpeen tunnistaminen → määrittely → esiselvitys → suunnittelu → toteutus → projektin päättäminen"
         ],
         ans: 1,
-        exp: "Materiaalin mukainen virallinen elinkaarimalli: Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen."
+        exp: "Kurssimateriaalin tarkka elinkaarimalli on: Ideointi → tarpeen tunnistaminen → määrittely → suunnittelu → toteutus → projektin päättäminen. Ideointivaiheessa tunnistetaan kehittämistarve tai mahdollisuus, ja tarpeen tunnistamisen jälkeen määritellään tavoitteet, rajaukset ja keskeiset sidosryhmät."
       },
       {
         id: 8,
         mod: 2,
         modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
-        q: "Mikä on ennen projektin virallista käynnistämistä tehtävän esiselvityksen eli toteutettavuustutkimuksen (feasibility study) päätarkoitus?",
+        q: "Miten projektin esiselvitys (toteutettavuustutkimus / feasibility study) ja projektin asettamiskirje eroavat toisistaan projektin alkuvaiheessa (Ruuska, 2007)?",
         opts: [
-          "Loppuraportin laatiminen ja kaluston myyminen",
-          "Arvioida hankkeen tarpeellisuutta, toteuttamiskelpoisuutta ja hyötyjä johdon päätöksenteon tueksi",
-          "Kaikkien yksityiskohtaisten työtuntien kirjaaminen takautuvasti",
-          "Projektiorganisaation välitön purkaminen"
+          "Asettamiskirjeellä arvioidaan ennakkoon projektin toteuttamiskelpoisuutta ja odotettuja hyötyjä, kun taas esiselvityksellä nimetään virallisesti projektipäällikkö ja ohjausryhmä.",
+          "Esiselvityksellä arvioidaan projektin tarpeellisuutta, toteuttamiskelpoisuutta ja hyötyjä päätöksenteon tueksi, kun taas asettamiskirjeellä käynnistetään projekti virallisesti ja nimetään projektipäällikkö.",
+          "Esiselvitys laaditaan vasta suunnitteluvaiheen päätteeksi ohjausryhmän hyväksyttäväksi, kun taas asettamiskirje toimii projektin lopullisena resurssi- ja kustannusbudjettina.",
+          "Asettamiskirjeen laatii projektiryhmä toteutusvaiheen alussa työnjaon tueksi, kun taas esiselvitys on projektin päättämisvaiheessa tehtävä taloudellinen jälkilaskelma."
         ],
         ans: 1,
-        exp: "Esiselvityksellä / toteutettavuustutkimuksella (Ruuska, 2007) selvitetään, kannattaako projektia ylipäätään käynnistää ja onko sille olemassa riittävät tekniset, taloudelliset ja toiminnalliset edellytykset."
+        exp: "Esiselvitys (feasibility study) tehdään ennen käynnistyspäätöstä arvioimaan tarpeellisuutta, toteuttamiskelpoisuutta ja hyötyjä. Kun johto päättää käynnistää projektin, laaditaan asettamiskirje, jossa määritellään tausta, tavoitteet, alustava aikataulu sekä nimetään projektipäällikkö ja ohjausryhmä."
       },
       {
         id: 9,
         mod: 2,
         modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
-        q: "Mikä virallinen asiakirja laaditaan usein käynnistämisvaiheessa nimeämään projektipäällikkö ja ohjausryhmä sekä antamaan valtuutus suunnittelulle?",
+        q: "Kuka laatii ja kuka hyväksyy projektisuunnitelman, ja mihin kysymyksiin sen tulee Lewisin (1997) mukaan vastata?",
         opts: [
-          "Projektin asettamiskirje",
-          "Gantt-kaavio",
-          "Loppukatselmuspöytäkirja",
-          "Työmaapäiväkirja"
+          "Suunnitelman laatii ohjausryhmä yhdessä tilaajan kanssa ja sen hyväksyy projektipäällikkö; se vastaa kysymyksiin kuka, mitä, milloin, miten ja minkä verran.",
+          "Suunnitelman laatii projektin asettaja esiselvityksen pohjalta ja sen hyväksyy rahoittaja; se vastaa kysymyksiin miksi, kenelle, millä budjetilla, milloin ja millä riskeillä.",
+          "Suunnitelman laatii projektipäällikkö yhteistyössä projektiryhmän ja sidosryhmien kanssa ja sen hyväksyy ohjaus- tai johtoryhmä; se vastaa kysymyksiin mitä, miksi, kuka, milloin ja miten.",
+          "Suunnitelman laatii projektiryhmä itsenäisesti toteutusvaiheen aikana ja sen hyväksyy linjajohto; se vastaa kysymyksiin mitä, missä järjestyksessä, kenen vastuulla ja millä kustannuksilla."
         ],
-        ans: 0,
-        exp: "Projektin asettamiskirje (Ruuska, 2007) luo yhteisen pohjan, vahvistaa taustan ja tavoitteet sekä nimeää muodollisesti projektipäällikön ja mahdollisen ohjausryhmän."
+        ans: 2,
+        exp: "Moduulin 2 mukaan projektisuunnitelman laatii yleensä projektipäällikkö yhteistyössä projektiryhmän ja keskeisten sidosryhmien kanssa, ja sen hyväksyy projektin ohjaus- tai johtoryhmä. Lewisin (1997) viisi kysymystä ovat: mitä tehdään, miksi tehdään, kuka tekee, milloin tehdään ja miten tavoitteet saavutetaan."
       },
       {
         id: 10,
         mod: 2,
         modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
-        q: "Mihin viiteen keskeiseen kysymykseen hyvin laaditun projektisuunnitelman tulee vastata (Lewis, 1997)?",
+        q: "Miten projektin toteutusvaihe sekä sen rinnalla kulkeva ohjaus ja seuranta määritellään suhteessa poikkeamiin (Artto ym., 2011; Pelin, 2009)?",
         opts: [
-          "Miksi, kenen syy, millä oikeudella, minne, milloinkaan",
-          "Mitä tehdään, miksi tehdään, kuka tekee, milloin tehdään ja miten tavoitteet saavutetaan",
-          "Kuka maksaa eniten, kuka pääsee vähimmällä, milloin lomaillaan, minne mennään, miten peitellään virheet",
-          "Mitä ostetaan, mistä saadaan alennusta, kuka irtisanotaan, milloin konkurssi uhkaa, miten valitetaan"
+          "Projektiraportointi keskittyy toteutuneiden työtuntien mekaaniseen kirjaamiseen, mutta alkuperäistä projektisuunnitelmaa ei saa muuttaa enää toteutusvaiheen käynnistyttyä.",
+          "Projektiraportointi on luonteeltaan erityisesti poikkeamien tunnistamista ja analysointia, ja suunnittelun sekä toteutuksen välillä toimii jatkuva palautesilmukka.",
+          "Projektin ohjaus ja seuranta käynnistyvät vasta toteutusvaiheen päätyttyä, jolloin mahdolliset aikataulu-, kustannus- ja laatupoikkeamat käsitellään loppuraportissa.",
+          "Mikäli toteutusvaiheessa havaitaan merkittäviä poikkeamia, projekti keskeytetään automaattisesti ja palataan ideointivaiheeseen uuden asettamiskirjeen laatimiseksi."
         ],
         ans: 1,
-        exp: "Lewis (1997) ja Ruuska (2007) listaavat 5 peruskysymystä: Mitä tehdään? Miksi tehdään? Kuka tekee? Milloin tehdään? Miten tavoitteet saavutetaan?"
+        exp: "Projektiraportointi on luonteeltaan erityisesti poikkeamien tunnistamista ja analysointia. Merkittävien aikataulu-, kustannus- tai laatupoikkeamien syyt selvitetään ja tarvittaessa päivitetään projektisuunnitelmaa, eli suunnittelun ja toteutuksen välillä on jatkuva palautesilmukka."
       },
       {
         id: 11,
         mod: 2,
         modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
-        q: "Miksi Pelin (2020) kutsuu projektin ositusta (Work Breakdown Structure, WBS)?",
+        q: "Mikä on työpaketin (work package) täsmällinen asema ja tehtävä projektin osituksessa (Work Breakdown Structure, WBS)?",
         opts: [
-          "Projektinhallinnan selkärangaksi, joka muodostaa projektiohjauksen perustan",
-          "Turhaksi byrokraattiseksi hidasteeksi, jota ei suositella käytettäväksi",
-          "Vain ohjelmistokoodareille tarkoitetuksi luokkahierarkiaksi",
-          "Tilintarkastajien salaiseksi pistokokeeksi"
+          "Työpaketti on WBS-rakenteen ylin hierarkiataso, joka kokoaa projektin päävaiheet yhteen ohjausryhmän kuukausittaista tilannekatsausta ja budjettiseurantaa varten.",
+          "Työpaketti on WBS-rakenteen pienin yksikkö sekä pienin seurattava kustannus- ja ohjausyksikkö, jolle voidaan osoittaa vastuuhenkilö, aikataulu, resurssit ja kustannukset.",
+          "Työpaketti on kahden päävaiheen väliin sijoittuva tarkistuspiste eli virstanpylväs, jolla ei ole omaa kestoa tai budjettia vaan ainoastaan laadullinen hyväksymiskriteeri.",
+          "Työpaketti on toimintaverkon kriittisellä polulla sijaitseva riippuvuussolmu, jonka avulla lasketaan tehtävien välinen pelivara ilman henkilökohtaista vastuunjakoa."
         ],
-        ans: 0,
-        exp: "Pelin (2020) määrittelee osituksen projektiohjauksen perustaksi ja nimittää sitä projektinhallinnan selkärangaksi, koska koko aikataulutus, budjetointi ja seuranta nojaavat siihen."
+        ans: 1,
+        exp: "WBS-rakenteen pienin yksikkö on työpaketti (work package). Se sisältää selkeästi määritellyn tehtäväkokonaisuuden, jolle osoitetaan vastuuhenkilö, aikataulu, resurssit ja kustannukset, ja se toimii projektin pienimpänä seurattavana kustannus- ja ohjausyksikkönä (Pelin, 2009; Ruuska, 2007)."
       },
       {
         id: 12,
         mod: 2,
         modName: "Moduuli 2: Vaiheet ja ositus (WBS)",
-        q: "Mikä seuraavista luonnehtii oikein WBS:n pienintä yksikköä eli työpakettia (work package)?",
+        q: "Miten kurssimateriaalin verkkosivuston toteutusprojektin WBS-esimerkissä päätehtävät ja alatasojen työpaketit on jäsennelty?",
         opts: [
-          "Se on projektin ylin strateginen päämäärä ilman omaa vastuuhenkilöä.",
-          "Se on itsenäisesti hallittava tehtäväkokonaisuus ja pienin seurattava kustannus- ja ohjausyksikkö, jolle voidaan määrittää vastuuhenkilö, aikataulu ja budjetti.",
-          "Työpaketti voi sisältää korkeintaan 15 minuuttia työtä eikä sitä saa koskaan delegoida.",
-          "Työpaketti tarkoittaa projektin fyysistä postilähetystä tilaajalle."
+          "Päätehtäviä ovat esimerkiksi 'Tarpeiden kartoitus' ja 'Julkaisu', kun taas työpaketteina pidetään laajoja kokonaisuuksia kuten 'Verkkosivuston suunnittelu' ja 'Testaus ja käyttöönotto'.",
+          "Päätehtäviä ovat esimerkiksi 'Verkkosivuston suunnittelu' ja 'Testaus ja käyttöönotto', kun taas työpaketteina pidetään tehtäviä '2.3 Visuaalisen ilmeen suunnittelu' tai '4.2 Käyttäjätestaus'.",
+          "Sekä päätehtävät että alatasojen tehtävät määritellään työpaketeiksi, mutta vastuuhenkilö, budjetti ja aikataulu asetetaan ainoastaan viidelle päätehtävätasolle.",
+          "Työpaketteja ovat ainoastaan käynnistämis- ja päättämisvaiheen hallinnolliset tehtävät, kun taas suunnittelu- ja toteutustehtävät jätetään rullaavan suunnittelun varaan."
         ],
         ans: 1,
-        exp: "WBS:n alin elementti on työpaketti. Se on ohjauksen ja kustannusseurannan perusyksikkö, jolla on nimetty omistaja, selkeä tavoite, aikataulu ja resurssit."
+        exp: "Materiaalin verkkosivustoesimerkissä päätavoite jaetaan viiteen päätehtävään (1. Projektin käynnistäminen, 2. Verkkosivuston suunnittelu, 3. Verkkosivuston toteutus, 4. Testaus ja käyttöönotto, 5. Projektin päättäminen) ja ne pilkotaan työpaketeiksi, joista tekstissä nostetaan nimenomaisesti esiin '2.3 Visuaalisen ilmeen suunnittelu' ja '4.2 Käyttäjätestaus'."
       },
 
       // ----------------- MODUULI 3 -----------------
@@ -779,85 +822,85 @@
         id: 13,
         mod: 3,
         modName: "Moduuli 3: Organisaatio ja sidosryhmät",
-        q: "Miten projektiorganisaation koko ja resurssitarve tyypillisesti kehittyvät projektin elinkaaren aikana (Ruuska, 2012)?",
+        q: "Miten projektiorganisaation rakennetta, kokoa ja ohjausta koskevat periaatteet määritellään kurssimateriaalissa (Mäntyneva, 2016; Ruuska, 2012)?",
         opts: [
-          "Koko pysyy täysin muuttumattomana ensimmäisestä päivästä viimeiseen.",
-          "Alussa organisaatio on usein kevyt, kasvaa suunnittelu- ja toteutusvaiheissa huipulleen ja supistuu asteittain kohti päättämistä.",
-          "Organisaatio on suurimmillaan ideointivaiheessa ja kutistuu yhteen henkeen toteutuksessa.",
-          "Resurssitarve kasvaa räjähdysmäisesti vasta projektin päättämisen jälkeen."
+          "Pienissä projekteissa projektipäällikkö voi toimia ilman omistajaa tai ohjausryhmää, ja projektiorganisaation koko pidetään vakiona aloituksesta purkamiseen saakka.",
+          "Pienissäkin projekteissa tulee olla omistaja tai ohjausryhmä strategista ohjausta varten, ja organisaation koko kasvaa suunnittelu- ja toteutusvaiheissa sekä vähenee asteittain päättyessä.",
+          "Projektiorganisaatio saavuttaa nopeasti pysyvän organisaation kaltaisen vakaan toimintatilan, ja sen henkilöstömäärä on suurimmillaan käynnistämis- ja päättämisvaiheissa.",
+          "Projektiorganisaation johtamisjärjestelmä ja viestintäkäytännöt kopioidaan sellaisenaan perusorganisaatiosta, jotta resurssitarve pysyy muuttumattomana koko elinkaaren ajan."
         ],
         ans: 1,
-        exp: "Projektiorganisaatio on tilapäinen. Alussa se on kevyt (ydintiimi/valmistelijat), laajenee toteutuksen huipussa ja supistuu vaiheittain ennen purkamista."
+        exp: "Mäntynevan (2016) mukaan pienissäkin projekteissa, joissa projektipäällikkö vastaa yksin toteutuksesta, tulee olla omistaja tai ohjausryhmä. Ruuskan (2012) mukaan koko muuttuu elinkaaren aikana: alussa kevyt, kasvaa suunnittelu- ja toteutusvaiheissa, ja päättyessä sitä vähennetään asteittain ennen purkamista."
       },
       {
         id: 14,
         mod: 3,
         modName: "Moduuli 3: Organisaatio ja sidosryhmät",
-        q: "Mitä tehtävien delegoinnilla tarkoitetaan täsmällisesti projektipäällikön johtamistyössä (Ruuska, 2012)?",
+        q: "Miten projektipäällikön rooli projektin integraattorina sekä tehtävien delegointi määritellään kurssimateriaalissa (Ruuska, 2012)?",
         opts: [
-          "Kaiken henkilökohtaisen vastuun siirtämistä alihankkijoille ilman raportointivelvoitetta",
-          "Vastuun ja päätösvallan siirtämistä tehtävän suorittamisesta henkilölle, joka hyväksyy annetun tehtävän",
-          "Päätösvallan keskittämistä vain ja ainoastaan tilaajalle",
-          "Vaikeiden töiden jättämistä tekemättä ryhmäpaineen välttämiseksi"
+          "Delegoinnissa projektipäällikkö siirtää työn suoritusvelvollisuuden asiantuntijalle, mutta pidättää kaiken tehtävään liittyvän päätösvallan ja vastuun ohjausryhmällä.",
+          "Delegoinnissa siirretään vastuuta ja päätösvaltaa tehtävän suorittamisesta henkilölle, joka hyväksyy annetun tehtävän, ja projektipäällikkö yhdistää eri osat toimivaksi kokonaisuudeksi.",
+          "Integraattorina projektipäällikkö vastaa projektin strategisesta valvonnasta perusorganisaation näkökulmasta ja delegoi operatiivisen päivittäisjohtamisen ohjausryhmän sihteerille.",
+          "Delegoinnissa vastuu projektin kokonaistavoitteista siirretään ulkopuolisille alihankkijoille, jolloin projektipäällikön rooli rajoittuu tekniseen asiantuntijatyöhön."
         ],
         ans: 1,
-        exp: "Delegoinnissa siirretään vastuuta ja tarvittavaa päätösvaltaa tehtävän suorittamiseksi henkilölle, joka hyväksyy tehtävän vastaanottamisen. Projektipäällikkö toimii kokonaisuuden integraattorina."
+        exp: "Ruuskan (2012) mukaan projektipäällikkö on operatiivinen johtaja ja integraattori, joka yhdistää tehtävät, työvaiheet, sidosryhmät ja resurssit. Delegoinnissa siirretään vastuuta ja päätösvaltaa tehtävän suorittamisesta henkilölle, joka hyväksyy annetun tehtävän."
       },
       {
         id: 15,
         mod: 3,
         modName: "Moduuli 3: Organisaatio ja sidosryhmät",
-        q: "Mikä on ohjausryhmän (johtoryhmän/valvontaryhmän) ensisijainen rooli ja miten usein se yleensä kokoontuu?",
+        q: "Mikä on ohjausryhmän (johtoryhmän tai valvontaryhmän) tehtävä ja miten projektipäällikkö osallistuu sen toimintaan (Silfverberg, 2007; Kettunen, 2009)?",
         opts: [
-          "Tehdä koodaus- ja asennustyöt; kokoontuu kaksi kertaa päivässä",
-          "Toimia projektin ylimpänä päätöksentekoelimenä perusorganisaation strategisesta näkökulmasta; kokoontuu yleensä säännöllisesti (esim. kerran kuukaudessa)",
-          "Ainoastaan maksaa kahvilaskut ilman päätösvaltaa; kokoontuu vain projektin päätyttyä",
-          "Toimia projektipäällikön alaisena ja ottaa vastaan hänen käskynsä"
+          "Ohjausryhmä vastaa projektin päivittäisestä operatiivisesta johtamisesta ja tehtävien delegoinnista; projektipäällikkö toimii ohjausryhmän puheenjohtajana.",
+          "Ohjausryhmä toimii projektin ylimpänä päätöksentekoelimenä perusorganisaation strategisten tavoitteiden näkökulmasta; projektipäällikkö osallistuu työskentelyyn ja toimii usein sen sihteerinä.",
+          "Ohjausryhmä koostuu projektin käytännön toteutuksesta vastaavista moniammatillisista asiantuntijoista; projektipäällikkö kutsuu sen koolle vain projektin alussa ja lopussa.",
+          "Ohjausryhmä toimii riippumattomana ulkoisena tarkastuselimenä, jonka kokouksista projektipäällikkö on jääviysperustein suljettu pois käsittelyn ajaksi."
         ],
         ans: 1,
-        exp: "Ohjausryhmä edustaa omistajaa/tilaajaa ja toimii ylimpänä päätöksentekoelimenä (Silfverberg, 2007; Kettunen, 2009). Se kokoontuu tyypillisesti esim. kerran kuukaudessa seuraamaan tavoitteiden toteutumista."
+        exp: "Ohjausryhmä (johtoryhmä/valvontaryhmä) on projektin ylin päätöksentekoelin, joka tarkastelee projektia perusorganisaation strategisten tavoitteiden näkökulmasta ja hyväksyy merkittävät muutokset. Projektipäällikkö osallistuu sen työskentelyyn ja toimii usein myös sen sihteerinä."
       },
       {
         id: 16,
         mod: 3,
         modName: "Moduuli 3: Organisaatio ja sidosryhmät",
-        q: "Mikä on projektipäällikön tavanomainen rooli projektin ohjausryhmän työskentelyssä?",
+        q: "Mitkä piirteet kuvaavat projektiryhmän kokoonpanoa ja toimintaa projektin elinkaaren aikana (Ruuska, 2012; Pelin, 2020)?",
         opts: [
-          "Hän on ulkopuolinen henkilö, jolle ei koskaan kerrota kokouksista.",
-          "Hän osallistuu työskentelyyn, esittelee asiat ja toimii usein sen sihteerinä.",
-          "Hän toimii aina automaattisesti ohjausryhmän puheenjohtajana ja omistajana.",
-          "Hänellä on veto-oikeus kumota kaikki organisaation strategiset päätökset."
+          "Projektiryhmän kokoonpano lukitaan asettamiskirjeessä koko projektin ajaksi, ja suurin osa tehtävistä suoritetaan itsenäisenä yksilötyönä työnjaon selkeyttämiseksi.",
+          "Projektiryhmän kokoonpanoa voidaan muuttaa projektin edetessä osaamistarpeiden mukaan, ja suurin osa tehtävistä edellyttää moniammatillista yhteistyötä ja tiedon jakamista.",
+          "Projektiryhmä muodostuu perusorganisaation ylimmästä johdosta sekä rahoittajien edustajista, jotka kokoontuvat kerran kuukaudessa hyväksymään budjettipoikkeamat.",
+          "Projektiryhmän jäsenet valitaan aina samasta perusorganisaation yksiköstä ja ammattiryhmästä, jotta ryhmän sisäisiltä näkemyseroilta ja perehdytykseltä vältytään."
         ],
         ans: 1,
-        exp: "Projektipäällikkö osallistuu ohjausryhmän kokouksiin asioiden esittelijänä ja usein toimii ryhmän sihteerinä, vaikka ei itse ole ryhmän puheenjohtaja (Kettunen, 2009; Silfverberg, 2007)."
+        exp: "Projektin eri vaiheissa tarvitaan erilaista osaamista (tekninen, talous, viestintä, laatu), minkä vuoksi projektiryhmän kokoonpanoa voidaan muuttaa projektin edetessä. Vaikka yksilö- ja parityötäkin käytetään, suurin osa tehtävistä edellyttää moniammatillista yhteistyötä ja tiedon jakamista."
       },
       {
         id: 17,
         mod: 3,
         modName: "Moduuli 3: Organisaatio ja sidosryhmät",
-        q: "Mikä seuraavista tahoista luetaan materiaalissa (Artto ym., 2006) nimenomaisesti projektin mahdolliseksi sidosryhmäksi?",
+        q: "Miten projektin sidosryhmät määritellään ja mitkä tahot kurssimateriaali (Artto ym., 2006) listaa esimerkkeinä sidosryhmistä?",
         opts: [
-          "Vain ja ainoastaan projektipäällikkö itse",
-          "Asiakas, loppukäyttäjät, kilpailijat, media sekä projektiin osallistuvien henkilöiden lähipiiri",
-          "Ainoastaan veroviranomainen",
-          "Ei kukaan organisaation ulkopuolinen"
+          "Sidosryhmiä ovat vain projektiin sopimussuhteessa olevat juridiset osapuolet, eli tilaaja, projektin omistaja, rahoittajat sekä suoraan palkatut toimittajat ja alihankkijat.",
+          "Sidosryhmiä ovat kaikki yksilöt, ryhmät ja organisaatiot, jotka voivat vaikuttaa projektiin tai joihin projekti voi vaikuttaa, mukaan lukien kilpailijat, media ja osallistujien lähipiiri.",
+          "Sidosryhmiä ovat ainoastaan projektiorganisaation ulkopuoliset tahot, kuten viranomaiset ja loppukäyttäjät, kun taas projektipäällikkö ja projektiryhmä rajataan käsitteen ulkopuolelle.",
+          "Sidosryhmiä ovat ne perusorganisaation sisäiset yksiköt, jotka osallistuvat ohjausryhmätyöskentelyyn ja joilla on suora päätösvalta projektin laajuuteen ja budjettiin."
         ],
         ans: 1,
-        exp: "Sidosryhmiä ovat kaikki tahot, joihin projekti vaikuttaa tai jotka voivat vaikuttaa siihen. Materiaali mainitsee laajan kirjon tilaajasta, käyttäjistä ja viranomaisista aina mediaan, kilpailijoihin ja lähipiiriin asti."
+        exp: "Artto ym. (2006) määrittelevät sidosryhmiksi kaikki yksilöt, ryhmät ja organisaatiot, jotka voivat vaikuttaa projektiin tai joihin projekti voi vaikuttaa (suoraan tai välillisesti). Listassa ovat mukana niin sisäiset toimijat (projektipäällikkö, projektiryhmä) kuin ulkoisetkin aina kilpailijoihin, mediaan, ympäröivään yhteiskuntaan ja osallistujien lähipiiriin asti."
       },
       {
         id: 18,
         mod: 3,
         modName: "Moduuli 3: Organisaatio ja sidosryhmät",
-        q: "Miksi sidosryhmien varhainen ja huolellinen tunnistaminen on materiaalin mukaan kriittinen osa projektin riskienhallintaa?",
+        q: "Miten sidosryhmien hallinta kytkeytyy projektin riskienhallintaan ja ohjausryhmätyöskentelyyn (Artto ym., 2006; Pelin, 2020)?",
         opts: [
-          "Koska huomiotta jäänyt merkittävä sidosryhmä voi myöhemmin vastustuksellaan estää projektin etenemisen tai lopputuloksen hyväksymisen.",
-          "Jotta kaikille sidosryhmille voidaan maksaa sama kiinteä kuukausipalkka.",
-          "Koska sidosryhmät korvaavat koko projektisuunnitelman laadinnan.",
-          "Sidosryhmillä ei ole mitään yhteyttä riskienhallintaan."
+          "Sidosryhmien tunnistaminen on osa kustannusten jälkilaskentaa, ja ristiriitojen välttämiseksi sidosryhmien edustajia ei oteta mukaan projektin ohjausryhmän kokouksiin.",
+          "Sidosryhmien tunnistaminen on tärkeä osa riskienhallintaa, sillä huomiotta jäänyt sidosryhmä voi vaikeuttaa etenemistä, ja tärkeimmät sidosryhmät osallistuvat usein ohjausryhmään.",
+          "Sidosryhmien odotukset ovat yleensä keskenään yhteneväisiä, minkä vuoksi sidosryhmäanalyysi tehdään vain silloin, kun viranomaisvaatimukset muuttuvat kesken toteutusvaiheen.",
+          "Sidosryhmähallinnan tavoitteena on siirtää projektin taloudellinen vastuu ulkoisille sidosryhmille ennen kuin projektisuunnitelman vaatimukset jäädytetään."
         ],
-        ans: 0,
-        exp: "Artto ym. (2006) korostavat, että sidosryhmien tunnistaminen on keskeinen osa riskienhallintaa: jos jokin avaintaho jätetään huomiotta, se voi viivästyttää projektia tai torjua lopputuloksen käyttöönoton."
+        ans: 1,
+        exp: "Sidosryhmien tunnistaminen on tärkeä osa riskienhallintaa: jos merkittävä sidosryhmä jää huomiotta, se voi myöhemmin aiheuttaa ongelmia etenemiselle tai lopputuloksen hyväksyttävyydelle. Lisäksi tärkeimmät sidosryhmät osallistuvat usein ohjausryhmän työskentelyyn."
       },
 
       // ----------------- MODUULI 4 -----------------
@@ -865,85 +908,85 @@
         id: 19,
         mod: 4,
         modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
-        q: "Mitä tarkoitetaan aikataulusuunnittelussa käytettävällä rullaavan suunnittelun periaatteella (vyöryvä aalto / rolling wave)?",
+        q: "Miten projektisuunnitelman osa-alueet 'Tulostavoitteet', 'Rajaukset' ja 'Toteutussuunnitelma' eroavat sisällöllisesti toisistaan (Artto ym., 2011; Pelin, 2020)?",
         opts: [
-          "Suunnitelmia ei tehdä lainkaan ennen kuin projekti on jo valmistunut.",
-          "Lähimpänä toteutettavat vaiheet suunnitellaan tarkasti, kun taas myöhemmät vaiheet kuvataan aluksi yleisemmällä tasolla ja tarkennetaan työn edetessä.",
-          "Projektin deadlinea siirretään joka viikko yhdellä kuukaudella eteenpäin.",
-          "Budjettia kasvatetaan automaattisesti ilman ohjausryhmän lupaa."
+          "Tulostavoitteissa kuvataan projektin aikana tehtävät työvaiheet ja menetelmät, kun taas toteutussuunnitelmassa määritellään mitä projektiin kuuluu ja mitä jää sen ulkopuolelle.",
+          "Tulostavoitteissa määritellään tavoitetila ja lopputulos sekoittamatta niitä työvaiheisiin, rajauksissa määritellään mitä jää ulkopuolelle ja toteutussuunnitelmassa tehtävät sekä riskienhallinta.",
+          "Rajauksissa määritellään projektin tehtäväluettelot, työmääräarviot ja riskien hallintatoimenpiteet, kun taas tulostavoitteissa esitellään rinnakkaiset hankkeet ja riippuvuudet.",
+          "Toteutussuunnitelmassa perustellaan miksi projekti on käynnistetty ja tarkastellaan aiempia selvityksiä, kun taas tulostavoitteissa määritellään maksuaikataulut ja rahoitus."
         ],
         ans: 1,
-        exp: "Rullaava suunnittelu (Artto ym., 2011; Ruuska, 2012) tarkoittaa, että lähitulevaisuus suunnitellaan tarkasti työpaketeiksi ja kaukaisemmat vaiheet tarkennetaan tiedon kertyessä."
+        exp: "Tulostavoitteissa määritellään lopputulos ja tavoitetila, eikä niitä tule sekoittaa työvaiheisiin tai menetelmiin. Rajauksissa määritellään mitä kuuluu mukaan ja mitä jää ulkopuolelle (sekä rajoitteet ja rinnakkaiset hankkeet). Toteutussuunnitelmaan sisältyvät tehtäväluettelot, työmääräarviot, aikataulut, resurssit, välitavoitteet sekä riskien tunnistaminen ja hallintatoimenpiteet."
       },
       {
         id: 20,
         mod: 4,
         modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
-        q: "Mistä aikataulun riippuvuustyypistä on kyse, kun tehtävän aloitus on sidottu tiettyyn ulkoiseen ajankohtaan, kuten viranomaispäätökseen tai toimituspäivään?",
+        q: "Miten tehtävien väliset riippuvuustyypit (limitys-, viive-, resurssi- ja kalenteririippuvuus) määritellään aikataulusuunnittelussa (Pelin, 2020)?",
         opts: [
-          "Loogisesta riippuvuudesta",
-          "Kalenteririippuvuudesta",
-          "Viiveriippuvuudesta",
-          "Limitysriippuvuudesta"
+          "Limitysriippuvuudessa tehtävän aloitus vaatii määrätyn odotusajan edellisen päättymisestä, kun taas viiveriippuvuudessa tehtävä käynnistetään toisen tehtävän tietyn vaiheen jälkeen.",
+          "Kalenteririippuvuudessa samojen henkilöiden käyttö estää samanaikaisen suorituksen, kun taas resurssiriippuvuudessa tehtävä on sidottu viranomaispäätökseen tai toimituspäivään.",
+          "Limitysriippuvuudessa tehtävä voidaan käynnistää toisen tehtävän tietyn vaiheen jälkeen, ja kalenteririippuvuudessa toteutus on sidottu tiettyyn ajankohtaan kuten viranomaispäätökseen.",
+          "Viiveriippuvuudessa tehtävä on sidottu ulkoiseen päivämäärään kuten tavarantoimitukseen, kun taas loogisessa riippuvuudessa tehtävillä ei ole suoraa yhteyttä toisiinsa."
         ],
-        ans: 1,
-        exp: "Pelin (2020) määrittelee: Kalenteririippuvuudessa tehtävä on sidottu tiettyyn kalenteripäivämäärään tai ulkoiseen tapahtumaan (kuten lupa, messut tai toimitusajankohta)."
+        ans: 2,
+        exp: "Pelinin (2020) määritelmät: Looginen = vasta edellisen valmistuttua; Limitys = voidaan käynnistää toisen tehtävän tietyn vaiheen jälkeen; Viive = aloitus edellyttää määrätyn ajan kulumista edellisen päättymisestä; Resurssi = samojen resurssien käyttö estää samanaikaisen toteutuksen; Kalenteri = sidottu tiettyyn ajankohtaan (esim. viranomaispäätös tai toimituspäivä)."
       },
       {
         id: 21,
         mod: 4,
         modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
-        q: "Mitä tarkoittaa resurssikuormitussuunnitelmassa esiintyvä standardimerkintä '6, EE, 0,5'?",
+        q: "Miten Gantt-kaavio, virstanpylväskaavio sekä toimintaverkkojen kaksi päätyyppiä (lohkoverkko AON ja nuoliverkko AOA) eroavat toisistaan (Artto ym., 2011; Pelin, 2020)?",
         opts: [
-          "Tehtävän kesto on 6 viikkoa, vastuuhenkilön tunnus on EE ja hänen käyttöasteensa kyseisessä tehtävässä on 50 % (0,5) työajasta.",
-          "Tehtävä vaatii 6 henkilöä, EE-palkkaluokan ja 5 kuukautta aikaa.",
-          "Projektin riskiarvo on 6, kustannuskeskus EE ja arvonlisävero 0,5 %.",
-          "Kuudentena päivänä suoritettava työpaketti EE vaatii puoli tuntia perehdytystä."
+          "Nuoliverkossa (AOA) tehtävät kuvataan laatikoina ja riippuvuudet nuolina, ja se on selkeytensä vuoksi huomattavasti yleisempi nykyisissä projektinhallintaohjelmistoissa kuin lohkoverkko.",
+          "Lohkoverkossa (AON) tehtävät kuvataan laatikoina tai solmuina ja riippuvuudet nuolina; janakaavion vahvuus on tehtävien keston visualisoinnissa ja toimintaverkkojen suoritusjärjestyksen kuvaamisessa.",
+          "Virstanpylväskaavio visualisoi yksityiskohtaisesti kunkin työpaketin työmäärän ja keston, kun taas Gantt-kaavio esittää pelkät päätöksentekopisteet ilman tehtävien kestoja.",
+          "Lohkoverkossa (AON) tehtävät kuvataan nuolina ja tapahtumat solmupisteinä, ja se perustuu täysin erilaiseen projektinhallinnan ohjauslogiikkaan kuin nuoliverkko (AOA)."
         ],
-        ans: 0,
-        exp: "Materiaalin (Artto ym., 2011; Pelin, 2020) mukaan merkinnässä '6, EE, 0,5' luku 6 on kesto viikkoina, EE on henkilön koodi/tunnus ja 0,5 on työajan käyttöaste (50 %)."
+        ans: 1,
+        exp: "Lohkoverkossa (Activity-on-Node, AON) tehtävät ovat laatikoita/solmuja ja riippuvuudet nuolia (yleisin ohjelmistoissa kuten MS Project). Nuoliverkossa (Activity-on-Arrow, AOA) tehtävät ovat nuolia ja tapahtumat solmupisteitä. Virstanpylväät eivät kuvaa työn kestoa vaan tavoitteen saavuttamista. Janakaavion vahvuus on keston visualisoinnissa, toimintaverkkojen taas suoritusjärjestyksen ja kriittisen polun esittämisessä."
       },
       {
         id: 22,
         mod: 4,
         modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
-        q: "Miten PERT-menetelmässä otetaan huomioon tehtävien keston epävarmuus ja mitkä 3 aika-arviota sille annetaan?",
+        q: "Miten kriittinen polku (CPM) ja PERT-menetelmä täydentävät toisiaan projektin aikatauluhallinnassa (Pelin, 2020; Kerzner, 2022)?",
         opts: [
-          "Aamu-, ilta- ja yöaika",
-          "Optimistinen aika, todennäköisin aika ja pessimistinen aika",
-          "Halpa aika, kallis aika ja ilmainen aika",
-          "Mennyt aika, nykyinen aika ja tuleva aika"
+          "Kriittinen polku on lyhin tehtäväketju läpi projektin, ja PERT-menetelmällä tasataan kriittisen polun ulkopuolisten tehtävien henkilöstökuormitusta kahden kestoarvion avulla.",
+          "Kriittinen polku on pisin toisistaan riippuvaisten tehtävien ketju ilman pelivaraa, ja PERT huomioi kestoarvioiden epävarmuuden kolmen aika-arvion (optimistinen, todennäköisin, pessimistinen) avulla.",
+          "PERT-menetelmä määrittää tehtävät, joilla ei ole lainkaan pelivaraa, kun taas kriittisen polun menetelmä laskee valmistumistodennäköisyyden optimistisen ja pessimistisen arvion keskiarvona.",
+          "Kriittisen polun tehtävillä on eniten aikataulullista pelivaraa muutostilanteissa, kun taas PERT-menetelmää käytetään vain silloin, kun tehtävien kestoista on tarkkaa historiatietoa."
         ],
         ans: 1,
-        exp: "PERT-menetelmässä (Program Evaluation and Review Technique) epävarmuutta mallinnetaan kolmella kestoarviolla: optimistinen (optimistic), todennäköisin (most likely) ja pessimistinen (pessimistic)."
+        exp: "Kriittinen polku on alusta loppuun ulottuva pisin toisistaan riippuvaisten tehtävien ketju, joka määrittää kokonaiskeston ja jolla ei ole pelivaraa. PERT-menetelmää käytetään, kun kestoihin liittyy epävarmuutta: jokaiselle tehtävälle annetaan optimistinen, todennäköisin ja pessimistinen aika-arvio, joista lasketaan odotettu kesto ja valmistumisen todennäköisyys."
       },
       {
         id: 23,
         mod: 4,
         modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
-        q: "Mikä on projektin 'kriittisen polun' täsmällinen määritelmä ja ominaisuus?",
+        q: "Miten työmäärän, resurssien ja keston välinen yhteys sekä avainhenkilön kuormitusmerkintä '6, EE, 0,5' määritellään resurssisuunnittelussa (Artto ym., 2011; Pelin, 2020)?",
         opts: [
-          "Lyhin reitti projektin alusta loppuun, jolla on eniten pelivaraa",
-          "Projektin alusta loppuun ulottuva pisin toisistaan riippuvaisten tehtävien ketju, jonka tehtävillä ei ole lainkaan pelivaraa (viivästys siirtää valmistumispäivää)",
-          "Tehtävät, joissa työskentelee organisaation toimitusjohtaja",
-          "Kaikki ne tehtävät, jotka ylittävät budjetin yli 50 prosentilla"
+          "Tehtävän kesto saadaan kertomalla työmäärä resurssimäärällä; merkinnässä '6, EE, 0,5' luku 6 tarkoittaa kuuden päivän työmäärää, EE tehtäväkoodia ja 0,5 puolen viikon pelivaraa.",
+          "Tehtävän kesto saadaan jakamalla työmäärä resurssimäärällä; merkinnässä '6, EE, 0,5' luku 6 tarkoittaa tehtävän kestoa viikkoina, EE henkilön tunnusta ja 0,5 käyttöastetta (50 % työajasta).",
+          "Tarvittava resurssimäärä saadaan jakamalla toteutusaika kokonaistyömäärällä; merkinnässä '6, EE, 0,5' luku 6 tarkoittaa kuutta henkilöä, EE erikoisosaamista ja 0,5 ylityökerrointa.",
+          "Tehtävän kesto saadaan jakamalla resurssimäärä työmäärällä; merkinnässä '6, EE, 0,5' luku 6 tarkoittaa ositustasoa, EE vastuuhenkilöä ja 0,5 tehtävän valmiusastetta."
         ],
         ans: 1,
-        exp: "Kriittinen polku (Critical Path) määrittää projektin vähimmäiskeston. Se on pisin ketju riippuvuuksia, ja sen tehtävien liikkumavara/pelivara on tasan nolla."
+        exp: "Peruskaava on Kesto = Työmäärä / Resurssimäärä (ja Tarvittava resurssimäärä = Kokonaistyömäärä / Käytettävissä oleva toteutusaika). Henkilökohtaisessa kuormitussuunnitelmassa merkintä '6, EE, 0,5' tarkoittaa: 6 = tehtävän kesto viikkoina, EE = henkilön tunnus ja 0,5 = käyttöaste eli 50 % työajasta."
       },
       {
         id: 24,
         mod: 4,
         modName: "Moduuli 4: Suunnitelma, aikataulut & talous",
-        q: "Miten budjetti eroaa kustannusarviosta ja miten 'sidottujen kustannusten periaate' toimii seurannassa?",
+        q: "Miten kustannusarvio, projektibudjetti, johdon varaus (management reserve) ja sidottujen kustannusten periaate määritellään kustannusohjauksessa (Pelin, 2020; Ruuska, 2012)?",
         opts: [
-          "Ne ovat täysin sama asia; kustannus kirjataan vasta kun raha siirtyy pankissa.",
-          "Kustannusarvio kertoo kuinka paljon rahaa tarvitaan, budjetti kertoo milloin rahaa tarvitaan kytkemällä se aikatauluun; sidottu kulu kirjataan heti sitovan sopimuksen/tilauksen syntyessä.",
-          "Budjetti tehdään vain jälkilaskennassa ja kustannusarvio jätetään aina salaiseksi.",
-          "Sidotut kustannukset tarkoittavat vakuudeksi annettua käteistä."
+          "Projektibudjetti kertoo kokonaisrahantarpeen ja kustannusarvio sen ajallisen jakautumisen; sidottu kustannus kirjataan vasta, kun saapunut ostolasku on maksettu pankkitililtä.",
+          "Kustannusarvio kertoo kokonaisrahantarpeen ja budjetti milloin rahaa tarvitaan eri vaiheissa; sidottu kustannus kirjataan jo sitovan sopimuksen tai tilauksen tekohetkellä.",
+          "Johdon varaus (management reserve) kasvaa projektin edetessä ja suunnitelmien tarkentuessa; sidottujen kustannusten periaatetta käytetään vain projektin päättävässä jälkilaskennassa.",
+          "Kustannusarvio laaditaan organisaation normaalin taloushallinnon raportoinnin pohjalta, kun taas budjetilla tarkoitetaan projektin päätyttyä tehtävää kannattavuuslaskelmaa."
         ],
         ans: 1,
-        exp: "Kustannusarvio summaa kokonaisrahantarpeen, kun taas budjetti jaksottaa sen aikajanalle. Sidottu kustannus kirjataan heti kun sitova sopimus syntyy, jotta taloustilanne ei vääristy laskujen viiveiden takia."
+        exp: "Kustannusarvio kertoo, kuinka paljon rahaa tarvitaan kokonaisuudessaan (ja sisältää epävarmuutta varten riskivarauksen / johdon varauksen, jota pienennetään suunnitelmien tarkentuessa). Projektibudjetti on taloudellinen toimintasuunnitelma, joka kertoo milloin rahaa tarvitaan eri vaiheissa. Sidottujen kustannusten periaatteessa kulu kirjataan heti sitovan tilauksen/sopimuksen tekohetkellä."
       },
 
       // ----------------- MODUULI 5 -----------------
@@ -951,85 +994,85 @@
         id: 25,
         mod: 5,
         modName: "Moduuli 5: Muutokset, riskit & ongelmat",
-        q: "Mitkä seuraavista luokitellaan kurssimateriaalissa nimenomaisesti projektin sisäisiksi muutoksiksi?",
+        q: "Miten projektissa esiintyvät sisäiset ja ulkoiset muutostarpeet erotellaan toisistaan ja miten ne vaikuttavat projektiin (Artto ym., 2011; Pelin, 2020)?",
         opts: [
-          "Asiakkaan uudet vaatimukset ja markkinoiden suhdannevaihtelut",
-          "Lainsäädännön ja viranomaismääräysten kiristyminen",
-          "Työmenetelmien muuttaminen, teknisten ratkaisujen vaihtaminen ja resurssien uudelleenjärjestely",
-          "Globaalit komponenttipulat ja rahtiviiveet"
+          "Sisäisiä muutoksia ovat tilaajan ja käyttäjien uudet vaatimukset projektin aikana, kun taas ulkoisia muutoksia ovat teknisten ratkaisujen vaihtaminen ja resurssien uudelleenjärjestely.",
+          "Sisäisiä muutoksia ovat työmenetelmien muuttaminen, teknisten ratkaisujen vaihtaminen ja resurssien uudelleenjärjestely; ulkoisia ovat asiakkaan muuttuneet tarpeet ja viranomaisvaatimukset.",
+          "Sisäiset muutokset kasvattavat aina projektin laajuutta ja kokonaisbudjettia merkittävästi, kun taas ulkoiset muutokset pysyvät projektiryhmän omassa hallinnassa ilman kustannusvaikutuksia.",
+          "Ulkoisia muutoksia ovat projektiryhmän toimintatapojen kehittäminen ja työvälineiden vaihto, kun taas sisäisiä muutoksia ovat teknologinen kehitys ja markkinatilanteen muutokset."
         ],
-        ans: 2,
-        exp: "Pelin (2020) mukaan sisäiset muutokset ovat projektitiimin omassa hallinnassa olevia toteutustapojen (menetelmät, tekniset valinnat, resurssien jako) viilauksia. Asiakkaan toiveet ja lait ovat ulkoisia."
+        ans: 1,
+        exp: "Sisäiset muutokset liittyvät toteutustapoihin ja projektiryhmän ratkaisuihin (työmenetelmien muuttaminen, teknisten ratkaisujen vaihtaminen, resurssien uudelleenjärjestely, toimintatapojen kehittäminen). Ulkoiset muutokset johtuvat asiakkaan muuttuneista tarpeista, lainsäädännöstä, viranomaisvaatimuksista, markkinoista tai teknologisesta kehityksestä."
       },
       {
         id: 26,
         mod: 5,
         modName: "Moduuli 5: Muutokset, riskit & ongelmat",
-        q: "Mitä tarkoitetaan vaatimusten hallintaan liittyvällä 'jäljitettävyydellä' (traceability)?",
+        q: "Mitä tarkoittavat vaatimusten hallinnan käsitteet 'jäljitettävyys' (traceability), 'vaatimusten jäädyttäminen' (baseline) ja 'scope creep' (Ruuska, 2012; Artto ym., 2011)?",
         opts: [
-          "Projektipäällikön oikeutta seurata työntekijöiden sijaintia GPS-laitteella",
-          "Kykyä osoittaa aukottomasti, miten yksittäinen vaatimus on huomioitu suunnittelussa, toteutettu ja todennettu lopputuotteen hyväksymisessä",
-          "Pelkkää kirjanpidon kuittien numerointia verotusta varten",
-          "Projektin lähdekoodin poistamista versionhallinnasta"
+          "Vaatimusten jäädyttäminen estää kaikki muutokset projektin loppuun saakka, ja jäljitettävyydellä seurataan muutospyyntöjen käsittelyyn kulunutta työaikaa ja kustannuksia.",
+          "Jäljitettävyys osoittaa miten vaatimus on huomioitu suunnittelussa, toteutuksessa ja hyväksymisessä; jäädyttäminen luo virallisen vaatimusversion, ja scope creep tarkoittaa laajuuden hallitsematonta kasvua.",
+          "Scope creep tarkoittaa vaatimusten lukitsemista liian aikaisessa suunnitteluvaiheessa, kun taas jäljitettävyys tarkoittaa virallisen vaatimusversion hyväksymistä muutostenhallinnan pohjaksi.",
+          "Jäljitettävyys tarkoittaa hylättyjen muutosehdotusten arkistointia jälkilaskentaa varten, ja vaatimusten jäädyttäminen tarkoittaa laajuuden vähittäistä laajenemista ilman päätöksiä."
         ],
         ans: 1,
-        exp: "Jäljitettävyys (traceability, Ruuska 2012) varmistaa, että jokaiseen hyväksyttyyn vaatimukseen löytyy vastaava suunnitelma, toteutus ja testitulos, jotta mikään ei unohdu."
+        exp: "Jäljitettävyydellä (traceability) osoitetaan, miten yksittäinen vaatimus on huomioitu suunnittelussa, toteutuksessa ja lopputuotteen hyväksymisessä. Vaatimusten jäädyttämisessä (baseline) hyväksytään virallinen vaatimusversio, jonka jälkeen muutokset kulkevat kontrolloidun muutostenhallintaprosessin kautta. Scope creep on laajuuden hallitsematonta kasvua."
       },
       {
         id: 27,
         mod: 5,
         modName: "Moduuli 5: Muutokset, riskit & ongelmat",
-        q: "Mikä tunnettu periaate vallitsee muutoksen kustannusten ja projektin etenemisen välillä?",
+        q: "Missä järjestyksessä muutostenhallintaprosessin kuusi vaihetta etenevät ja mikä rooli vaikutusanalyysillä (impact analysis) on prosessissa (Pelin, 2020; Kettunen, 2018)?",
         opts: [
-          "Muutoksen tekeminen on sitä kalliimpaa, mitä varhaisemmassa vaiheessa se tehdään.",
-          "Muutoksen kustannus kasvaa jyrkästi projektin edetessä: suunnitteluvaiheessa muutos on halpa, toteutus- ja käyttöönottovaiheessa erittäin kallis.",
-          "Muutoksen kustannus pysyy täysin vakiona elinkaaren läpi.",
-          "Muutokset toteutusvaiheessa ovat aina ilmaisia."
+          "Muutostarpeen tunnistaminen → vaikutusten arviointi → hyväksymispäätös → muutoksen dokumentointi ja perustelu → muutoksen toteutus → toteutuksen seuranta.",
+          "Muutostarpeen tunnistaminen → muutoksen dokumentointi ja perustelu → vaikutusten arviointi → hyväksymis- tai hylkäyspäätös → muutoksen toteutus → toteutuksen seuranta ja dokumentointi.",
+          "Muutoksen dokumentointi → muutostarpeen tunnistaminen → muutoksen toteutus → vaikutusten arviointi → hyväksymis- tai hylkäyspäätös → toteutuksen seuranta ja dokumentointi.",
+          "Muutostarpeen tunnistaminen → hyväksymispäätös → muutoksen dokumentointi → vaikutusten arviointi → muutoksen toteutus → vain hyväksyttyjen ehdotusten arkistointi."
         ],
         ans: 1,
-        exp: "Artto ym. (2011) ja Pelin (2020): Alussa muutos vaatii vain paperityön/suunnitelman päivitystä (halpaa), mutta toteutus- tai käyttöönottovaiheessa se vaatii jo tehdyn työn purkamista ja uudelleenrakentamista (kallista)."
+        exp: "Muutostenhallintaprosessin 6 vaihetta ovat: 1. Muutostarpeen tunnistaminen, 2. Muutoksen dokumentointi ja perustelu, 3. Vaikutusten arviointi (impact analysis), 4. Hyväksymis- tai hylkäyspäätös, 5. Muutoksen toteutus, 6. Toteutuksen seuranta ja dokumentointi. Dokumentoitu päätös on jäätävä sekä hyväksytyistä että hylätyistä ehdotuksista."
       },
       {
         id: 28,
         mod: 5,
         modName: "Moduuli 5: Muutokset, riskit & ongelmat",
-        q: "Mitä tarkoitetaan käsitteellä 'scope creep' (laajuuden hallitsematon kasvu)?",
+        q: "Mitkä ovat muutosehdotuksen kuusi tyypillistä käsittelytilaa ja miten muutosten kustannusvaikutus käyttäytyy projektin edetessä (Kettunen, 2018; Artto ym., 2011)?",
         opts: [
-          "Projektin aikataulun nopeutumista ilman syytä",
-          "Projektin laajuuden ja vaatimusten vähittäistä, hallitsematonta laajenemista ilman virallisia päätöksiä, lisäbudjettia tai aikataulumuutoksia",
-          "Projektiryhmän jäsenten vapaaehtoista irtisanoutumista",
-          "Koneiden kulumista työmaalla"
+          "Tilat ovat: avoin, arvioitavana, jäädytetty, delegoitu, valmis ja arkistoitu; muutoksen kustannusvaikutus on suurimmillaan määrittelyvaiheessa ja pienenee toteutusvaiheessa.",
+          "Tilat ovat: käsittelyssä, hyväksytty, hylätty, siirretty myöhempään vaiheeseen, toteutettu ja suljettu; muutoksen kustannus kasvaa mitä pidemmälle projekti on edennyt.",
+          "Tilat ovat: tunnistettu, perusteltu, analysoitu, hyväksytty, testattu ja luovutettu; muutoksen kustannus pysyy vakiona riippumatta siitä, missä vaiheessa muutos toteutetaan.",
+          "Tilat ovat: luonnos, odottaa, hyväksytty, peruttu, korjattu ja jäljitettävyystarkistettu; toteutusvaiheen muutokset koskevat yleensä vain dokumentaatiota ja ovat siksi edullisia."
         ],
         ans: 1,
-        exp: "Scope creep tarkoittaa projektin sisällön vaivihkaista paisumista asiakkaan pienten lisätoiveiden myötä ilman virallista muutosprosessia ja lisärahoitusta, mikä on yleinen syy epäonnistumisiin."
+        exp: "Muutosehdotuksen kuusi tyypillistä tilaa ovat: käsittelyssä, hyväksytty, hylätty, siirretty myöhempään vaiheeseen, toteutettu ja suljettu. Tunnettu projektinhallinnan periaate on, että muutoksen kustannus kasvaa projektin edetessä (alkuvaiheessa muutos koskee suunnitelmia ja dokumentaatiota, toteutusvaiheessa se aiheuttaa merkittäviä lisäkustannuksia ja viiveitä)."
       },
       {
         id: 29,
         mod: 5,
         modName: "Moduuli 5: Muutokset, riskit & ongelmat",
-        q: "Miten riskin suuruus lasketaan kurssimateriaalin riskimatriisissa (asteikolla 1–5)?",
+        q: "Miten riskien suuruus määritetään 1–5-asteikkoisessa riskimatriisissa ja miten Pareto-analyysiä hyödynnetään riskien priorisoinnissa (Pelin, 2020; Ruuska, 2012)?",
         opts: [
-          "Riskin suuruus = Todennäköisyys + Vaikutus (maksimi 10)",
-          "Riskin suuruus = Todennäköisyys × Vaikutus (arvo välillä 1–25)",
-          "Riskin suuruus = Budjetti jaettuna aikataululla",
-          "Riskin suuruus = Työpakettien kokonaismäärä"
+          "Riskin suuruus lasketaan kaavalla Todennäköisyys + Vaikutus (asteikolla 2–10), ja Pareto-analyysin mukaan 80 prosenttia projektin riskeistä voidaan poistaa 20 prosentin budjettivarauksella.",
+          "Riskin suuruus lasketaan kaavalla Todennäköisyys × Vaikutus (asteikolla 1–25), ja Pareto-analyysin (80/20-periaate) mukaan pieni joukko keskeisiä riskejä aiheuttaa valtaosan projektin uhkista.",
+          "Riskin suuruus lasketaan jakamalla vaikutuksen vakavuus todennäköisyydellä, ja Pareto-analyysillä tunnistetaan ne toimintaympäristön ulkoiset riskit, joita ei voida hallita ennakkoon.",
+          "Riskimatriisissa arvo 3 tarkoittaa suurta todennäköisyyttä ja vakavaa vaikutusta, ja Pareto-analyysin avulla riskit jaetaan tasan sisäisiin ja ulkoisiin hallintakategorioihin."
         ],
         ans: 1,
-        exp: "Riskin suuruus lasketaan kaavalla: Todennäköisyys (1–5) × Vaikutus (1–5) = 1–25. Esimerkiksi arvo 4 × 5 = 20 on korkean riskiluokan tapahtuma, joka vaatii välittömiä toimenpiteitä."
+        exp: "Riskimatriisissa sekä todennäköisyys että vaikutus arvioidaan asteikolla 1–5 (esim. 3 = Kohtalainen todennäköisyys / Merkittävä vaikutus; 4 = Suuri / Vakava; 5 = Erittäin suuri / Erittäin vakava), ja Riskin suuruus = Todennäköisyys × Vaikutus. Pareto-analyysi (80/20-periaate) osoittaa, että pieni joukko keskeisiä riskejä aiheuttaa valtaosan projektin uhkista."
       },
       {
         id: 30,
         mod: 5,
         modName: "Moduuli 5: Muutokset, riskit & ongelmat",
-        q: "Mitä riskien käsittelystrategiaa edustaa kiinteähintaisen alihankintasopimuksen tekeminen tai vakuutuksen ottaminen?",
+        q: "Miten riskien neljä pääasiallista käsittelystrategiaa (välttäminen, pienentäminen, siirtäminen ja hyväksyminen) eroavat toisistaan käytännön esimerkkien valossa?",
         opts: [
-          "Riskin välttämistä",
-          "Riskin pienentämistä",
-          "Riskin siirtämistä",
-          "Riskin hyväksymistä"
+          "Testatun teknologian valinta uuden sijaan on riskin pienentämistä, kun taas koulutus, dokumentointi ja varahenkilöjärjestelyt ovat esimerkkejä riskin välttämisestä.",
+          "Kiinteähintaiset alihankintasopimukset ja takuuehdot ovat riskin välttämistä, kun taas vakuutuksen ottaminen on esimerkki riskin vaikutuksen pienentämisestä.",
+          "Testatun teknologian valinta uuden sijaan on riskin välttämistä, koulutus ja varahenkilöt ovat riskin pienentämistä, ja vakuutukset sekä kiinteähintaiset sopimukset ovat riskin siirtämistä.",
+          "Pienen toimitusviiveen mahdollisuuden jättäminen ennalleen on riskin siirtämistä, kun taas projektisuunnitelman muuttaminen riskitekijän poistamiseksi on riskin hyväksymistä."
         ],
         ans: 2,
-        exp: "Riskin siirtämisessä (Artto ym., 2011; Pelin, 2020) taloudellinen tai toiminnallinen riski siirretään sopimuksella toiselle osapuolelle (kuten vakuutusyhtiölle tai alihankkijalle takuu- ja kiinteähintasopimuksin)."
+        exp: "Materiaalin 4 strategiaa ja esimerkit: 1) Välttäminen = poistetaan riski muuttamalla suunnitelmaa (esim. testattu ratkaisu kokeilemattoman teknologian sijaan), 2) Pienentäminen = vähennetään todennäköisyyttä/vaikutusta (koulutus, dokumentointi, varahenkilöt), 3) Siirtäminen = taloudellinen vastuu toiselle (vakuutukset, takuuehdot, kiinteähintaiset alihankintasopimukset), 4) Hyväksyminen = vaikutus vähäinen tai hallinta liian kallista."
       },
 
       // ----------------- MODUULI 6 -----------------
@@ -1037,85 +1080,85 @@
         id: 31,
         mod: 6,
         modName: "Moduuli 6: Viestintä ja raportointi",
-        q: "Miten kirjallinen viestintä ja henkilökohtainen vuorovaikutus eroavat vaikuttavuudeltaan (Ruuska, 2012)?",
+        q: "Miten kirjallinen viestintä, henkilökohtainen vuorovaikutus ja sähköpostin käyttö suhteutuvat toisiinsa projektiviestinnässä (Ruuska, 2012)?",
         opts: [
-          "Kirjallinen viestintä muuttaa syvästi asenteita, kun taas henkilökohtainen vuorovaikutus luo vain passiivista tietoisuutta.",
-          "Kirjallinen viestintä lisää tietoisuutta asiasta, mutta asenteisiin ja käyttäytymiseen vaikuttaminen edellyttää usein henkilökohtaista vuorovaikutusta.",
-          "Henkilökohtainen kanssakäyminen on täysin tehotonta projektityössä.",
-          "Pelkkä intranet-tiedote riittää aina saamaan ihmiset sitoutumaan muutokseen."
+          "Kirjallinen viestintä on tehokkain muoto asenteisiin ja käyttäytymiseen vaikuttamisessa, kun taas henkilökohtainen vuorovaikutus soveltuu parhaiten yleisen tietoisuuden lisäämiseen.",
+          "Sähköposti on suositeltavin kanava vaikeiden ja negatiivisten asioiden käsittelyyn, koska kirjallinen muoto poistaa kasvokkaisen vuorovaikutuksen tulkinnanvaraisuuden.",
+          "Kirjallinen viestintä lisää tietoisuutta asiasta, asenteisiin ja käyttäytymiseen vaikuttaminen edellyttää henkilökohtaista vuorovaikutusta, eikä sähköposti sovellu vaikeiden asioiden käsittelyyn.",
+          "Virallinen ja kirjallinen viestintäjärjestelmä riittää yksinään projektin johtamiseen, mikäli sama viesti lähetetään samanaikaisesti kaikille sidosryhmille sähköpostitse."
         ],
-        ans: 1,
-        exp: "Ruuska (2012) osoittaa: Kirjallinen viesti välittää tehokkaasti faktoja ja herättää tietoisuutta, mutta todellinen asenteiden ja käyttäytymisen muutos vaatii dialogia ja henkilökohtaista kohtaamista."
+        ans: 2,
+        exp: "Ruuskan (2012) mukaan kirjallinen viestintä lisää tietoisuutta käsiteltävästä asiasta, mutta asenteisiin ja käyttäytymiseen vaikuttaminen edellyttää usein henkilökohtaista vuorovaikutusta (jota pidetään tehokkaimpana viestinnän muotona). Sähköposti ei sovellu hyvin vaikeiden tai negatiivisten asioiden käsittelyyn kasvottomuutensa ja tulkinnanvaraisuutensa vuoksi."
       },
       {
         id: 32,
         mod: 6,
         modName: "Moduuli 6: Viestintä ja raportointi",
-        q: "Miksi sähköpostin käyttöä ei kurssikirjallisuudessa suositella vaikeiden tai negatiivisten asioiden hoitoon?",
+        q: "Mikä on hyvän viestinnän tunnusmerkki ja miten viestinnän suunnittelu kytkeytyy projektin kokoon ja sidosryhmiin (Artto ym., 2006; Ruuska, 2012)?",
         opts: [
-          "Koska sähköpostiviestit ovat laissa kiellettyjä liike-elämässä",
-          "Koska se on kasvotonta, luo väärinkäsitysten ja tulkintojen riskin eikä mahdollista välitöntä tunnetilan aistimista",
-          "Koska sähköposti saapuu perille vasta viikon viiveellä",
-          "Koska sähköposti vaatii aina viranomaisen leiman"
+          "Hyvän viestinnän tunnusmerkki on viestintäkanavien suuri lukumäärä; pienissä projekteissa laaditaan aina erillinen viestintäsuunnitelma ja laajoissa se sisällytetään asettamiskirjeeseen.",
+          "Hyvän viestinnän tunnusmerkki on, että vastaanottaja ymmärtää viestin tarkoitetulla tavalla ja lähettäjä voi varmistua tästä; suunnittelun pohjaksi suositellaan sidosryhmäanalyysiä.",
+          "Hyvän viestinnän tunnusmerkki on viestien täydellinen arkistointi; viestinnän tarve pysyy vakiona sidosryhmien lukumäärästä riippumatta, kunhan viestintäsuunnitelma on jäädytetty.",
+          "Viestinnän suunnittelun pohjaksi laaditaan toimintaverkko, ja laajoissa hankkeissa viestintäsuunnitelma korvaa varsinaisen projektisuunnitelman ohjaus- ja raportointiosion."
         ],
         ans: 1,
-        exp: "Ruuskan (2012) mukaan sähköposti on herkkä väärinymmärryksille kasvottomuutensa vuoksi, eikä se sovellu konfliktien tai vaikeiden kielteisten viestien ratkaisuun."
+        exp: "Artto ym. (2006) määrittelevät hyvän viestinnän tunnusmerkiksi sen, että vastaanottaja ymmärtää viestin tarkoitetulla tavalla ja lähettäjä voi varmistua tästä. Suunnittelun pohjaksi suositellaan sidosryhmäanalyysiä. Laajoissa hankkeissa laaditaan erillinen viestintäsuunnitelma, kun taas pienemmissä projekteissa tiedot voidaan sisällyttää projektisuunnitelmaan."
       },
       {
         id: 33,
         mod: 6,
         modName: "Moduuli 6: Viestintä ja raportointi",
-        q: "Mikä on kurssimateriaalin (Artto ym., 2006) mukaan hyvän viestinnän keskeinen tunnusmerkki?",
+        q: "Mitä elementtejä viestintäsuunnitelmassa tyypillisesti kuvataan projektipäällikön päivittäisen johtamisen tueksi (Ruuska, 2012; Artto ym., 2006)?",
         opts: [
-          "Viesti on mahdollisimman pitkä ja sisältää vieraskielisiä sivistyssanoja.",
-          "Vastaanottaja ymmärtää viestin tarkoitetulla tavalla ja lähettäjä voi varmistua tästä.",
-          "Lähettäjä ei koskaan vastaa saamiinsa palautteisiin.",
-          "Viesti lähetetään aina vähintään tuhannelle vastaanottajalle."
+          "Viestintäsuunnitelmassa määritellään työpakettien sisäiset riippuvuudet, kriittisen polun pelivarat, henkilöstön kuormitusasteet sekä alihankkijoiden maksuaikataulut.",
+          "Viestintäsuunnitelmassa määritellään viestinnän sisältö, kohderyhmät, tavoitteet, käytettävät viestintäkanavat, aikataulu sekä viestinnän vastuuhenkilöt.",
+          "Viestintäsuunnitelmassa määritellään ainoastaan ulkoisen median tiedotustilaisuudet, viranomaislupien hakuaikataulut sekä projektikansion lopullinen arkistointipaikka.",
+          "Viestintäsuunnitelmassa määritellään muutosehdotusten kuusi käsittelytilaa, riskimatriisin todennäköisyyskertoimet sekä ohjausryhmän jäsenten palkkioperusteet."
         ],
         ans: 1,
-        exp: "Onnistuneen viestinnän peruskriteeri on se, että viestin sisältö ymmärretään vastaanottajan päässä täsmälleen tarkoitetulla tavalla ja viestijä saa tästä vahvistuksen (palautesilmukka)."
+        exp: "Viestintäsuunnitelma toimii projektipäällikön käytännön työkaluna, ja siinä kuvataan tyypillisesti viestinnän sisältö, kohderyhmät, tavoitteet, käytettävät kanavat, aikataulu sekä vastuuhenkilöt (Ruuska, 2012; Artto ym., 2006)."
       },
       {
         id: 34,
         mod: 6,
         modName: "Moduuli 6: Viestintä ja raportointi",
-        q: "Mitä sääntöjä kurssikirjallisuus asettaa toimiville projektikokouksille (Ruuska, 2012)?",
+        q: "Mitkä periaatteet koskevat projektin kokouskäytäntöjä ja kokousten organisointia kurssimateriaalin mukaan (Ruuska, 2012)?",
         opts: [
-          "Kokouksilla ei saa olla agendaa ja osallistujamäärän tulee olla mahdollisimman suuri.",
-          "Kokousten tulee olla suunniteltuja, tavoitteellisia ja ajallisesti rajattuja, ryhmäkoko pidetään pienenä ja niille nimetään aina puheenjohtaja ja sihteeri.",
-          "Kokoukset pidetään vain silloin kun projektipäällikkö haluaa pitää monologin.",
-          "Kokouksista ei saa koskaan laatia pöytäkirjaa."
+          "Kokousryhmän tulee olla mahdollisimman suuri tiedonkulun varmistamiseksi, ja puheenjohtajan tehtävä kiertää vuorollaan kaikkien sidosryhmien edustajien kesken.",
+          "Kokousten tulee olla suunniteltuja, tavoitteellisia ja ajallisesti rajattuja, kokousryhmä pidetään suhteellisen pienenä ja jokaiselle kokoukselle nimetään puheenjohtaja ja sihteeri.",
+          "Kokouksiin kutsutaan koko projektiorganisaatio aihepiiristä riippumatta, ja kokouksen kesto jätetään avoimeksi, jotta kaikki esille nousevat asiat ehditään ratkaista.",
+          "Kokouskäytännöistä sovitaan vasta toteutusvaiheen puolivälissä, ja pöytäkirjaa pidetään ainoastaan silloin, kun kokouksessa käsitellään budjetin ylityksiä."
         ],
         ans: 1,
-        exp: "Ruuska (2012) korostaa: Hyvä kokous on suunniteltu, tiukasti rajattu ajaltaan, osallistujina vain asianosaiset (pieni tehokas ryhmä) ja rooleina selkeä puheenjohtaja ja sihteeri."
+        exp: "Ruuskan (2012) mukaan kokousten tulee olla suunniteltuja, tavoitteellisia ja ajallisesti rajattuja. Osallistujiksi kutsutaan vain ne, joiden asiantuntemusta tai päätöksentekoa aihe edellyttää, ja kokousryhmän kannattaa pysyä suhteellisen pienenä. Jokaiselle kokoukselle on nimettävä puheenjohtaja ja sihteeri."
       },
       {
         id: 35,
         mod: 6,
         modName: "Moduuli 6: Viestintä ja raportointi",
-        q: "Mitä tilanneraportointi luonteeltaan ensisijaisesti on projektiohjauksen näkökulmasta?",
+        q: "Mitä tietoja tyypillinen säännöllinen projektiraportti (tilanneraportti) sisältää ohjausryhmän päätöksenteon tueksi (Kettunen, 2009; Pelin, 2004)?",
         opts: [
-          "Menojen salaamista tilintarkastajilta",
-          "Ennen kaikkea poikkeamien tunnistamista ja analysointia suhteessa suunnitelmiin, jotta korjaavat päätökset voidaan tehdä ajoissa",
-          "Pelkkää virallista juhlapuhetta tilaajan miellyttämiseksi",
-          "Koko projektisuunnitelman kirjoittamista uudelleen joka viikko"
+          "Yhteenvedon projektin tilanteesta, päivitetyn aikataulun, kustannustiedot, laatutilanteen, riskit sekä mahdolliset päätösehdotukset.",
+          "Projektin asettamiskirjeen, toteutettavuustutkimuksen tulokset, lopputuotteen ylläpito- ja jatkokehityssuunnitelmat sekä henkilöstön uudelleensijoitussuunnitelman.",
+          "Yksityiskohtaisen jälkilaskennan projektin kannattavuudesta, projektiorganisaation purkamispäätöksen sekä opittujen kokemusten ja kehittämiskohteiden lopullisen arvioinnin.",
+          "Kaikkien yksittäisten työpakettien sisäiset tarkistuslistat, toimintaverkon nuolikaaviot sekä täydellisen kopion projektin alkuperäisestä vaatimusmäärittelystä."
         ],
-        ans: 1,
-        exp: "Tilanneraportointi (Artto ym., 2011; Kettunen, 2009) keskittyy toteuman ja suunnitelman vertailuun: poikkeamien havaitsemiseen, niiden syiden analyysiin ja korjaaviin toimenpiteisiin."
+        ans: 0,
+        exp: "Kettusen (2009) ja Pelinin (2004) mukaan tyypillinen säännöllinen projektiraportti (tilanneraportti) projektipäällikön ja ohjausryhmän välillä sisältää yhteenvedon projektin tilanteesta, päivitetyn aikataulun, kustannustiedot, laatutilanteen, riskit sekä mahdolliset päätösehdotukset."
       },
       {
         id: 36,
         mod: 6,
         modName: "Moduuli 6: Viestintä ja raportointi",
-        q: "Mikä seuraavista kokonaisuuksista kuuluu nimenomaan projektin loppuraporttiin (Ruuska, 2012) eikä viikoittaiseen tilanneraporttiin?",
+        q: "Miten projektin päättyessä laadittava loppuraportti ja sen sisältö määritellään kurssimateriaalissa (Ruuska, 2012; Silfverberg, 2007)?",
         opts: [
-          "Tulevan tiistain lounaslista",
-          "Opitut kokemukset (lessons learned), projektin kokonaisarviointi sekä tuotoksen ylläpito- ja jatkokehityssuunnitelmat",
-          "Kriittisen polun päivittäinen tuntilista",
-          "Yksittäisen koodaustyöpaketin ohjelmointivirheet"
+          "Loppuraportti korvaa projektin taloudellisen jälkilaskennan, eikä ulkopuolisilla rahoittajilla kuten EU-rahoittajilla ole oikeutta asettaa vaatimuksia sen sisällölle.",
+          "Loppuraportti arvioi tavoitteiden saavuttamista, organisoinnin toimivuutta, taloutta ja opittuja kokemuksia sekä kuvaa tarvittaessa lopputuotteen ylläpito- ja jatkokehityssuunnitelmat.",
+          "Loppuraportissa käsitellään ainoastaan toteutuneita aikataulu- ja kustannuspoikkeamia, kun taas opitut kokemukset ja jatkokehitystarpeet kirjataan erilliseen viestintäsuunnitelmaan.",
+          "Loppuraportti on luottamuksellinen asiakirja, joka laaditaan vain ennenaikaisesti keskeytetyistä projekteista selvittämään miksi alkuperäisestä projektisuunnitelmasta poikettiin."
         ],
         ans: 1,
-        exp: "Loppuraportti kokoaa yhteen koko hankkeen tulokset: miten onnistuttiin, mitä opittiin (organisaation oppiminen), miten tuotetta jatkossa ylläpidetään ja mitä suositellaan jatkotoimiksi."
+        exp: "Loppuraportti kokoaa projektin yleiskuvauksen ja tavoitteet, organisoinnin ja yhteistyön toimivuuden, lopputuotteen/tulosten arvioinnin, aikataulun, resurssien ja talouden toteutumisen, kokonaisarvioinnin, opitut kokemukset, suositukset jatkotoimenpiteiksi sekä lopputuotteen ylläpito- ja jatkokehityssuunnitelmat. Ulkopuolinen rahoittaja (esim. EU) voi asettaa sille erityisvaatimuksia."
       },
 
       // ----------------- MODUULI 7 -----------------
@@ -1123,85 +1166,85 @@
         id: 37,
         mod: 7,
         modName: "Moduuli 7: Projektin päättäminen",
-        q: "Kuka kutsuu koolle projektin päätöskokouksen ja kuka tekee virallisen päätöksen projektin päättämisestä ja vastuista vapauttamisesta?",
+        q: "Miten vastuut jakautuvat projektin päätöskokouksen koolle kutsumisessa ja projektin virallisessa päättämispäätöksessä (Huotari, 2015; Pelin, 2004)?",
         opts: [
-          "Projektipäällikkö kutsuu koolle ja valmistelee asiat; ohjausryhmä (tai valvova johtoelin) tekee virallisen päätöksen.",
-          "Projektiryhmän harjoittelija päättää projektin ilman ohjausryhmää.",
-          "Ohjausryhmä kutsuu kokouksen ja projektipäällikkö tekee yksin juridiset päätökset.",
-          "Ulkopuolinen konsultti päättää projektin salaisessa äänestyksessä."
+          "Ohjausryhmän puheenjohtaja kutsuu päätöskokouksen koolle ja laatii loppuraportin, kun taas projektipäällikkö tekee lopullisen päätöksen projektiorganisaation purkamisesta.",
+          "Projektipäällikkö kutsuu päätöskokouksen koolle ja vastaa sen valmistelusta, kun taas lopullisen päätöksen projektin päättämisestä ja vastuista vapauttamisesta tekee ohjausryhmä.",
+          "Tilaajaorganisaation linjajohto kutsuu päätöskokouksen koolle vastaanottotarkastuksen jälkeen, ja projektiryhmä päättää äänestämällä omasta vastuuvapaudestaan.",
+          "Projektin omistaja valmistelee päätöskokouksen ja esittelee loppuraportin, minkä jälkeen ulkopuolinen rahoittaja tekee päätöksen henkilöstön uudelleensijoittamisesta."
         ],
-        ans: 0,
-        exp: "Pelinin (2004) ja Huotarin (2015) mukaan päätöskokouksen kutsuu koolle ja valmistelee projektipäällikkö, mutta virallisen lopettamispäätöksen ja vastuuvapauden antaa ohjausryhmä."
+        ans: 1,
+        exp: "Pelinin (2004) mukaan päätöskokouksen kutsuu koolle yleensä projektipäällikkö, joka vastaa kokouksen valmistelusta ja loppuraportin esittelystä. Huotarin (2015) mukaan lopullisen päätöksen projektin päättämisestä, projektiorganisaation purkamisesta ja vastuista vapauttamisesta tekee projektin ohjausryhmä tai muu valvova johtoelin."
       },
       {
         id: 38,
         mod: 7,
         modName: "Moduuli 7: Projektin päättäminen",
-        q: "Milloin projekti voidaan päättää ennenaikaisesti (Pelin, 2004)?",
+        q: "Millä edellytyksillä projekti voidaan päättää ennenaikaisesti kurssimateriaalin mukaan (Pelin, 2004)?",
         opts: [
-          "Ainoastaan silloin kun tilaaja unohtaa projektin nimen",
-          "Kun suunnitelmasta poiketaan merkittävästi, toimintaympäristön olosuhteet muuttuvat olennaisesti tai tilaajan tilanne estää jatkamisen",
-          "Projektia ei ole koskaan sallittua keskeyttää missään olosuhteissa",
-          "Aina heti kun ensimmäinen työpaketti valmistuu etuajassa"
+          "Projekti voidaan päättää ennenaikaisesti vain silloin, kun kaikki työpaketit ja virstanpylväät saadaan valmiiksi huomattavasti alkuperäistä aikataulua nopeammin.",
+          "Projekti voidaan päättää ennenaikaisesti, jos projektisuunnitelmasta poiketaan merkittävästi, toimintaympäristön olosuhteet muuttuvat olennaisesti tai tilaajan taloudellinen tilanne estää toteutuksen.",
+          "Projekti voidaan päättää ennenaikaisesti projektipäällikön yksipuolisella ilmoituksella heti, kun kriittisen polun tehtävissä havaitaan ensimmäinen aikatauluviive.",
+          "Projekti voidaan päättää ennenaikaisesti ainoastaan viranomaisen määräyksellä, eikä silloin laadita loppuraporttia tai suoriteta projektimateriaalien arkistointia."
         ],
         ans: 1,
-        exp: "Pelin (2004) toteaa, että projekti voidaan keskeyttää ennenaikaisesti perustelluista syistä: edellytykset ovat rauenneet, markkina muuttunut, tilaajan maksukyky pettänyt tai tavoitteita ei voida saavuttaa."
+        exp: "Pelinin (2004, s. 341) mukaan projektin päättäminen voi tapahtua myös ennenaikaisesti esimerkiksi silloin, kun projektisuunnitelmasta poiketaan merkittävästi, toimintaympäristön olosuhteet muuttuvat olennaisesti tai tilaajan taloudellinen tilanne estää hankkeen toteuttamisen."
       },
       {
         id: 39,
         mod: 7,
         modName: "Moduuli 7: Projektin päättäminen",
-        q: "Miten virallinen tulosten luovutusmenettely eroaa tutkimushankkeessa ja tietojärjestelmähankkeessa (Kettunen, 2003; Ruuska, 2012)?",
+        q: "Miten tulosten viralliset luovutus- ja hyväksymismenettelyt eroavat toisistaan tutkimus-, rakennus- ja tietojärjestelmäprojekteissa (Kettunen, 2003; Ruuska, 2012)?",
         opts: [
-          "Molemmat luovutetaan täysin samalla rakennustyömaan vastaanottotarkastuksella.",
-          "Tutkimushankkeessa tulokset luovutetaan usein päätösseminaarissa; tietojärjestelmähankkeessa suoritetaan hyväksymistestaus ja usein erillinen koekäyttöjakso.",
-          "Tietojärjestelmähankkeessa ei koskaan tehdä testausta ennen luovutusta.",
-          "Tutkimushankkeessa tuloksia ei luovuteta kenellekään."
+          "Tutkimusprojekteissa järjestetään hyväksymistestaus, fyysisissä rakennusprojekteissa päätösseminaari ja tietojärjestelmäprojekteissa virallinen vastaanottotarkastus.",
+          "Tutkimusprojekteissa tulokset voidaan luovuttaa päätösseminaarissa, fyysisissä rakennus- ja laiteprojekteissa tehdään vastaanottotarkastus ja tietojärjestelmäprojekteissa hyväksymistestaus.",
+          "Kaikissa kolmessa projektityypissä vaaditaan ensin kolmen kuukauden koekäyttöjakso, jonka jälkeen pidetään yhteinen vastaanottotarkastus ja julkinen päätösseminaari.",
+          "Fyysisissä rakennusprojekteissa tulokset hyväksytään koekäyttöjakson ja hyväksymistestauksen avulla, kun taas tietojärjestelmäprojekteissa riittää puutteiden kirjaaminen vastaanottopöytäkirjaan."
         ],
         ans: 1,
-        exp: "Tutkimuksissa tyypillinen luovutustapa on päätösseminaari ja julkaisu. IT- ja järjestelmähankkeissa vaaditaan kriteeripohjainen hyväksymistestaus ja yleensä tuotannollinen koekäyttö."
+        exp: "Luovutusmenettely riippuu projektin luonteesta: 1) Tutkimus- tai selvitysprojekteissa tulokset voidaan esitellä päätösseminaarissa, joka toimii virallisena luovutustilaisuutena, 2) Fyysisissä rakennus-, laite- tai teknisissä projekteissa suoritetaan vastaanottotarkastus (puutteet pöytäkirjaan), ja 3) Tietojärjestelmäprojekteissa toteutetaan hyväksymistestaus ja tarvittaessa koekäyttöjakso."
       },
       {
         id: 40,
         mod: 7,
         modName: "Moduuli 7: Projektin päättäminen",
-        q: "Mitä tapahtuu projektituotoksen hallinnolliselle ja operatiiviselle vastuulle virallisen hyväksynnän jälkeen?",
+        q: "Mitä projektin päätöskokouksessa käsitellään ja minne vastuu tuotoksesta siirtyy hyväksynnän jälkeen (Pelin, 2004; Ruuska, 2012)?",
         opts: [
-          "Vastuu jää pysyvästi puretun projektiryhmän henkilökohtaiseksi velvollisuudeksi ilman palkkaa.",
-          "Vastuu tuotoksesta siirtyy projektiorganisaatiolta vastaanottavalle linja- tai tilaajaorganisaatiolle (ylläpitoon).",
-          "Kukaan ei vastaa tuotoksesta enää koskaan.",
-          "Vastuu siirtyy automaattisesti ohjelmistotoimittajan toimitusjohtajalle henkilökohtaisesti."
+          "Päätöskokouksessa laaditaan projektin riskienhallintasuunnitelma, ja hyväksynnän jälkeen vastuu tuotoksen ylläpidosta jää pysyvästi projektipäällikölle.",
+          "Päätöskokouksessa hyväksytään loppuraportti ja jatkotoimenpiteet sekä käsitellään henkilöstön uudelleensijoittaminen, ja vastuu tuotoksesta siirtyy tilaaja- tai linjaorganisaatiolle.",
+          "Päätöskokouksessa suoritetaan tietojärjestelmän hyväksymistestaus, ja vastuu tuotoksesta siirtyy projektiorganisaatiolta ulkopuoliselle rahoittajalle takuuajan päätyttyä.",
+          "Päätöskokouksessa määritellään projektin ositus (WBS) jälkilaskentaa varten, ja projektiorganisaatio jää voimaan kevennettynä ylläpitotiiminä koko tuotteen elinkaaren ajaksi."
         ],
         ans: 1,
-        exp: "Päättämisvaiheen ydin on tuotoksen siirtäminen vastaanottajalle (Ruuska, 2012). Projektiorganisaatio puretaan ja ylläpitovastuu siirtyy jatkuvaan linjaorganisaatioon."
+        exp: "Päätöskokouksessa käsitellään loppuraportin esittely ja hyväksyminen, tulosten ja toteutuksen arviointi, jatkotoimenpiteiden hyväksyminen, lopettamisen käytännön toimenpiteet, tehtävien ja vastuiden siirtäminen tilaajaorganisaatiolle, henkilöstön uudelleensijoittaminen sekä arkistointi. Hyväksynnän jälkeen vastuu tuotoksesta siirtyy projektiorganisaatiolta tilaaja- tai linjaorganisaatiolle."
       },
       {
         id: 41,
         mod: 7,
         modName: "Moduuli 7: Projektin päättäminen",
-        q: "Mitkä ovat Pelinin (2004) mukaan projektikansion kokoamisen ja arkistoinnin 3 keskeistä tarkoitusta?",
+        q: "Mitä asiakirjoja projektin päättyessä koottava projektikansio sisältää ja mitkä ovat sen kolme keskeistä tarkoitusta (Pelin, 2004)?",
         opts: [
-          "Verojen kiertäminen, työntekijöiden valvonta ja tilojen tyhjentäminen",
-          "Tiedon säilyminen, tulosten jäljitettävyys sekä organisaation oppiminen tulevia projekteja varten",
-          "Ohjausryhmän salaisten muistiinpanojen kätkeminen",
-          "Asiakkaan laskutustietojen hävittäminen"
+          "Se sisältää vain tilinpäätöstiedot ja työsopimukset; tarkoituksena on verotarkastukseen varautuminen, kustannusylitysten kuittaaminen ja tilaajan maksuvalmiuden varmistaminen.",
+          "Se sisältää suunnitelmat, sopimukset, pöytäkirjat ja raportit; tarkoituksena on tiedon säilyminen, tulosten jäljitettävyys sekä organisaation oppiminen tulevia projekteja varten.",
+          "Se sisältää ainoastaan hylätyt muutospyynnöt ja poikkeamaraportit; tarkoituksena on alihankkijoiden sanktiointi, takuuajan lyhentäminen ja vastuuvapauden epääminen.",
+          "Se sisältää kilpailijoiden sidosryhmäanalyysit ja markkinaselvitykset; tarkoituksena on uusien tuotteiden hinnoittelu, rahoitushakemusten kopiointi ja henkilöstön arviointi."
         ],
         ans: 1,
-        exp: "Pelin (2004) nimeää 3 pääfunktiota: 1) tiedon säilyminen tulevaisuutta varten, 2) tulosten ja päätösten jäljitettävyys ja 3) kokemusten hyödyntäminen eli organisaation oppiminen."
+        exp: "Projektin päätyttyä hallinnollinen aineisto (suunnitelmat, sopimukset, pöytäkirjat, raportit ja muut asiakirjat) kootaan ja arkistoidaan projektikansioon. Pelinin (2004, s. 346) mukaan dokumentoinnin kolme tarkoitusta ovat: 1) tiedon säilyminen, 2) tulosten jäljitettävyys sekä 3) organisaation oppiminen tulevia projekteja varten."
       },
       {
         id: 42,
         mod: 7,
         modName: "Moduuli 7: Projektin päättäminen",
-        q: "Mitä projektin päätöskokouksessa käsitellään Pelinin (2004) esittämän asialistan mukaan?",
+        q: "Mikä merkitys projektin päättämisvaiheen jälkilaskennalla ja opittujen kokemusten dokumentoinnilla on organisaation projektikypsyydelle (Kettunen, 2018; Pelin, 2020)?",
         opts: [
-          "Vain seuraavan vuoden lomarahat",
-          "Loppuraportti, tulosten ja toteutuksen arviointi, jatkotoimenpiteet, vastuiden siirto, henkilöstön uudelleensijoitus ja arkistointi",
-          "Uuden projektin WBS-ositus ja kriittisen polun laskenta alusta alkaen",
-          "Pelkät asiakasvalitukset ilman dokumentointia"
+          "Jälkilaskenta toteutetaan lähes kaikissa organisaatioissa moitteettomasti, mutta sen tuloksia ei voida hyödyntää uusissa projekteissa hankkeiden ainutkertaisuuden vuoksi.",
+          "Jälkilaskenta ja kokemusten analysointi jäävät käytännössä usein puutteellisiksi, kun huomio siirtyy nopeasti uusiin hankkeisiin, jolloin samat arviointivirheet toistuvat.",
+          "Jälkilaskennan päätavoitteena on muuttaa päättyneen projektin sidotut kustannukset takautuvasti johdon varaukseksi, jotta projektin budjetti saadaan täsmäämään.",
+          "Opittujen kokemusten dokumentointi kuuluu ainoastaan ketteriin ohjelmistoprojekteihin, kun taas perinteisissä investointiprojekteissa riittää pelkkä vastaanottotarkastus."
         ],
         ans: 1,
-        exp: "Päätöskokouksen standardilista sisältää loppuraportin hyväksymisen, onnistumisen arvioinnin, vastuiden siirron vastaanottajalle, henkilöstön vapauttamisen ja materiaalien arkistoinnin."
+        exp: "Materiaalin mukaan jälkilaskenta ja oppien dokumentointi tuottavat arvokasta tietoa tulevien projektien kustannusarvioille, budjeteille ja resurssisuunnitelmille. Käytännössä jälkilaskenta jää kuitenkin monissa organisaatioissa puutteelliseksi, koska huomio siirtyy nopeasti uusiin hankkeisiin, jolloin samat virheet toistuvat."
       },
 
       // ----------------- MODUULI 8 -----------------
@@ -1209,85 +1252,85 @@
         id: 43,
         mod: 8,
         modName: "Moduuli 8: Kehityssuunnat",
-        q: "Mihin tilanteisiin perinteinen vesiputousmalli (waterfall) edelleen soveltuu parhaiten kurssimateriaalin mukaan?",
+        q: "Millaisiin hankkeisiin perinteinen vesiputousmalli (waterfall) ja millaisiin ketterät menetelmät (Agile) soveltuvat parhaiten (Artto ym., 2011; Lehtonen, 2014)?",
         opts: [
-          "Nopeasti muuttuviin mobiilipelisovelluksiin, joiden ominaisuudet keksitään viikoittain",
-          "Hankkeisiin, joissa tavoitteet, vaatimukset ja ympäristö ovat vakaita ja muutokset myöhemmin kalliita (kuten rakennus- ja infrahankkeet)",
-          "Hankkeisiin, joissa ei ole lainkaan aikataulua tai budjettia",
-          "Vain alle 100 euron arvoisiin mikrotehtäviin"
+          "Vesiputousmalli soveltuu parhaiten hankkeisiin, joissa lopputulosta ei voida määritellä alussa tarkasti, kun taas ketterät menetelmät vaativat vakaan toimintaympäristön.",
+          "Vesiputousmalli soveltuu vakaisiin rakennus-, infra- ja viranomaisprojekteihin, joissa myöhemmät muutokset ovat kalliita; ketterät menetelmät nopeasti muuttuviin ympäristöihin.",
+          "Ketterät menetelmät soveltuvat ainoastaan tietotekniikan ohjelmistokehitykseen, kun taas palveluiden kehittäminen, markkinointi ja julkiset hankkeet vaativat vesiputousmallia.",
+          "Vesiputousmallissa suunnittelu ja toteutus etenevät lyhyissä 1–4 viikon iteroinneissa, kun taas ketterässä mallissa koko hanke suunnitellaan yksityiskohtaisesti ennen toteutusta."
         ],
         ans: 1,
-        exp: "Vesiputousmalli sopii erinomaisesti vakaisiin ja ennustettaviin hankkeisiin (Artto ym., 2011), kuten siltojen, teiden tai rakennusten toteutukseen, joissa myöhäiset muutokset ovat kohtuuttoman kalliita."
+        exp: "Perinteinen vesiputousmalli soveltuu hankkeisiin, joissa tavoitteet, vaatimukset ja toimintaympäristö ovat suhteellisen vakaita (esim. rakennus-, infra-, investointi- ja viranomaisprojektit) ja myöhäiset muutokset ovat kalliita. Ketterät menetelmät soveltuvat tilanteisiin, joissa lopputulosta ei voida määritellä tarkasti alussa tai ympäristö muuttuu nopeasti."
       },
       {
         id: 44,
         mod: 8,
         modName: "Moduuli 8: Kehityssuunnat",
-        q: "Miten ketterä Scrum-malli jaksottaa kehitystyön ja miten pitkiä kehitysjaksot (sprintit) tyypillisesti ovat?",
+        q: "Mitkä ovat ketterien menetelmien (Agile) keskeiset periaatteet projektin etenemisessä ja tiimityössä (Lehtonen, 2014; Leppänen, 2022)?",
         opts: [
-          "Yhden päivän mittaisiin pikahetkiin ilman suunnittelua",
-          "Tyypillisesti 1–4 viikon mittaisiin kehitysjaksoihin (sprintteihin), joiden päätteeksi arvioidaan tulokset ja suunnitellaan seuraava jakso",
-          "Tasan 6 kuukauden mittaisiin vaiheisiin",
-          "Sprinttejä käytetään vain projektin päättämisen jälkeen"
+          "Projekti etenee lyhyissä kehityssykleissä eli iteroinneissa, joissa korostuvat jatkuva yhteistyö asiakkaan kanssa, toimivan tuloksen varhainen tuottaminen ja itseohjautuvat tiimit.",
+          "Projekti etenee tiukasti alkuperäisen jäädytetyn vaatimusmäärittelyn mukaisesti, ja kaikki asiakaspalaute käsitellään keskitetysti vasta päättämisvaiheen hyväksymistestauksessa.",
+          "Ketterä projektityö poistaa kokonaan tavoitteiden määrittelyn, aikataulutuksen, resurssisuunnittelun ja riskienhallinnan tarpeen korvaamalla ne vapaamuotoisella ideoinnilla.",
+          "Kehityssyklit ovat tyypillisesti 6–12 kuukauden mittaisia kokonaisuuksia, joissa projektipäällikkö jakaa tehtävät yksityiskohtaisesti ilman tiimin omaa päätösvaltaa."
         ],
-        ans: 1,
-        exp: "Scrum perustuu toistuviin kiinteänmittaisiin jaksoihin eli sprintteihin (yleensä 1–4 viikkoa), joiden aikana tiimi toteuttaa toimivan osakokonaisuuden ja katselmoi sen asiakkaan kanssa."
+        ans: 0,
+        exp: "Ketterässä projektinhallinnassa projekti etenee lyhyissä kehityssykleissä eli iteroinneissa. Keskeisiä periaatteita ovat jatkuva yhteistyö asiakkaiden ja sidosryhmien kanssa, nopea reagointi muutoksiin, toimivan lopputuloksen tuottaminen mahdollisimman aikaisin, jatkuva oppiminen sekä itseohjautuvien tiimien hyödyntäminen."
       },
       {
         id: 45,
         mod: 8,
         modName: "Moduuli 8: Kehityssuunnat",
-        q: "Mihin Kanban-menetelmän toimintalogiikka ensisijaisesti perustuu (Leppänen, 2022)?",
+        q: "Miten ketteristä menetelmistä Scrum ja Kanban sekä toisaalta hybridiprojektinhallinta eroavat toisistaan (Lehtonen, 2014; Leppänen, 2022; Pelin, 2020)?",
         opts: [
-          "Määrämittaisiin sprintteihin ja pakollisiin aamujumppiin",
-          "Työn visualisointiin taululla, työn virtauksen ohjaamiseen ja keskeneräisen työn (WIP) määrän rajoittamiseen",
-          "Kaikkien kirjallisten ohjeiden ja dokumenttien kieltämiseen",
-          "Projektipäällikön yksinvaltaan ilman tiimin osallistumista"
+          "Kanban perustuu kiinteisiin 1–4 viikon mittaisiin sprintteihin, kun taas Scrum perustuu keskeneräisen työn määrän rajoittamiseen ja jatkuvaan virtaukseen ilman kehitysjaksoja.",
+          "Scrum perustuu 1–4 viikon kehitysjaksoihin eli sprintteihin, Kanban työn visualisointiin ja keskeneräisen työn vähentämiseen, ja hybridimalli yhdistää suunnitelmallisuuden ja ketteryyden.",
+          "Hybridiprojektinhallinnalla tarkoitetaan Scrumin ja Kanbanin käyttämistä vuoroviikoin samassa ohjelmistotiimissä ilman perinteistä projektisuunnitelmaa tai budjettiraamia.",
+          "Scrumissa luovutaan kokonaan tiimityöstä ja asiakkaan osallistumisesta, kun taas Kanbanissa työtehtävät piilotetaan taululta kuormitushuippujen tasoittamiseksi."
         ],
         ans: 1,
-        exp: "Kanban visualisoi työvaiheet (To Do, Doing, Done), rajoittaa yhtäaikaisen keskeneräisen työn määrää (Work In Progress / WIP) ja maksimoi työn läpivirtausta ilman sidottuja sprinttisyklejä."
+        exp: "Scrum perustuu lyhyisiin, tyypillisesti 1–4 viikon kehitysjaksoihin eli sprintteihin. Kanban perustuu työn visualisointiin Kanban-taululla, keskeneräisen työn määrän vähentämiseen ja työn virtauksen parantamiseen. Hybridiprojektinhallinta yhdistää perinteisen projektinhallinnan suunnitelmallisuuden ja ketterien menetelmien joustavuuden."
       },
       {
         id: 46,
         mod: 8,
         modName: "Moduuli 8: Kehityssuunnat",
-        q: "Mitä tarkoitetaan 'hybridiprojektinhallinnalla' (Pelin, 2020)?",
+        q: "Mihin Lean-ajatteluun perustuva tahtituotanto tähtää rakennusalalla ja muilla toimialoilla (Koskela, 2000; Pelin, 2020)?",
         opts: [
-          "Projektia, jossa käytetään ainoastaan hybridiautoja työmaaliikenteessä",
-          "Toimintamallia, jossa yhdistetään perinteisen vesiputousmallin ennakkosuunnitelmallisuus ja ketterien menetelmien joustava kokeilu",
-          "Hanketta, jolla on kaksi eri toimitusjohtajaa eri maissa",
-          "Projektia, jossa työskennellään vain öisin"
+          "Tahtituotannossa huomio kohdistetaan yksittäisten resurssien ja työkoneiden maksimaaliseen kuormitusasteeseen, vaikka työvaiheiden välille syntyisi pitkiä odotusaikoja.",
+          "Tahtituotannossa projekti jaetaan pienempiin työpaketteihin, jotka etenevät suunnitellussa rytmissä työalueelta toiselle tavoitteena tasainen työn virtaus ja arvontuotanto asiakkaalle.",
+          "Tahtituotanto on sopimusmalli, jossa tilaaja ja urakoitsija jakavat rakennushankkeen taloudelliset riskit ja hyödyt ilman ennalta määriteltyä aikataulua tai työpaketteja.",
+          "Tahtituotannossa luovutaan kokonaan projektin osituksesta (WBS) ja annetaan kunkin aliurakoitsijan suorittaa omat työvaiheensa vapaassa järjestyksessä työmaalla."
         ],
         ans: 1,
-        exp: "Hybridimalli yhdistää perinteisen mallin raamit (kokonaisaikataulu, kiinteät rajapinnat, budjettiraami) ja ketterät toteutusmenetelmät (sprintit ja Kanban toteutusvaiheessa)."
+        exp: "Lean-ajatteluun perustuvassa tahtituotannossa projekti jaetaan pienempiin työpaketteihin, jotka etenevät suunnitellussa rytmissä työalueelta toiselle. Keskeisenä tavoitteena on luoda tasainen työn virtaus, vähentää häiriöitä, lyhentää läpimenoaikoja ja keskittyä koko projektin sujuvuuteen sekä arvontuotantoon asiakkaalle."
       },
       {
         id: 47,
         mod: 8,
         modName: "Moduuli 8: Kehityssuunnat",
-        q: "Mihin rakennusalalla yleistyneessä, Lean-ajatteluun pohjautuvassa 'tahtituotannossa' pyritään (Koskela, 2000)?",
+        q: "Mikä on allianssimallin keskeinen toimintaperiaate ja missä hankkeissa sitä on Suomessa hyödynnetty (Lahdenperä, 2019)?",
         opts: [
-          "Työmaan keskeyttämiseen joka toinen viikko",
-          "Työpakettien etenemiseen tasaisessa vakiorytmissä (tahdissa) tilasta toiseen, tasaisen työn virtauksen luomiseen ja läpimenoaikojen lyhentämiseen",
-          "Työntekijöiden kuormittamiseen ilman minkäänlaista tauotusta",
-          "Kaikkien koneiden korvaamiseen pelkällä käsityöllä"
+          "Allianssimallissa tilaaja kilpailuttaa suunnittelijat ja urakoitsijat kiinteähintaisilla erillissopimuksilla, jotta kaikki taloudelliset riskit saadaan siirrettyä pois tilaajalta.",
+          "Allianssimallissa tilaaja, suunnittelijat ja urakoitsijat muodostavat yhteisen organisaation sekä jakavat yhdessä projektin riskit ja hyödyt, esimerkiksi Tampereen Rantatunnelissa ja raitiotiessä.",
+          "Allianssimalli on kevyisiin markkinointi- ja tapahtumaprojekteihin kehitetty ketterä menetelmä, jossa ei käytetä kirjallisia sopimuksia tai yhteistä johtamisjärjestelmää.",
+          "Allianssimallissa jokainen osapuoli optimoi oman organisaationsa taloudellisen tuloksen erikseen, ja mahdolliset aikatauluylitykset vähennetään suoraan suunnittelijoiden palkkioista."
         ],
         ans: 1,
-        exp: "Tahtituotannossa hanke ositetaan ja työ etenee vakioidussa tahdissa lohkosta toiseen. Tavoitteena on työn tasainen virtaus, odotusaikojen ja häiriöiden karsinta sekä nopea läpimeno."
+        exp: "Allianssimalli on yhteistoiminnallinen toteutusmuoto, jossa tilaaja, suunnittelijat ja urakoitsijat muodostavat yhteisen organisaation sekä jakavat yhdessä sekä riskit että saavutettavat hyödyt. Sitä käytetään vaativissa sairaala-, rata-, tie- ja infrahankkeissa (esim. Tampereen Rantatunneli, Tampereen raitiotie ja keskussairaalahankkeet)."
       },
       {
         id: 48,
         mod: 8,
         modName: "Moduuli 8: Kehityssuunnat",
-        q: "Mikä on allianssimallin (Lahdenperä, 2019) keskeisin periaate ja mitkä ovat tunnettuja suomalaisia esimerkkejä siitä?",
+        q: "Mitkä tekijät korostuvat tulevaisuuden projektinhallinnassa teknologisen kehityksen rinnalla kurssimateriaalin mukaan (Pelin, 2020; Leppänen, 2022)?",
         opts: [
-          "Tilaaja siirtää kaikki riskit yhdelle alihankkijalle sakon uhalla; esimerkkinä mikä tahansa normaali kauppakeskus",
-          "Tilaaja, suunnittelijat ja urakoitsijat muodostavat yhteisen organisaation, jossa jaetaan yhdessä sekä riskit että saavutetut hyödyt; esimerkkeinä Tampereen Rantatunneli ja Tampereen raitiotie",
-          "Allianssimalli kieltää sopimusten allekirjoittamisen; esimerkkinä Apollo-ohjelma",
-          "Allianssi tarkoittaa ulkomaisen yrityksen vihamielistä yritysvaltausta"
+          "Tekoäly ja automaatio poistavat sidosryhmien osallistamisen ja viestinnän tarpeen, jolloin projektipäällikön rooli kaventuu pelkäksi tietojärjestelmien ylläpitäjäksi.",
+          "Reaaliaikaisen tiedolla johtamisen, ennakoivan analytiikan ja tekoälyavusteisen suunnittelun rinnalla korostuvat vastuullisuus, kestävä kehitys ja sidosryhmien osallistaminen.",
+          "Modernit toimintamallit ovat tehneet perinteisistä projektinhallinnan perusperiaatteista, kuten tavoitteiden määrittelystä, aikataulutuksesta ja riskienhallinnasta, tarpeettomia.",
+          "Tulevaisuuden projektinhallinnassa siirrytään yhden ainoan standardoidun menetelmän käyttöön kaikilla toimialoilla hankkeen koosta ja toimintaympäristöstä riippumatta."
         ],
         ans: 1,
-        exp: "Allianssi perustuu 'yhdessä tekemiseen': jaetut tavoitteet, yhteinen organisaatio ja jaettu 'risk & reward' -kannustinjärjestelmä. Tunnettuja onnistumisia ovat mm. Tampereen Rantatunneli ja Raitiotie."
+        exp: "Tulevaisuuden projektinhallinnassa hyödynnetään reaaliaikaista tiedolla johtamista, ennakoivaa analytiikkaa sekä tekoälyavusteista resurssi- ja aikataulusuunnittelua, ja samalla projektien vastuullisuus, kestävä kehitys ja sidosryhmien osallistaminen ovat nousseet entistä tärkeämmiksi menestystekijöiksi."
       }
     ];
 
@@ -1440,19 +1483,29 @@
     }
 
     function confirmFinishExam() {
-      const unanswered = activeQuestions.filter(q => selectedAnswers[q.id] === undefined).length;
-      if (unanswered > 0) {
-        const ok = confirm(`Sinulla on vielä ${unanswered} vastaamatonta kysymystä. Haluatko silti lopettaa ja tarkistaa tulokset?`);
-        if (!ok) return;
-      }
       displayResults();
+    }
+
+    function backToStartScreen() {
+      document.getElementById('screen-result').classList.add('hidden');
+      document.getElementById('screen-quiz').classList.add('hidden');
+      document.getElementById('header-progress').classList.add('hidden');
+      document.getElementById('screen-start').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function displayResults() {
       let score = 0;
+      const modStats = {};
+
       activeQuestions.forEach(q => {
+        if (!modStats[q.mod]) {
+          modStats[q.mod] = { total: 0, correct: 0, name: `Moduuli ${q.mod}` };
+        }
+        modStats[q.mod].total++;
         if (selectedAnswers[q.id] === q.ans) {
           score++;
+          modStats[q.mod].correct++;
         }
       });
 
@@ -1494,6 +1547,27 @@
       document.getElementById('score-percent').innerText = `${pct}%`;
       document.getElementById('score-grade').innerText = grade === 0 ? "0 (Hyl)" : `${grade} / 5`;
       document.getElementById('res-feedback-text').innerText = feedback;
+
+      // Moduulikohtainen erittely
+      const modBox = document.getElementById('module-breakdown-box');
+      modBox.innerHTML = '';
+      Object.keys(modStats).sort((a, b) => a - b).forEach(mKey => {
+        const st = modStats[mKey];
+        const mPct = Math.round((st.correct / st.total) * 100);
+        const barColor = mPct >= 80 ? 'var(--accent-green)' : (mPct >= 50 ? 'var(--primary)' : 'var(--accent-red)');
+        const item = document.createElement('div');
+        item.className = 'mod-stat-card';
+        item.innerHTML = `
+          <div class="mod-stat-header">
+            <span>${st.name}</span>
+            <span>${st.correct}/${st.total} (${mPct}%)</span>
+          </div>
+          <div class="mod-stat-bar">
+            <div class="mod-stat-fill" style="width: ${mPct}%; background: ${barColor};"></div>
+          </div>
+        `;
+        modBox.appendChild(item);
+      });
 
       renderReviewItems('all');
 
