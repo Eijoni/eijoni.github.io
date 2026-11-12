@@ -490,6 +490,106 @@
       color: var(--text-muted);
       margin-top: auto;
     }
+
+    /* Uudet tyylit välilehdille ja tärpeille */
+    .main-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      background: rgba(17, 24, 39, 0.6);
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+    
+    .main-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .main-tab-btn:hover {
+      background: rgba(31, 41, 55, 0.8);
+      color: #fff;
+    }
+    
+    .main-tab-btn.active {
+      background: var(--primary-light);
+      color: #fff;
+      border: 1px solid var(--primary);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    }
+
+    .note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .note-card:hover {
+      border-color: #374151;
+    }
+
+    .note-header {
+      padding: 18px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      transition: background 0.2s;
+      user-select: none;
+    }
+
+    .note-header:hover {
+      background: rgba(31, 41, 55, 0.8);
+    }
+
+    .note-body {
+      padding: 0 20px;
+      display: none;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .note-body.open {
+      display: block;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 16px;
+      padding-bottom: 20px;
+    }
+
+    .note-body ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .note-body li {
+      margin-bottom: 8px;
+    }
+
+    .note-body li::marker {
+      color: var(--primary);
+    }
+
+    .note-icon {
+      font-size: 1.2rem;
+      color: var(--primary);
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
   </style>
 </head>
 <body>
@@ -497,7 +597,7 @@
   <header>
     <div class="header-content">
       <div class="brand">
-        <span class="badge-pm">PROJEKTI 1–8</span>
+        <span class="badge-pm">PTP eli Paska, tosi paska</span>
         <div class="brand-text">
           <h1>Projektinhallinnan Tenttivalmentaja</h1>
           <p>48 kysymyksen täydellinen kysymyspankki</p>
@@ -510,6 +610,11 @@
   </header>
 
   <main>
+    <div class="main-tabs">
+      <button id="btn-tab-quiz" class="main-tab-btn active" onclick="switchMainTab('quiz')">📝 Harjoitustentti</button>
+      <button id="btn-tab-notes" class="main-tab-btn" onclick="switchMainTab('notes')">💡 Tärpit & Koosteet</button>
+    </div>
+
     <!-- 1. ALOITUSRUUTU -->
     <div id="screen-start" class="card">
       <span class="chip chip-warn">⚠️ Vaativa nippelitieto- ja soveltamistentti</span>
@@ -551,6 +656,7 @@
             <option value="8">Moduuli 8: Kehityssuunnat (Ketterä, Lean & Allianssi)</option>
           </select>
 
+          
         </div>
       </div>
 
@@ -627,6 +733,159 @@
       </div>
 
       <div id="review-cards-list"></div>
+    </div>
+
+    <!-- TÄRPIT JA KOOSTEET VÄLILEHTI -->
+    <div id="tab-notes" class="hidden">
+      <div class="card" style="margin-bottom: 20px;">
+        <h2 class="title">Moduulikohtaiset tärpit & koosteet</h2>
+        <p class="lead">Kertaa tentin tärkeimmät käsitteet, listat ja nyrkkisäännöt nopeasti. Avaa moduulin kortti klikkaamalla.</p>
+        
+        <!-- Moduuli 1 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(1)">
+            <span>Moduuli 1: Taustaa ja käsitteitä</span>
+            <span id="note-icon-1" class="note-icon">+</span>
+          </div>
+          <div id="note-body-1" class="note-body">
+            <ul>
+              <li><strong>Rautainen kolmio:</strong> Muodostuu tuloksesta (laajuus/laatu), ajasta ja rahasta.</li>
+              <li><strong>Projektin määritelmä:</strong> "Ainutkertainen, rajattu ja tavoitteellinen" kokonaisuus.</li>
+              <li><strong>IPMA ICB4 -pätevyydet:</strong> Jaetaan kolmeen pääalueeseen:
+                <ul>
+                  <li><em>Käytäntö:</em> Suunnittelu, hallinta, aikataulut.</li>
+                  <li><em>Ihmis:</em> Vuorovaikutus, johtaminen, tiimityö.</li>
+                  <li><em>Näkökulma:</em> Strategia, sidosryhmät, kestävä kehitys.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 2 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(2)">
+            <span>Moduuli 2: Projektin vaiheet ja ositus</span>
+            <span id="note-icon-2" class="note-icon">+</span>
+          </div>
+          <div id="note-body-2" class="note-body">
+            <ul>
+              <li><strong>Projektin elinkaari:</strong> Ideointi → tunnistaminen → määrittely → suunnittelu → toteutus → päättäminen.</li>
+              <li><strong>WBS (Work Breakdown Structure):</strong> Jakaa projektin hierarkkisesti. Sen pienin ohjattava yksikkö on <em>työpaketti</em> (sisältää aina vastuun, budjetin ja aikataulun).</li>
+              <li><strong>Rullaava suunnittelu:</strong> Tarkoittaa lähiajan tarkkaa ja tulevaisuuden karkeaa suunnittelua.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 3 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(3)">
+            <span>Moduuli 3: Organisaatio ja sidosryhmät</span>
+            <span id="note-icon-3" class="note-icon">+</span>
+          </div>
+          <div id="note-body-3" class="note-body">
+            <ul>
+              <li><strong>Ohjausryhmä:</strong> Toimii projektin ylimpänä päätöksentekoelimenä.</li>
+              <li><strong>Projektipäällikkö:</strong> Toimii integraattorina (yhdistää eri osat) ja delegoi vastuuta asiantuntijoille.</li>
+              <li><strong>Sidosryhmät:</strong> Kattavat todella laajan joukon ihmisiä, mukaan lukien projektilaisten lähipiirin ja ympäröivän yhteiskunnan (eivät pelkästään virallisia sopimusosapuolia).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 4 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(4)">
+            <span>Moduuli 4: Suunnitelma, aikataulut, resurssit</span>
+            <span id="note-icon-4" class="note-icon">+</span>
+          </div>
+          <div id="note-body-4" class="note-body">
+            <ul>
+              <li><strong>PERT-menetelmä:</strong> Käytetään kolmea aika-arviota (optimistinen, todennäköisin, pessimistinen) aikataulun epävarmuuden hallintaan.</li>
+              <li><strong>Kriittinen polku:</strong> Pisin toisistaan riippuvaisten tehtävien ketju, jolla <em>ei ole lainkaan pelivaraa</em>.</li>
+              <li><strong>Resurssimerkintä "6, EE, 0,5":</strong> Tarkoittaa 6 viikkoa kestoa, EE on vastuuhenkilö, 0,5 tarkoittaa 50% työaikaa tähän tehtävään.</li>
+              <li><strong>Kustannusohjaus:</strong> <em>Sidotut kustannukset</em> kirjataan heti sitovan tilauksen yhteydessä, ei vasta laskua maksettaessa. <em>Kustannusarvio</em> vastaa kysymykseen "paljonko", ja <em>budjetti</em> vastaa "milloin".</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 5 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(5)">
+            <span>Moduuli 5: Muutokset, riskit ja ongelmat</span>
+            <span id="note-icon-5" class="note-icon">+</span>
+          </div>
+          <div id="note-body-5" class="note-body">
+            <ul>
+              <li><strong>Muutostyypit:</strong> Sisäinen muutos johtuu tiimin omista teknisistä valinnoista. Ulkoinen muutos tulee asiakkaalta, lainsäädännöstä tai viranomaisilta.</li>
+              <li><strong>Jäljitettävyys (traceability):</strong> Yhdistää ja osoittaa miten vaatimukset on viety suunnittelun kautta toteutukseen.</li>
+              <li><strong>Riskienhallinta:</strong>
+                <ul>
+                  <li><em>Riskimatriisi:</em> Riskin suuruus = Todennäköisyys × Vaikutus.</li>
+                  <li><em>Pareto-analyysi:</em> 80/20-sääntö; auttaa kohdistamaan huomion kaikkein merkittävimpiin riskeihin.</li>
+                  <li><em>4 riskistrategiaa:</em> Välttäminen, pienentäminen, siirtäminen, hyväksyminen.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 6 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(6)">
+            <span>Moduuli 6: Viestintä ja raportointi</span>
+            <span id="note-icon-6" class="note-icon">+</span>
+          </div>
+          <div id="note-body-6" class="note-body">
+            <ul>
+              <li><strong>Viestintätavat:</strong> Kirjallinen viestintä on hyväksytty tietoisuuden lisääjä, mutta henkilökohtainen vuorovaikutus on tehokkain muuttamaan asenteita.</li>
+              <li><strong>Hyvä viestintä:</strong> Sen tunnusmerkki on se, että vastaanottaja ymmärtää viestin ja lähettäjä voi aidosti varmistaa sen.</li>
+              <li><strong>Raportointi:</strong> Loppuraportti eroaa tilanneraportista siten, että se sisältää erityisesti opit, kehityskohteet ja tuotteen ylläpitosuunnitelmat.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 7 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(7)">
+            <span>Moduuli 7: Projektin päättäminen</span>
+            <span id="note-icon-7" class="note-icon">+</span>
+          </div>
+          <div id="note-body-7" class="note-body">
+            <ul>
+              <li><strong>Päätöskokous:</strong> Kokouksen kutsuu koolle projektipäällikkö, mutta virallisen lopettamispäätöksen ja vastuuvapauden myöntää ohjausryhmä.</li>
+              <li><strong>Luovutusmenettelyt:</strong> 
+                <ul>
+                  <li><em>Tutkimus/Selvitys:</em> Päätösseminaari</li>
+                  <li><em>Rakennus/Laite:</em> Vastaanottotarkastus</li>
+                  <li><em>IT/Tietojärjestelmä:</em> Hyväksymistestaus</li>
+                </ul>
+              </li>
+              <li><strong>Projektikansio:</strong> Arkistoinnin kolme tarkoitusta: tiedon säilyminen, jäljitettävyyden mahdollistaminen ja organisaation oppiminen tulevia varten.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Moduuli 8 -->
+        <div class="note-card">
+          <div class="note-header" onclick="toggleNote(8)">
+            <span>Moduuli 8: Kehityssuuntia</span>
+            <span id="note-icon-8" class="note-icon">+</span>
+          </div>
+          <div id="note-body-8" class="note-body">
+            <ul>
+              <li><strong>Ketterät menetelmät (Agile):</strong>
+                <ul>
+                  <li><em>Scrum:</em> Perustuu 1–4 viikon määrämittaisiin sprintteihin.</li>
+                  <li><em>Kanban:</em> Perustuu työn jatkuvaan visualisointiin ja virtaukseen (ei kiinteitä aikasyklejä).</li>
+                </ul>
+              </li>
+              <li><strong>Tahtituotanto:</strong> Lean-ajatteluun pohjaava malli rakennusalalla, joka varmistaa pienten työpakettien tasaisen siirtymisen ja virtauksen.</li>
+              <li><strong>Allianssimalli:</strong> Yhteinen organisaatio, jonka muodostavat tilaaja, suunnittelija ja urakoitsija, jotka kantavat kaikki riskit ja hyödyt täysin yhdessä.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
     </div>
   </main>
 
@@ -1660,6 +1919,40 @@
 
     function resetExam() {
       initiateQuiz();
+    }
+
+    function switchMainTab(tabId) {
+      const isNotes = tabId === 'notes';
+      
+      // Päivitä napit
+      document.getElementById('btn-tab-notes').classList.toggle('active', isNotes);
+      document.getElementById('btn-tab-quiz').classList.toggle('active', !isNotes);
+      
+      // Päivitä näkymät
+      document.getElementById('tab-notes').classList.toggle('hidden', !isNotes);
+      
+      if (isNotes) {
+        // Piilotetaan tentin tilat (aloitus, kysymys, tulos) kun ollaan tärpeissä
+        document.getElementById('screen-start').classList.add('hidden');
+        document.getElementById('screen-quiz').classList.add('hidden');
+        document.getElementById('screen-result').classList.add('hidden');
+        document.getElementById('header-progress').classList.add('hidden');
+      } else {
+        // Takaisin tenttipuolelle: palataan varmuuden vuoksi aloitusruutuun
+        backToStartScreen();
+      }
+    }
+
+    function toggleNote(id) {
+      const body = document.getElementById('note-body-' + id);
+      const icon = document.getElementById('note-icon-' + id);
+      if (body.classList.contains('open')) {
+        body.classList.remove('open');
+        icon.innerText = '+';
+      } else {
+        body.classList.add('open');
+        icon.innerText = '−';
+      }
     }
   </script>
 </body>
