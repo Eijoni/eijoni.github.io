@@ -911,6 +911,217 @@
     padding: 2rem 1rem;
     color: var(--text-muted);
   }
+
+  /* ==================== WRITING COACH (ADDITION) ==================== */
+  .write-subtabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+  }
+  .write-subtab {
+    padding: 0.55rem 1.05rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .write-subtab:hover { border-color: var(--sv-blue); }
+  .write-subtab.active {
+    background: var(--sv-blue);
+    border-color: var(--sv-blue);
+    color: #fff;
+  }
+
+  .write-pane { display: none; animation: fadeIn 0.2s ease; }
+  .write-pane.active { display: block; }
+
+  .drill-sentence-box {
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.15rem 1.2rem;
+    margin: 0.9rem 0;
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+  .drill-input {
+    display: inline-block;
+    min-width: 210px;
+    max-width: 100%;
+    padding: 0.42rem 0.7rem;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    border: 2px solid var(--sv-blue);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    margin: 0.15rem 0.25rem;
+  }
+  .drill-input:focus { box-shadow: 0 0 0 3px rgba(0, 82, 147, 0.18); }
+  .drill-input.is-ok { border-color: var(--success); background: var(--success-bg); }
+  .drill-input.is-bad { border-color: var(--danger); background: var(--danger-bg); }
+
+  .char-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin: 0.55rem 0;
+  }
+  .char-btn {
+    min-width: 34px;
+    height: 32px;
+    padding: 0 0.5rem;
+    border-radius: 7px;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-weight: 800;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .char-btn:hover {
+    border-color: var(--sv-blue);
+    background: var(--sv-blue-light);
+    color: var(--sv-blue);
+  }
+
+  .sim-layout {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  @media (max-width: 820px) {
+    .sim-layout { grid-template-columns: 1fr; }
+  }
+
+  .sim-textarea {
+    width: 100%;
+    min-height: 230px;
+    padding: 0.95rem 1.05rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color var(--transition);
+  }
+  .sim-textarea:focus { outline: none; border-color: var(--sv-blue); }
+
+  .word-meter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0 0.85rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .word-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .word-badge.ok { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
+  .word-badge.warn { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+
+  .sim-checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+  }
+  .sim-checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .sim-checklist li.hit {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+  }
+
+  .analysis-panel {
+    margin-top: 1rem;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    display: none;
+  }
+  .analysis-panel.show { display: block; animation: fadeIn 0.2s ease; }
+  .analysis-item {
+    padding: 0.5rem 0.7rem;
+    border-radius: 7px;
+    font-size: 0.87rem;
+    margin-bottom: 0.45rem;
+    border-left: 4px solid var(--sv-blue);
+    background: var(--surface);
+  }
+  .analysis-item.a-ok { border-left-color: var(--success); }
+  .analysis-item.a-warn { border-left-color: var(--warn); background: var(--warn-bg); }
+  .analysis-item.a-err { border-left-color: var(--danger); background: var(--danger-bg); }
+
+  .collapsible-box {
+    margin-top: 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .collapsible-box summary {
+    padding: 0.7rem 0.95rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--sv-blue);
+  }
+  .collapsible-content {
+    padding: 0.8rem 0.95rem 0.95rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+  .phrase-chip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .phrase-chip {
+    text-align: left;
+    padding: 0.42rem 0.65rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .phrase-chip:hover { border-color: var(--sv-blue); background: var(--sv-blue-light); }
+
 </style>
 </head>
 <body>
@@ -929,6 +1140,7 @@
       <nav class="nav-tabs" aria-label="Päänavigaatio">
         <button class="nav-tab active" data-tab="quiz">📝 Harjoitustentti</button>
         <button class="nav-tab" data-tab="study">📚 Tärpit &amp; Koosteet</button>
+        <button class="nav-tab" data-tab="write">✍️ Kirjoitusvalmennus</button>
       </nav>
       <button class="icon-pill" id="fikaBtn" title="Ota pieni Fika-paus!">☕ Fika</button>
       <button class="icon-pill" id="themeBtn" title="Vaihda vaalea / tumma teema">🌙</button>
@@ -1163,6 +1375,146 @@ SeAMK / Företaget AB</pre>
     <!-- Moduulikohtaiset tiivistelmäkortit -->
     <div id="studyCardsContainer"></div>
   </section>
+
+  <!-- ==================== TAB 3: KIRJOITUSVALMENNUS (ADDITION) ==================== -->
+  <section id="tab-write" class="view">
+    <div class="card hero-banner">
+      <div>
+        <h2>✍️ Kirjoitusvalmennus (Aktiivinen tuottaminen)</h2>
+        <p>Kun tentti painottuu kirjoittamiseen, pelkkä oikean vaihtoehdon tunnistaminen ei riitä – sanat, taivutukset ja V2-sanajärjestys pitää saada ulos omasta päästä. Aloita aktiivisesta aukkoharjoittelusta ja siirry sitten Exam-kirjoitussimulaattoriin.</p>
+        <div class="write-subtabs" role="tablist">
+          <button type="button" class="write-subtab active" data-wpane="drills">⚡ 1. Lause- &amp; aukkotreeni (24 kpl)</button>
+          <button type="button" class="write-subtab" data-wpane="sim">📝 2. Exam-kirjoitussimulaattori (5 tehtävää)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 1: ACTIVE RECALL DRILLS -->
+    <div id="wpane-drills" class="write-pane active">
+      <div class="card">
+        <div class="quiz-topbar">
+          <div>
+            <span class="section-label" style="margin-bottom:0.35rem;">Valitse teema</span>
+            <div class="filter-bar" id="drillCatBar" style="margin-bottom:0;"></div>
+          </div>
+          <div style="text-align:right;">
+            <span class="tag" id="drillProgressTag">1 / 24</span>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;" id="drillScoreTag">Oikein: 0</div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.1rem;">
+          <div style="font-size:0.82rem; font-weight:800; text-transform:uppercase; color:var(--sv-blue);" id="drillCatLabel"></div>
+          <div style="font-size:1.06rem; font-weight:700; margin-top:0.2rem;" id="drillFiPrompt"></div>
+
+          <div class="drill-sentence-box" id="drillSentenceBox"></div>
+
+          <div class="char-bar">
+            <span style="font-size:0.78rem; color:var(--text-muted); margin-right:0.2rem;">Ruotsalaiset kirjaimet:</span>
+            <button type="button" class="char-btn" data-insert-target="drillInput" data-char="å">å</button>
+            <button type="button" class="char-btn" data-insert-target="drillInput" data-char="ä">ä</button>
+            <button type="button" class="char-btn" data-insert-target="drillInput" data-char="ö">ö</button>
+            <button type="button" class="char-btn" data-insert-target="drillInput" data-char="Å">Å</button>
+            <button type="button" class="char-btn" data-insert-target="drillInput" data-char="Ä">Ä</button>
+            <button type="button" class="char-btn" data-insert-target="drillInput" data-char="Ö">Ö</button>
+            <button type="button" class="btn btn-outline" id="drillHintBtn" style="margin-left:auto; padding:0.3rem 0.7rem; font-size:0.82rem;">💡 Vihje</button>
+          </div>
+
+          <div id="drillHintText" style="display:none; font-size:0.86rem; color:var(--warn); background:var(--warn-bg); border:1px solid var(--warn-border); padding:0.5rem 0.75rem; border-radius:8px; margin-bottom:0.6rem;"></div>
+
+          <div class="feedback-box" id="drillFeedback">
+            <div class="feedback-title" id="drillFbTitle"></div>
+            <div id="drillFbText" style="font-size:0.9rem;"></div>
+          </div>
+
+          <div class="quiz-actions">
+            <button type="button" class="btn btn-outline" id="drillRevealBtn">👀 Näytä vastaus</button>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="drillCheckBtn">✓ Tarkista (Enter)</button>
+              <button type="button" class="btn btn-gold" id="drillNextBtn" style="display:none;">Seuraava →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 2: EXAM WRITING SIMULATOR -->
+    <div id="wpane-sim" class="write-pane">
+      <div class="card">
+        <span class="section-label">Valitse Exam-harjoitustehtävä</span>
+        <div class="filter-bar" id="simTaskPicker" style="margin-bottom:0;"></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.75rem; flex-wrap:wrap; margin-bottom:0.85rem;">
+          <div>
+            <span class="tag tag-gold" id="simTaskBadge">Tehtävä</span>
+            <h3 id="simTaskTitle" style="color:var(--sv-blue); margin-top:0.35rem;"></h3>
+          </div>
+          <button type="button" class="btn btn-outline" id="simClearBtn" style="padding:0.4rem 0.8rem; font-size:0.82rem;">🗑️ Tyhjennä luonnos</button>
+        </div>
+
+        <p id="simTaskPrompt" style="font-size:0.94rem; margin-bottom:1rem; padding:0.85rem 1rem; background:var(--sv-blue-light); border-left:4px solid var(--sv-blue); border-radius:8px;"></p>
+
+        <div class="sim-layout">
+          <div>
+            <div class="char-bar" style="margin-top:0;">
+              <span style="font-size:0.78rem; color:var(--text-muted); margin-right:0.2rem;">Lisää kirjain:</span>
+              <button type="button" class="char-btn" data-insert-target="simTextarea" data-char="å">å</button>
+              <button type="button" class="char-btn" data-insert-target="simTextarea" data-char="ä">ä</button>
+              <button type="button" class="char-btn" data-insert-target="simTextarea" data-char="ö">ö</button>
+              <button type="button" class="char-btn" data-insert-target="simTextarea" data-char="Å">Å</button>
+              <button type="button" class="char-btn" data-insert-target="simTextarea" data-char="Ä">Ä</button>
+              <button type="button" class="char-btn" data-insert-target="simTextarea" data-char="Ö">Ö</button>
+            </div>
+
+            <textarea id="simTextarea" class="sim-textarea" placeholder="Kirjoita ruotsinkielinen vastauksesi tähän... (Luonnos tallentuu automaattisesti selaimeesi)"></textarea>
+
+            <div class="word-meter">
+              <span id="simSaveStatus">💾 Tallennetaan automaattisesti</span>
+              <span class="word-badge" id="simWordBadge">0 sanaa</span>
+            </div>
+
+            <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="simAnalyzeBtn">🔍 Tarkista tekstini (AMK-tsekki)</button>
+            </div>
+
+            <div class="analysis-panel" id="simAnalysisPanel"></div>
+          </div>
+
+          <div>
+            <div class="study-box">
+              <h4>✅ Tehtävänannon sisältövaatimukset</h4>
+              <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.4rem;">Päivittyy automaattisesti kirjoittaessasi!</p>
+              <ul class="sim-checklist" id="simChecklist"></ul>
+            </div>
+
+            <details class="collapsible-box" id="simPhraseDetails">
+              <summary>🆘 Fraasiapu (klikkaa lisätäksesi tekstiin)</summary>
+              <div class="collapsible-content">
+                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">Yritä ensin itse! Jos jumiudut, klikkaa fraasia lisätäksesi sen luonnokseesi:</p>
+                <div class="phrase-chip-list" id="simPhraseList"></div>
+              </div>
+            </details>
+
+            <details class="collapsible-box" id="simModelDetails">
+              <summary>📄 Mallivastaus &amp; AMK-arviointikriteerit</summary>
+              <div class="collapsible-content">
+                <pre class="email-pre" id="simModelText" style="background:var(--surface); padding:0.75rem; border-radius:8px; border:1px solid var(--border); margin-bottom:0.75rem;"></pre>
+                <div style="font-size:0.8rem; color:var(--text-muted); line-height:1.45;">
+                  <strong>AMK-opettajan arviointilinja (B1):</strong><br>
+                  • <strong>Sisältö:</strong> Kaikki tehtävänannon pyytämät asiat mukana.<br>
+                  • <strong>Sävy:</strong> Kohtelias ja työelämään sopiva (esim. <em>Skulle du kunna, gärna, Med vänlig hälsning</em>).<br>
+                  • <strong>Ymmärrettävyys:</strong> Lyhyet, selkeät lauseet voittavat aina monimutkaiset käännösyritykset!
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -3159,6 +3511,838 @@ function escapeHtml(str) {
 renderModulePicker();
 renderStudyFilters();
 renderStudyCards();
+
+// ==================== WRITING COACH (ADDITION) ====================
+(function initWritingCoach() {
+  const WRITE_DRILLS = [
+  {
+    "id": "d1",
+    "cat": "Sähköposti",
+    "fi": "Lopputervehdys (yksikkö): 'Ystävällisin terveisin'",
+    "before": "",
+    "after": "\n[Oma nimi]",
+    "answers": [
+      "med vänlig hälsning",
+      "med vänlig hälsning,"
+    ],
+    "hint": "Med v... h... (huom: yksikkö, ei -a lopussa!)",
+    "explain": "Yksikössä aina 'Med vänlig hälsning' (ei 'vänliga'). Monikossa taas 'Vänliga hälsningar' ilman 'med'-sanaa."
+  },
+  {
+    "id": "d2",
+    "cat": "Sähköposti",
+    "fi": "Kohtelias pyyntö: 'Voisitko lähettää raportin?'",
+    "before": "",
+    "after": " skicka rapporten?",
+    "answers": [
+      "skulle du kunna",
+      "kan du"
+    ],
+    "hint": "Konditionaali: Skulle du k...",
+    "explain": "'Skulle du kunna + infinitiivi...?' on ruotsin kohteliain ja varmin pyyntörakenne työsähköpostissa."
+  },
+  {
+    "id": "d3",
+    "cat": "Sähköposti",
+    "fi": "Liitteen mainitseminen: 'Liitän hinnaston tähän sähköpostiin.'",
+    "before": "Jag ",
+    "after": " prislistan i detta mejl.",
+    "answers": [
+      "bifogar"
+    ],
+    "hint": "Verbi: att b... (preesens -ar)",
+    "explain": "'Att bifoga' = liittää tiedosto sähköpostiin. Toimii myös: 'Bifogat hittar du prislistan.'"
+  },
+  {
+    "id": "d4",
+    "cat": "Sähköposti",
+    "fi": "Yhteydenottoon kutsuminen: 'Ota ihmeessä yhteyttä, jos sinulla on kysyttävää!'",
+    "before": "",
+    "after": " om du har några frågor!",
+    "answers": [
+      "hör gärna av dig",
+      "hör av dig"
+    ],
+    "hint": "Refleksiiviverbi + pehmennin: H... gärna a... d...",
+    "explain": "'Hör gärna av dig!' on ystävällisen työsähköpostin vakiofraasi. Muista refleksiivipronomini 'dig' (tai 'er' monikossa)."
+  },
+  {
+    "id": "d5",
+    "cat": "Sähköposti",
+    "fi": "Tiedustelu (epäsuora kysymys): 'Tiedustelisin, onko tuote varastossa.'",
+    "before": "Jag ",
+    "after": " om produkten finns i lager.",
+    "answers": [
+      "undrar"
+    ],
+    "hint": "Miettiä / tiedustella: att u...",
+    "explain": "'Jag undrar om...' + suora sanajärjestys (produkten finns) on todella kohtelias tapa kysyä sähköpostissa."
+  },
+  {
+    "id": "d6",
+    "cat": "Sähköposti",
+    "fi": "Loppulause: 'Kiitos etukäteen!'",
+    "before": "Tack ",
+    "after": "!",
+    "answers": [
+      "på förhand"
+    ],
+    "hint": "Prepositio + f...",
+    "explain": "'Tack på förhand!' = Kiitos etukäteen. Sopii melkein jokaiseen pyyntö- tai tiedustelusähköpostiin."
+  },
+  {
+    "id": "d7",
+    "cat": "Sähköposti",
+    "fi": "Tapaamisen ehdottaminen: 'Sopisko sinulle tavata torstaina?'",
+    "before": "Skulle det ",
+    "after": " dig att träffas på torsdag?",
+    "answers": [
+      "passa"
+    ],
+    "hint": "Sopia: att p...",
+    "explain": "'Skulle det passa dig att...?' = Sopisko sinulle...?"
+  },
+  {
+    "id": "d8",
+    "cat": "Sähköposti",
+    "fi": "Vastauksen odottaminen: 'Odotan innolla vastaustasi.'",
+    "before": "Jag ",
+    "after": " ditt svar.",
+    "answers": [
+      "ser fram emot"
+    ],
+    "hint": "Kolme sanaa: s... f... e...",
+    "explain": "'Att se fram emot något' = odottaa innolla jotakin. Tyylikäs lopetus työsähköpostiin."
+  },
+  {
+    "id": "d9",
+    "cat": "Työ & Opiskelu",
+    "fi": "Opiskelu: 'Opiskelen tradenomiksi Seinäjoen AMK:ssa.'",
+    "before": "Jag studerar ",
+    "after": " tradenom vid Seinäjoki yrkeshögskola.",
+    "answers": [
+      "till"
+    ],
+    "hint": "Yksi prepositio (ei 'som'!)",
+    "explain": "Kun kerrotaan, miksi ammatiksi opiskellaan, prepositio on aina 'till' (studera till tradenom). Työssä ollaan 'som' (jobba som säljare)."
+  },
+  {
+    "id": "d10",
+    "cat": "Työ & Opiskelu",
+    "fi": "Valmistuminen: 'Valmistun ensi vuonna.'",
+    "before": "Jag ",
+    "after": " nästa år.",
+    "answers": [
+      "tar examen",
+      "ska ta examen"
+    ],
+    "hint": "t... e... (suorittaa tutkinto)",
+    "explain": "'Att ta examen' = valmistua / suorittaa tutkinto."
+  },
+  {
+    "id": "d11",
+    "cat": "Työ & Opiskelu",
+    "fi": "Työtehtävät: 'Työtehtäväni ovat asiakkaiden palveleminen ja myynti.'",
+    "before": "Mina ",
+    "after": " är att betjäna kunder och sälja.",
+    "answers": [
+      "arbetsuppgifter"
+    ],
+    "hint": "Monikko sanasta 'en arbetsuppgift'",
+    "explain": "'En arbetsuppgift' -> monikko 'arbetsuppgifter'. Luonteva aloitus omasta työstä kerrottaessa."
+  },
+  {
+    "id": "d12",
+    "cat": "Työ & Opiskelu",
+    "fi": "Kiinnostus ja vahvuus: 'Olen kiinnostunut markkinoinnista.'",
+    "before": "Jag är intresserad ",
+    "after": " marknadsföring.",
+    "answers": [
+      "av"
+    ],
+    "hint": "Kaksikirjaiminen prepositio",
+    "explain": "Vakiorektio: 'intresserad AV något' (ja 'bra PÅ något')."
+  },
+  {
+    "id": "d13",
+    "cat": "Asiakaspalvelu & Puhelin",
+    "fi": "Asiakaspalveluavaus: 'Hei ja tervetuloa! Miten voin auttaa sinua?'",
+    "before": "Hej och välkommen! ",
+    "after": "?",
+    "answers": [
+      "hur kan jag hjälpa dig",
+      "hur kan jag hjälpa er"
+    ],
+    "hint": "H... k... j... h... d...",
+    "explain": "Tärkein ja varmin asiakaspalveluavaus kaikissa tilanteissa."
+  },
+  {
+    "id": "d14",
+    "cat": "Asiakaspalvelu & Puhelin",
+    "fi": "Puhelimessa: 'Hetkinen, yhdistän puhelun.'",
+    "before": "Ett ögonblick, jag ",
+    "after": ".",
+    "answers": [
+      "kopplar",
+      "kopplar samtalet"
+    ],
+    "hint": "Yhdistää: att k...",
+    "explain": "'Ett ögonblick, jag kopplar (samtalet).' on puhelinruotsin perusfraasi."
+  },
+  {
+    "id": "d15",
+    "cat": "Asiakaspalvelu & Puhelin",
+    "fi": "Viestin jättäminen: 'Haluatko jättää viestin?'",
+    "before": "Vill du ",
+    "after": "?",
+    "answers": [
+      "lämna ett meddelande"
+    ],
+    "hint": "l... e... m...",
+    "explain": "'Lämna ett meddelande' = jättää viesti."
+  },
+  {
+    "id": "d16",
+    "cat": "Asiakaspalvelu & Puhelin",
+    "fi": "Kassalla: 'Maksatko kortilla vai käteisellä?'",
+    "before": "Betalar du ",
+    "after": " eller kontant?",
+    "answers": [
+      "med kort"
+    ],
+    "hint": "Prepositio + kort",
+    "explain": "Maksutapa: 'med kort' (kortilla), 'kontant' (käteisellä ilman prepositiota)."
+  },
+  {
+    "id": "d17",
+    "cat": "Asiakaspalvelu & Puhelin",
+    "fi": "Reklamaatio: 'Pahoittelen todella! Etsitään ratkaisu.'",
+    "before": "Jag ",
+    "after": " verkligen! Vi ska hitta en lösning.",
+    "answers": [
+      "beklagar"
+    ],
+    "hint": "Pahoitella kohteliaasti: att b...",
+    "explain": "'Jag beklagar!' on ammattimainen ja empaattinen tapa aloittaa reklamaation hoito."
+  },
+  {
+    "id": "d18",
+    "cat": "Yritysesittely",
+    "fi": "Historia (passiivi): 'Yritys perustettiin vuonna 2010.'",
+    "before": "Företaget ",
+    "after": " år 2010.",
+    "answers": [
+      "grundades"
+    ],
+    "hint": "s-passiivi imperfektissä: grund...",
+    "explain": "'Grundades' = perustettiin (passiivi). Muista -s loppuun, muuten se tarkoittaa 'perusti'!"
+  },
+  {
+    "id": "d19",
+    "cat": "Yritysesittely",
+    "fi": "Henkilöstö: 'Meillä on noin 50 työntekijää.'",
+    "before": "Vi har cirka 50 ",
+    "after": ".",
+    "answers": [
+      "anställda",
+      "medarbetare"
+    ],
+    "hint": "a... (monikko)",
+    "explain": "'Anställda' (tai 'medarbetare') = työntekijät. Varo: 'arbetsgivare' on työnantaja!"
+  },
+  {
+    "id": "d20",
+    "cat": "Yritysesittely",
+    "fi": "Liikevaihto: 'Liikevaihtomme on noussut tasaisesti.'",
+    "before": "Vår ",
+    "after": " har stigit jämnt.",
+    "answers": [
+      "omsättning"
+    ],
+    "hint": "o... (en-sukuinen)",
+    "explain": "'En omsättning' = liikevaihto. ('En vinst' olisi voitto.)"
+  },
+  {
+    "id": "d21",
+    "cat": "Yritysesittely",
+    "fi": "Tulevaisuus: 'Tulevaisuus näyttää valoisalta yritykselle.'",
+    "before": "",
+    "after": " ser ljus ut för företaget.",
+    "answers": [
+      "framtiden"
+    ],
+    "hint": "Määräinen muoto sanasta 'en framtid'",
+    "explain": "'Framtiden ser ljus ut' on loistava loppulause yritysesittelyyn."
+  },
+  {
+    "id": "d22",
+    "cat": "Sanajärjestys (V2)",
+    "fi": "Käänteinen sanajärjestys (V2): 'Huomenna lähetän tarjouksen.' (jag / skickar)",
+    "before": "Imorgon ",
+    "after": " offerten.",
+    "answers": [
+      "skickar jag",
+      "ska jag skicka"
+    ],
+    "hint": "Verbi 2. paikalle ennen subjektia!",
+    "explain": "Päälause alkaa ajanmääreellä ('Imorgon'), joten verbi tulee heti sen jälkeen: 'Imorgon skickar jag...'."
+  },
+  {
+    "id": "d23",
+    "cat": "Sanajärjestys (V2)",
+    "fi": "Sivulauseen BIFF-sääntö: '...koska en voi tulla kokoukseen.' (jag / kan / inte)",
+    "before": "...eftersom ",
+    "after": " komma på mötet.",
+    "answers": [
+      "jag inte kan"
+    ],
+    "hint": "Sivulauseessa 'inte' tulee ENNEN verbiä!",
+    "explain": "BIFF-sääntö: Bisats -> Inte Före Finita verbet ('eftersom jag inte kan')."
+  },
+  {
+    "id": "d24",
+    "cat": "Sanajärjestys (V2)",
+    "fi": "Apuverbi ilman att-sanaa: 'Minun täytyy vastata asiakkaalle tänään.' (måste / svara)",
+    "before": "Jag ",
+    "after": " kunden idag.",
+    "answers": [
+      "måste svara",
+      "måste svara på"
+    ],
+    "hint": "Apuverbi + infinitiivi ILMAN 'att'-sanaa!",
+    "explain": "Modaalisten apuverbien (kan, vill, ska, måste, får, bör) jälkeen ei koskaan laiteta 'att'-sanaa."
+  }
+];
+  const WRITE_TASKS = [
+  {
+    "id": "wt1",
+    "badge": "Opettajan ykköstärppi",
+    "title": "1. Ystävällinen työsähköposti (Tapaaminen & liite)",
+    "targetMin": 55,
+    "targetMax": 100,
+    "prompt": "Kirjoita ystävällinen työsähköposti ruotsalaiselle yhteistyökumppanille (Anna Lind). Kiitä hänen aiemmasta viestistään, ehdota lyhyttä Teams-tapaamista ensi viikolle, mainitse että liität esityksen/hinnaston mukaan, ja pyydä ystävällisesti vastausta.",
+    "checklist": [
+      {
+        "id": "c1",
+        "label": "Selkeä otsikko (Ämne)",
+        "regex": "\\b(ämne|rubrik)\\b"
+      },
+      {
+        "id": "c2",
+        "label": "Ystävällinen tervehdys (esim. Hej Anna!)",
+        "regex": "\\b(hej|bästa|goddag)\\b"
+      },
+      {
+        "id": "c3",
+        "label": "Kiitos tai ystävällinen aloitus (Tack / Hoppas)",
+        "regex": "\\b(tack|hoppas)\\b"
+      },
+      {
+        "id": "c4",
+        "label": "Kohtelias pyyntö tai ehdotus (Skulle / Kan / Passa / Gärna)",
+        "regex": "\\b(skulle|passa|gärna|undrar|kunna)\\b"
+      },
+      {
+        "id": "c5",
+        "label": "Liitteen mainitseminen (bifogar / bilaga)",
+        "regex": "\\b(bifoga|bifogar|bifogat|bilaga|bilagan)\\b"
+      },
+      {
+        "id": "c6",
+        "label": "Oikea lopputervehdys (Med vänlig hälsning / Vänliga hälsningar)",
+        "regex": "(med vänlig hälsning|vänliga hälsningar|hälsningar)"
+      }
+    ],
+    "phrases": [
+      "Ämne: Möte nästa vecka",
+      "Hej Anna! Tack för ditt mejl.",
+      "Hoppas att allt är bra med dig.",
+      "Skulle det passa dig att ha ett kort möte på torsdag kl. 10?",
+      "Jag bifogar presentationen i detta mejl.",
+      "Hör gärna av dig om tiden passar!",
+      "Tack på förhand! Med vänlig hälsning"
+    ],
+    "model": "Ämne: Möte nästa vecka angående projektet\n\nHej Anna!\n\nTack för ditt mejl. Hoppas att allt är bra med dig!\n\nJag skriver till dig angående vårt samarbete. Skulle det passa dig att ha ett kort möte på Teams på torsdag kl. 10.00? Jag bifogar vår presentation i detta mejl, så att du kan titta på den i förväg.\n\nHör gärna av dig om tiden passar eller om du har några frågor. Tack på förhand!\n\nMed vänlig hälsning\n[Oma nimi]"
+  },
+  {
+    "id": "wt2",
+    "badge": "Asiakaspalvelu & Mejl",
+    "title": "2. Sähköpostivastaus asiakkaan tiedusteluun / reklamaatioon",
+    "targetMin": 55,
+    "targetMax": 100,
+    "prompt": "Asiakas (Erik) on lähettänyt sähköpostia: hänen tilaamansa tuote oli viallinen ja hän kysyy, saako uuden tuotteen tai rahat takaisin. Kirjoita ystävällinen, ammattimainen vastaus: pahoittele tapahtunutta, tarjoa selkeä ratkaisu (vaihto tai hyvitys) ja kutsu ottamaan yhteyttä tarvittaessa.",
+    "checklist": [
+      {
+        "id": "c1",
+        "label": "Otsikko (Ämne) ja tervehdys (Hej Erik!)",
+        "regex": "\\b(hej|bästa)\\b"
+      },
+      {
+        "id": "c2",
+        "label": "Pahoittelu (beklagar / ledsen / ursäkta / förlåt)",
+        "regex": "\\b(beklagar|ledsen|ursäkta|förlåt)\\b"
+      },
+      {
+        "id": "c3",
+        "label": "Ratkaisun tarjoaminen (ny produkt / pengarna tillbaka / lösning / byta)",
+        "regex": "\\b(lösning|ny produkt|pengarna|byta|skicka|ersätta|öppet köp|garanti)\\b"
+      },
+      {
+        "id": "c4",
+        "label": "Ystävällinen sävy (gärna / tack / välkommen)",
+        "regex": "\\b(gärna|tack|välkommen|hjälpa)\\b"
+      },
+      {
+        "id": "c5",
+        "label": "Lopputervehdys (Med vänlig hälsning)",
+        "regex": "(med vänlig hälsning|vänliga hälsningar|hälsningar)"
+      }
+    ],
+    "phrases": [
+      "Ämne: Svar på ditt mejl angående beställning",
+      "Hej Erik! Tack för att du hörde av dig.",
+      "Jag beklagar verkligen att produkten var trasig/defekt.",
+      "Självklart ska vi hitta en bra lösning.",
+      "Vi kan skicka en ny produkt eller ge dig pengarna tillbaka.",
+      "Hör gärna av dig och berätta vilket alternativ du föredrar!",
+      "Med vänlig hälsning"
+    ],
+    "model": "Ämne: Svar angående din beställning\n\nHej Erik!\n\nTack för ditt mejl. Jag beklagar verkligen att produkten du beställde inte fungerade som den skulle.\n\nSjälvklart ska vi lösa detta så snabbt som möjligt. Du kan välja om du vill att vi skickar en ny produkt kostnadsfritt, eller om du hellre vill få pengarna tillbaka. Skulle du kunna skicka ditt ordernummer och kvitto som svar på detta mejl?\n\nHör gärna av dig om du har några frågor!\n\nMed vänlig hälsning\n[Oma nimi]\nKundservice"
+  },
+  {
+    "id": "wt3",
+    "badge": "Lähikerta 1",
+    "title": "3. Kerro itsestäsi, opinnoistasi ja työstäsi",
+    "targetMin": 65,
+    "targetMax": 110,
+    "prompt": "Kirjoita lyhyt esittely itsestäsi työnhakua tai verkostoitumista varten. Kerro: 1) mitä ja missä opiskelet ja milloin valmistut, 2) työkokemuksestasi ja työtehtävistäsi, 3) 2–3 vahvuuttasi (egenskaper) ja 4) kielitaidostasi.",
+    "checklist": [
+      {
+        "id": "c1",
+        "label": "Opinnot (studerar till / yrkeshögskola / examen)",
+        "regex": "\\b(studerar|utbildning|yrkeshögskola|examen)\\b"
+      },
+      {
+        "id": "c2",
+        "label": "Työ & työtehtävät (jobbar / arbetar / arbetsuppgifter)",
+        "regex": "\\b(jobbar|arbetar|jobb|arbete|arbetsuppgifter|praktik)\\b"
+      },
+      {
+        "id": "c3",
+        "label": "Vahvuudet / adjektiivit (noggrann / flexibel / pålitlig / social / självständig)",
+        "regex": "\\b(noggrann|flexibel|pålitlig|social|självständig|ansvarsfull|stresstålig|positiv|vänlig)\\b"
+      },
+      {
+        "id": "c4",
+        "label": "Kielitaito (modersmål / talar / svenska / engelska / finska)",
+        "regex": "\\b(modersmål|talar|pratar|finska|engelska|svenska)\\b"
+      }
+    ],
+    "phrases": [
+      "Jag studerar till tradenom vid Seinäjoki yrkeshögskola.",
+      "Jag planerar att ta examen år...",
+      "Jag har jobbat inom handelsbranschen / på ett företag.",
+      "Mina arbetsuppgifter har varit att betjäna kunder och...",
+      "Mina styrkor är att jag är noggrann, pålitlig och flexibel.",
+      "Mitt modersmål är finska och jag talar flytande engelska samt bra svenska."
+    ],
+    "model": "Hej! Jag heter [Nimi] och jag studerar till tradenom vid Seinäjoki yrkeshögskola. Jag planerar att ta examen om ett par år.\n\nTidigare har jag jobbat inom handelsbranschen som försäljare. Mina arbetsuppgifter var att betjäna kunder, prissätta varor och ta hand om butiken. Jag trivs mycket bra med att jobba med människor.\n\nMina styrkor är att jag är noggrann, pålitlig och självständig. Jag lär mig också nya saker snabbt. Mitt modersmål är finska, jag talar flytande engelska och jag utvecklar min svenska hela tiden."
+  },
+  {
+    "id": "wt4",
+    "badge": "Lähikerta 3",
+    "title": "4. Asiakaspalveludialogi (Kauppa / Hotelli / Pankki)",
+    "targetMin": 60,
+    "targetMax": 110,
+    "prompt": "Kirjoita lyhyt asiakaspalveludialogi (Säljare/Receptionist & Kund) joko myymälässä (tuotteen osto, takuu/vaihto-oikeus ja maksaminen) TAI hotellissa (huoneen sisäänkirjautuminen, aamiainen ja opastaminen huoneeseen).",
+    "checklist": [
+      {
+        "id": "c1",
+        "label": "Ystävällinen avaus (Välkommen / Hur kan jag hjälpa)",
+        "regex": "\\b(välkommen|hjälpa|lov att vara)\\b"
+      },
+      {
+        "id": "c2",
+        "label": "Kysymys tuotteesta tai palvelusta (kostar / garanti / frukost / öppet köp / våningen)",
+        "regex": "\\b(kostar|pris|garanti|öppet köp|bytesrätt|frukost|dubbelrum|enkelrum|våningen|konto)\\b"
+      },
+      {
+        "id": "c3",
+        "label": "Maksaminen tai käytännön asia (kort / kontant / kvitto / nyckel / legitimation)",
+        "regex": "\\b(kort|kontant|kvitto|nota|nyckel|legitimation|boka)\\b"
+      },
+      {
+        "id": "c4",
+        "label": "Kohtelias lopetus (Tack / Trevlig dag / Välkommen åter)",
+        "regex": "\\b(tack|trevlig|åter|hejdå)\\b"
+      }
+    ],
+    "phrases": [
+      "Säljare: Hej och välkommen! Hur kan jag hjälpa dig?",
+      "Kund: Hej! Jag letar efter... / Jag har bokat ett rum.",
+      "Säljare: Den kostar ... euro och har två års garanti.",
+      "Säljare: Vi har 14 dagars öppet köp med kvitto.",
+      "Säljare: Betalar du med kort eller kontant? Vill du ha kvittot?",
+      "Kund: Med kort, tack! / Ingår frukost i priset?",
+      "Säljare: Varsågod och ha en fortsatt trevlig dag!"
+    ],
+    "model": "Säljare: Hej och välkommen! Hur kan jag hjälpa dig?\nKund: Hej! Jag letar efter en ny mobiltelefon. Hur mycket kostar den här modellen?\nSäljare: Den kostar 499 euro och har två års garanti. Vi har också 14 dagars öppet köp om du sparar kvittot.\nKund: Det låter jättebra! Jag tar den.\nSäljare: Toppen! Betalar du med kort eller kontant?\nKund: Jag betalar med kort, tack.\nSäljare: Varsågod, här är mobilen och kvittot. Ha en trevlig dag och välkommen åter!\nKund: Tack detsamma, hejdå!"
+  },
+  {
+    "id": "wt5",
+    "badge": "Lähikerta 4",
+    "title": "5. Lyhyt yritysesittely (Företagspresentation)",
+    "targetMin": 75,
+    "targetMax": 110,
+    "prompt": "Kirjoita 80–100 sanan yritysesittely valitsemastasi yrityksestä. Käytä lyhyitä ja selkeitä lauseita. Kerro: sijainti, perustamisvuosi, toimitusjohtaja, henkilöstömäärä, ala ja tuotteet/palvelut, asiakkaat, kilpailu sekä tulevaisuudennäkymät.",
+    "checklist": [
+      {
+        "id": "c1",
+        "label": "Sijainti (ligger i / huvudkontor)",
+        "regex": "\\b(ligger|huvudkontor)\\b"
+      },
+      {
+        "id": "c2",
+        "label": "Historia / perustaminen (grundades)",
+        "regex": "\\b(grundades|grundade|startade)\\b"
+      },
+      {
+        "id": "c3",
+        "label": "Johto & henkilöstö (vd / anställda / personal)",
+        "regex": "\\b(vd|anställda|personal|medarbetare)\\b"
+      },
+      {
+        "id": "c4",
+        "label": "Toiminta & tuotteet (tillverkar / säljer / erbjuder / produkter / tjänster)",
+        "regex": "\\b(tillverkar|säljer|erbjuder|produkter|tjänster|branschen)\\b"
+      },
+      {
+        "id": "c5",
+        "label": "Asiakkaat, kilpailu tai tulevaisuus (kunder / konkurrens / framtiden)",
+        "regex": "\\b(kunder|målgrupp|konkurrens|konkurrenter|framtiden|export|omsättning)\\b"
+      }
+    ],
+    "phrases": [
+      "[Yritys] är ett känt företag som ligger i...",
+      "Företaget grundades år ... och huvudkontoret finns i...",
+      "Vd:n heter ... och företaget har cirka ... anställda.",
+      "Företaget arbetar inom ...-branschen och tillverkar / erbjuder...",
+      "Våra kunder är både privatpersoner och företag.",
+      "Konkurrensen är hård, men företaget har stor framgång.",
+      "Framtiden ser mycket ljus ut för företaget."
+    ],
+    "model": "Nordic Tech Ab är ett innovativt företag som ligger i Seinäjoki. Företaget grundades år 2016 och huvudkontoret finns fortfarande här. Vd:n heter Maria Lind och företaget har cirka 45 anställda, bland annat utvecklare och säljare.\n\nFöretaget arbetar inom IT-branschen och erbjuder smarta digitala tjänster för små och medelstora företag. Deras kunder finns i både Finland och Sverige. Konkurrensen är hård, men företaget satsar på hög kvalitet och god kundservice. Omsättningen har stigit jämnt och framtiden ser mycket ljus ut."
+  }
+];
+
+  // --- Sub-tabs ---
+  document.querySelectorAll(".write-subtab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.wpane;
+      document.querySelectorAll(".write-subtab").forEach(b => b.classList.toggle("active", b === btn));
+      document.querySelectorAll(".write-pane").forEach(p => p.classList.toggle("active", p.id === `wpane-${target}`));
+    });
+  });
+
+  // --- Swedish char quick-insert ---
+  function insertAtCursor(el, char) {
+    if (!el) return;
+    const start = el.selectionStart ?? el.value.length;
+    const end = el.selectionEnd ?? el.value.length;
+    el.value = el.value.slice(0, start) + char + el.value.slice(end);
+    el.focus();
+    el.selectionStart = el.selectionEnd = start + char.length;
+    el.dispatchEvent(new Event("input"));
+  }
+
+  document.querySelectorAll(".char-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetEl = document.getElementById(btn.dataset.insertTarget);
+      insertAtCursor(targetEl, btn.dataset.char);
+    });
+  });
+
+  // ==================== PANE 1: DRILLS ====================
+  const drillCats = ["Kaikki", ...Array.from(new Set(WRITE_DRILLS.map(d => d.cat)))];
+  let activeDrillCat = "Kaikki";
+  let drillPool = [];
+  let drillIdx = 0;
+  let drillScore = 0;
+  let drillAnswered = false;
+
+  function normSwedish(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[.,!?;:]+$/g, "")
+      .replace(/\s+/g, " ");
+  }
+
+  function renderDrillCats() {
+    const bar = document.getElementById("drillCatBar");
+    bar.innerHTML = drillCats.map(c =>
+      `<button type="button" class="pill-btn ${activeDrillCat === c ? 'selected' : ''}" data-dcat="${escapeHtml(c)}">${escapeHtml(c)}</button>`
+    ).join("");
+    bar.querySelectorAll(".pill-btn").forEach(b => {
+      b.addEventListener("click", () => {
+        activeDrillCat = b.dataset.dcat;
+        startDrillSet();
+      });
+    });
+  }
+
+  function startDrillSet() {
+    const base = activeDrillCat === "Kaikki"
+      ? WRITE_DRILLS.slice()
+      : WRITE_DRILLS.filter(d => d.cat === activeDrillCat);
+    drillPool = fisherYatesShuffle(base);
+    drillIdx = 0;
+    drillScore = 0;
+    renderDrillCats();
+    renderCurrentDrill();
+  }
+
+  function renderCurrentDrill() {
+    const d = drillPool[drillIdx];
+    drillAnswered = false;
+
+    document.getElementById("drillProgressTag").textContent = `${drillIdx + 1} / ${drillPool.length}`;
+    document.getElementById("drillScoreTag").textContent = `Oikein: ${drillScore} / ${drillIdx}`;
+    document.getElementById("drillCatLabel").textContent = d.cat;
+    document.getElementById("drillFiPrompt").textContent = d.fi;
+
+    const box = document.getElementById("drillSentenceBox");
+    const beforeHtml = escapeHtml(d.before).replace(/\n/g, "<br>");
+    const afterHtml = escapeHtml(d.after).replace(/\n/g, "<br>");
+    box.innerHTML = `${beforeHtml}<input type="text" id="drillInput" class="drill-input" autocomplete="off" spellcheck="false" placeholder="Kirjoita ruotsiksi...">${afterHtml}`;
+
+    const inp = document.getElementById("drillInput");
+    inp.focus();
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (!drillAnswered) checkDrill();
+        else nextDrill();
+      }
+    });
+
+    const hintEl = document.getElementById("drillHintText");
+    hintEl.style.display = "none";
+    hintEl.textContent = "💡 Vihje: " + d.hint;
+
+    const fb = document.getElementById("drillFeedback");
+    fb.className = "feedback-box";
+    document.getElementById("drillCheckBtn").style.display = "inline-flex";
+    document.getElementById("drillRevealBtn").style.display = "inline-flex";
+    document.getElementById("drillNextBtn").style.display = "none";
+  }
+
+  function checkDrill(revealed = false) {
+    if (drillAnswered) return;
+    const d = drillPool[drillIdx];
+    const inp = document.getElementById("drillInput");
+    const val = normSwedish(inp.value);
+    const isOk = !revealed && d.answers.some(a => normSwedish(a) === val);
+
+    drillAnswered = true;
+    if (isOk) drillScore++;
+
+    inp.disabled = true;
+    inp.classList.add(isOk ? "is-ok" : "is-bad");
+    if (revealed) inp.value = d.answers[0];
+
+    const fb = document.getElementById("drillFeedback");
+    fb.classList.add("show", isOk ? "is-correct" : "is-wrong");
+    document.getElementById("drillFbTitle").textContent = isOk
+      ? "✅ Rätt! Hienosti tuotettu!"
+      : `❌ Oikea muoto: ${d.answers[0]}`;
+    document.getElementById("drillFbText").textContent = d.explain;
+
+    document.getElementById("drillScoreTag").textContent = `Oikein: ${drillScore} / ${drillIdx + 1}`;
+    document.getElementById("drillCheckBtn").style.display = "none";
+    document.getElementById("drillRevealBtn").style.display = "none";
+    const nextBtn = document.getElementById("drillNextBtn");
+    nextBtn.style.display = "inline-flex";
+    nextBtn.textContent = drillIdx === drillPool.length - 1 ? "🔄 Aloita uusi sekoitettu kierros" : "Seuraava →";
+  }
+
+  function nextDrill() {
+    if (drillIdx < drillPool.length - 1) {
+      drillIdx++;
+      renderCurrentDrill();
+    } else {
+      showToast("✍️ Lause- & aukkotreeni valmis!", `Sait ${drillScore} / ${drillPool.length} oikein aktiivisessa tuottamisessa! Sekoitetaan uusi kierros.`);
+      startDrillSet();
+    }
+  }
+
+  document.getElementById("drillCheckBtn").addEventListener("click", () => checkDrill(false));
+  document.getElementById("drillRevealBtn").addEventListener("click", () => checkDrill(true));
+  document.getElementById("drillNextBtn").addEventListener("click", nextDrill);
+  document.getElementById("drillHintBtn").addEventListener("click", () => {
+    const h = document.getElementById("drillHintText");
+    h.style.display = h.style.display === "none" ? "block" : "none";
+  });
+
+  // ==================== PANE 2: EXAM WRITING SIMULATOR ====================
+  let activeTaskIdx = 0;
+  const simTextarea = document.getElementById("simTextarea");
+
+  function storageKey(taskId) {
+    return "affarssvenska_draft_" + taskId;
+  }
+
+  function renderSimPicker() {
+    const picker = document.getElementById("simTaskPicker");
+    picker.innerHTML = WRITE_TASKS.map((t, idx) =>
+      `<button type="button" class="pill-btn ${idx === activeTaskIdx ? 'selected' : ''}" data-tidx="${idx}">${escapeHtml(t.title)}</button>`
+    ).join("");
+    picker.querySelectorAll(".pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeTaskIdx = parseInt(btn.dataset.tidx, 10);
+        renderSimPicker();
+        loadSimTask();
+      });
+    });
+  }
+
+  function loadSimTask() {
+    const t = WRITE_TASKS[activeTaskIdx];
+    document.getElementById("simTaskBadge").textContent = t.badge;
+    document.getElementById("simTaskTitle").textContent = t.title;
+    document.getElementById("simTaskPrompt").textContent = t.prompt;
+    document.getElementById("simModelText").textContent = t.model;
+
+    document.getElementById("simPhraseDetails").open = false;
+    document.getElementById("simModelDetails").open = false;
+    document.getElementById("simAnalysisPanel").className = "analysis-panel";
+    document.getElementById("simAnalysisPanel").innerHTML = "";
+
+    const phraseList = document.getElementById("simPhraseList");
+    phraseList.innerHTML = t.phrases.map(p =>
+      `<button type="button" class="phrase-chip" data-phrase="${escapeHtml(p)}">+ ${escapeHtml(p)}</button>`
+    ).join("");
+    phraseList.querySelectorAll(".phrase-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const prefix = simTextarea.value && !simTextarea.value.endsWith("\n") && !simTextarea.value.endsWith(" ") ? "\n" : "";
+        insertAtCursor(simTextarea, prefix + btn.dataset.phrase + " ");
+      });
+    });
+
+    try {
+      simTextarea.value = localStorage.getItem(storageKey(t.id)) || "";
+    } catch (e) {
+      simTextarea.value = "";
+    }
+    updateSimLiveState();
+  }
+
+  function countWords(txt) {
+    const trimmed = txt.trim();
+    if (!trimmed) return 0;
+    return trimmed.split(/\s+/).length;
+  }
+
+  function updateSimLiveState() {
+    const t = WRITE_TASKS[activeTaskIdx];
+    const txt = simTextarea.value;
+    const wc = countWords(txt);
+
+    const badge = document.getElementById("simWordBadge");
+    badge.textContent = `${wc} sanaa (tavoite ${t.targetMin}–${t.targetMax})`;
+    badge.className = "word-badge " + (wc >= t.targetMin && wc <= t.targetMax + 20 ? "ok" : wc > 0 ? "warn" : "");
+
+    const cl = document.getElementById("simChecklist");
+    cl.innerHTML = t.checklist.map(item => {
+      const re = new RegExp(item.regex, "i");
+      const hit = re.test(txt);
+      return `<li class="${hit ? 'hit' : ''}"><span>${hit ? '✅' : '⬜'}</span><span>${escapeHtml(item.label)}</span></li>`;
+    }).join("");
+
+    try {
+      localStorage.setItem(storageKey(t.id), txt);
+      document.getElementById("simSaveStatus").textContent = "💾 Luonnos tallennettu selaimeen";
+    } catch (e) {}
+  }
+
+  function analyzeSimText() {
+    const t = WRITE_TASKS[activeTaskIdx];
+    const txt = simTextarea.value.trim();
+    const panel = document.getElementById("simAnalysisPanel");
+
+    if (!txt) {
+      panel.className = "analysis-panel show";
+      panel.innerHTML = `<div class="analysis-item a-warn">Kirjoita ensin edes muutama lause ruotsiksi, niin AMK-tarkistin käy tekstisi läpi!</div>`;
+      return;
+    }
+
+    const wc = countWords(txt);
+    const items = [];
+
+    // 1. Word count
+    if (wc < t.targetMin) {
+      items.push({ cls: "a-warn", msg: `📏 <strong>Pituus (${wc} sanaa):</strong> Teksti on vielä melko lyhyt (tavoite ${t.targetMin}–${t.targetMax} sanaa). Koita lisätä 1–2 konkreettista lausetta.` });
+    } else if (wc > t.targetMax + 25) {
+      items.push({ cls: "a-warn", msg: `📏 <strong>Pituus (${wc} sanaa):</strong> Hienosti tuotettu, mutta tentissä kannattaa pysyä melko tiiviinä (tavoite ${t.targetMin}–${t.targetMax}), jotta ehtii tarkistaa kieliopin.` });
+    } else {
+      items.push({ cls: "a-ok", msg: `📏 <strong>Pituus (${wc} sanaa):</strong> Helt lagom! Juuri sopiva pituus AMK-tenttivastaukseen.` });
+    }
+
+    // 2. Checklist coverage
+    const missing = t.checklist.filter(item => !(new RegExp(item.regex, "i")).test(txt));
+    if (missing.length === 0) {
+      items.push({ cls: "a-ok", msg: "✅ <strong>Sisältövaatimukset:</strong> Kaikki tehtävänannon keskeiset osat löytyvät tekstistäsi!" });
+    } else {
+      items.push({ cls: "a-warn", msg: `📋 <strong>Tarkista vielä nämä tehtävänannon kohdat:</strong> ${missing.map(m => escapeHtml(m.label)).join(" • ")}` });
+    }
+
+    // 3. Common AMK Swedish Grammar Traps
+    const traps = [];
+
+    if (/med\s+vänliga\s+hälsning\b/i.test(txt)) {
+      traps.push("Lopputervehdys: kirjoitit <em>'Med vänliga hälsning'</em>. Oikea muoto on yksikössä <strong>Med vänlig hälsning</strong> tai monikossa <strong>Vänliga hälsningar</strong> (ilman med-sanaa).");
+    }
+    if (/\b(kan|vill|ska|måste|får|bör|skulle)\s+att\b/i.test(txt)) {
+      traps.push("Apuverbi + att: Ruotsissa apuverbien (<em>kan, vill, ska, måste, får, bör</em>) jälkeen tulee infinitiivi <strong>ILMAN att-sanaa</strong> (esim. <em>måste skicka</em>, ei <em>måste att skicka</em>).");
+    }
+    if (/(^|[.!?\n]\s*)(imorgon|idag|i dag|igår|nu|sedan|därför|tyvärr|nästa vecka|i framtiden|på måndag|på tisdag|på onsdag|på torsdag|på fredag)\s+(jag|vi|du|han|hon|de|det|man|företaget)\b/i.test(txt)) {
+      traps.push("V2-sanajärjestys: Lauseesi alkaa ajanmääreellä tai adverbilla (esim. <em>Imorgon, Tyvärr, På måndag</em>) ja jatkuu heti subjektilla. Muista käänteinen sanajärjestys: <strong>verbi 2. paikalle!</strong> (Esim. <em>Imorgon <u>ska jag</u>...</em>).");
+    }
+    if (/\b(eftersom|att|om|när)\s+(jag|du|han|hon|vi|ni|de|man|det)\s+(kan|vill|ska|måste|har|är|gör|jobbar|kommer|tror|tycker)\s+inte\b/i.test(txt)) {
+      traps.push("Sivulauseen BIFF-sääntö: Sivulauseessa (<em>eftersom, att, om, när</em>) kieltosana <strong>inte</strong> tulee ENNEN finiittiverbiä (esim. <em>eftersom jag <u>inte kan</u></em>).");
+    }
+    if (/\bstuderar\s+som\b/i.test(txt)) {
+      traps.push("Prepositio: Ammatiksi opiskellaan <strong>studera till</strong> (esim. <em>studerar till tradenom</em>), kun taas työssä ollaan <em>jobbar som</em>.");
+    }
+    if (wc >= 20 && !/[åäöÅÄÖ]/.test(txt)) {
+      traps.push("Ruotsalaiset vokaalit (å/ä/ö): Tekstissäsi ei ole yhtään å-, ä- tai ö-kirjainta – tarkista, ettei jokin sana muuttunut vahingossa toiseksi (esim. <em>ar/år, mote/möte, lan/lån/lön</em>).");
+    }
+
+    if (traps.length === 0) {
+      items.push({ cls: "a-ok", msg: "📐 <strong>Kielioppitsekki:</strong> Ei havaittu yleisimpiä AMK-tenttiansoja (V2, BIFF, apuverbit, lopputervehdys). Hyvää työtä – vertaa vielä lopuksi mallivastaukseen!" });
+    } else {
+      traps.forEach(tr => items.push({ cls: "a-err", msg: `⚠️ <strong>Kielioppihuomio:</strong> ${tr}` }));
+    }
+
+    panel.className = "analysis-panel show";
+    panel.innerHTML = `<div style="font-weight:800; margin-bottom:0.55rem; color:var(--sv-blue);">👩‍🏫 AMK-opettajan pikatarkistus</div>` +
+      items.map(it => `<div class="analysis-item ${it.cls}">${it.msg}</div>`).join("");
+  }
+
+  simTextarea.addEventListener("input", updateSimLiveState);
+  document.getElementById("simAnalyzeBtn").addEventListener("click", analyzeSimText);
+  document.getElementById("simClearBtn").addEventListener("click", () => {
+    simTextarea.value = "";
+    updateSimLiveState();
+    document.getElementById("simAnalysisPanel").className = "analysis-panel";
+  });
+
+  // Boot Writing Coach
+  startDrillSet();
+  renderSimPicker();
+  loadSimTask();
+})();
+
 </script>
 </body>
 </html>
